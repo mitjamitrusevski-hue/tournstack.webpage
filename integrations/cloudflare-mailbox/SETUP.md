@@ -4,7 +4,7 @@
 
 The user has created a Cloudflare account using **mitja@tournstack.com**. That address is suitable. It does not need to match **mitja.mitrusevski@gmail.com**, which continues to own Contacts and Apps Script. The sender remains **TournStack <info@tournstack.com>** through mailbox.org.
 
-The Worker, persistent queue, branded confirmation and deployment configuration are prepared. Local protocol/queue checks and a Wrangler dry-run build pass. **Nothing has been deployed to Cloudflare yet.** Real mailbox.org authentication and inbox delivery need the live checks below. The existing Apps Script Version 1 continues to use its previous Google sender until updated.
+The Worker and its SQLite Durable Object queue are deployed at **https://tournstack-mailbox.tournstack.workers.dev**. Wrangler verified the `mitja@tournstack.com` account, and `SMTP_USER`, `SMTP_PASSWORD` and `MAIL_RELAY_TOKEN` were entered through private Wrangler prompts on 2026-10-03. The unauthenticated `/health` route returned HTTP 401, as expected. The project handoff reports that Apps Script `verifyMailRelay` succeeded against mailbox.org TLS/SMTP without sending an email. A real form submission, Sheet row and inbox delivery remain unverified. The steps below are retained for maintenance and recovery.
 
 ## The setup
 
@@ -28,7 +28,7 @@ Verified against Cloudflare documentation on **2026-10-03**:
 
 The code defaults to **100 contacts per rolling day** and **three confirmations per recipient per rolling day**. In normal operation, this is well below the request/storage allowances. As a conservative illustration, 200 messages taking 20 seconds each use roughly 500 GB-seconds for SMTP work at 128 MB, before minor queue overhead, versus 13,000 included. This is an estimate, not a guarantee: attacks, repeated failures or other Workers on the same account consume shared allowances. Free-plan operations fail when relevant limits are exceeded; do not enable Paid automatically.
 
-This is a low-volume inquiry receipt system, not a newsletter sender. Mailbox.org's own policies, account permissions and sending limits also apply. Cloudflare permits TLS TCP sockets, but the real mailbox.org connection from Cloudflare must still pass authentication and delivery checks.
+This is a low-volume inquiry receipt system, not a newsletter sender. Mailbox.org's own policies, account permissions and sending limits also apply. Cloudflare permits TLS TCP sockets. The handoff reports a successful mailbox.org authentication check; actual notification and confirmation delivery still needs a controlled submission test.
 
 ## 1. Download the two deployment files
 
@@ -45,7 +45,7 @@ npx --yes wrangler@4.147.0 login
 npx --yes wrangler@4.147.0 deploy
 ```
 
-The first command opens a browser for Cloudflare authorization. Use the account registered as **mitja@tournstack.com**. The second creates the configured Worker and its SQLite Durable Object automatically. It should return the actual **workers.dev** URL. Save that returned URL; do not invent it from the account email or a guessed subdomain.
+For a fresh or recovery deployment, the first command opens a browser for Cloudflare authorization. Use the account registered as **mitja@tournstack.com**. The second deploys the configured Worker and its SQLite Durable Object. The deployed URL is **https://tournstack-mailbox.tournstack.workers.dev**; verify the command output when redeploying.
 
 If asked to create a workers.dev subdomain, choose an available account subdomain. Stay on the **Workers Free** plan. Until secrets are configured, the Worker rejects requests and cannot send email.
 

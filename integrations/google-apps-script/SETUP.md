@@ -12,7 +12,7 @@ The copied Contacts spreadsheet is now the integration target. Its ID is `1QxdXh
 
 Use the user's [Apps Script project](https://script.google.com/u/0/home/projects/1Vol7BUmnv_jdAs_BRnorsQeW1CdT3EI8GNoM7agTTEqtY-PNEMGfLW4c/edit) while signed into that Gmail account. This editor link is not a deployed web app endpoint.
 
-The user supplied an updated deployment on **2026-10-03**: [Web app endpoint](https://script.google.com/macros/s/AKfycbykm7hoGEXYxCJyNb0An2oWpt2BX5kbZunBu5FjEeW8yjn14ICtC8YMaVPt761YAN65/exec). This `/exec` URL replaces the previous deployment URL in the local website configuration. The user ran `verifyMailRelay` successfully: mailbox.org TLS connection and SMTP authentication succeeded, with no email sent. The selected implementation calls a Cloudflare Worker that sends directly through mailbox.org SMTP; see [Cloudflare Free setup](../cloudflare-mailbox/SETUP.md). Publish the website configuration and verify a real contact submission, Sheet storage, notification delivery and visitor confirmation. SMTP authentication alone does not verify inbox delivery.
+The user supplied an updated deployment on **2026-10-03**: [Web app endpoint](https://script.google.com/macros/s/AKfycbykm7hoGEXYxCJyNb0An2oWpt2BX5kbZunBu5FjEeW8yjn14ICtC8YMaVPt761YAN65/exec). This `/exec` URL is now present in the live website configuration. The handoff reports a successful `verifyMailRelay` run: mailbox.org TLS connection and SMTP authentication succeeded, with no email sent. The selected implementation calls the deployed Cloudflare Worker at `https://tournstack-mailbox.tournstack.workers.dev`; see [Cloudflare Free setup](../cloudflare-mailbox/SETUP.md). The published website still needs one real contact submission to verify Sheet storage, notification delivery and visitor confirmation. SMTP authentication alone does not verify inbox delivery.
 
 ### Where appsscript.json belongs
 
@@ -31,7 +31,7 @@ Google references: [bound script ownership and copying](https://developers.googl
 
 ## One-time deployment
 
-First deploy the Cloudflare Worker and enter **MAIL_RELAY_URL** and **MAIL_RELAY_TOKEN** in **Project Settings → Script Properties**, following [Cloudflare Free setup](../cloudflare-mailbox/SETUP.md). SMTP credentials stay in Cloudflare's secrets, not in Apps Script or the website. The Node SMTP relay remains an optional alternative if a server becomes available.
+The Cloudflare Worker is deployed and its three secret names are configured. The handoff reports that **MAIL_RELAY_URL** and **MAIL_RELAY_TOKEN** are entered in **Project Settings → Script Properties**; confirm them there if relay calls fail. SMTP credentials stay in Cloudflare's secrets, not in Apps Script or the website. The Node SMTP relay remains an optional alternative if a server becomes available.
 
 1. Open the Apps Script project linked above while signed into **mitja.mitrusevski@gmail.com**. Name the project **TournStack WEB Contacts**.
 2. Replace the editor's default code with the complete contents of `Code.gs` in this folder. The new Contacts spreadsheet ID and email recipient are already included. If using another copy later, update `CONTACTS_SHEET_ID` to that copy's ID first.
