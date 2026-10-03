@@ -133,8 +133,8 @@
   const prompt = document.querySelector('#interest-prompt');
   if (!prompt || form || document.body.dataset.page === 'thanks') return;
 
-  const seenKey = 'tournstack-invitation-seen-v1';
-  const elapsedKey = 'tournstack-invitation-elapsed-v1';
+  const seenKey = 'tournstack-invitation-seen-v2';
+  const elapsedKey = 'tournstack-invitation-elapsed-v2';
   const read = (key) => {
     try { return window.sessionStorage.getItem(key); } catch { return null; }
   };

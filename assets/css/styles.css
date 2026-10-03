@@ -112,7 +112,7 @@ body{padding-top:var(--header-height)}
 button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 .button:disabled{background:var(--surface);color:var(--muted);cursor:default}
 .interest-prompt[hidden]{display:none}
-.interest-prompt{position:fixed;right:24px;bottom:24px;z-index:110;width:min(370px,calc(100% - 32px));padding:28px;border:1px solid var(--line);border-radius:18px;background:var(--soft);color:var(--slate);box-shadow:0 12px 36px #0f172a26;animation:answer-in .4s ease-out both}
+.interest-prompt{position:fixed;left:24px;bottom:24px;z-index:110;width:min(330px,calc(100% - 32px));padding:24px;border:1px solid var(--line);background:var(--soft);color:var(--slate);box-shadow:0 12px 36px #0f172a26;animation:answer-in .4s ease-out both}
 .interest-prompt .eyebrow{font-size:9px;letter-spacing:.1em;color:var(--action);margin:0 24px 14px 0}
 .interest-prompt h2{font-size:23px;line-height:1.25;letter-spacing:-.025em;max-width:280px}
 .interest-prompt>p:not(.eyebrow){font-size:13px;color:var(--muted);line-height:1.7;margin-top:12px}
@@ -136,7 +136,7 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 #contact-form .button{margin-top:24px}.form-status{font-size:12px;line-height:1.8;color:var(--muted);margin-top:18px;min-height:22px}
 #contact-form noscript p{font-size:12px;margin-top:12px}
 @media(max-width:1050px){.contact-page-grid{gap:42px}}
-@media(max-width:760px){.faq-item summary{padding:18px 16px;gap:10px}.faq-answer{padding:18px 18px 22px 47px}.interest-prompt{bottom:16px;right:16px;padding:24px}.contact-page-grid{grid-template-columns:1fr;gap:32px}.contact-intro h2{font-size:30px}.contact-form-card{padding:26px}}
+@media(max-width:760px){.faq-item summary{padding:18px 16px;gap:10px}.faq-answer{padding:18px 18px 22px 47px}.interest-prompt{bottom:16px;left:16px;padding:24px}.contact-page-grid{grid-template-columns:1fr;gap:32px}.contact-intro h2{font-size:30px}.contact-form-card{padding:26px}}
 @media(prefers-reduced-motion:reduce){.reveal-pending{opacity:1;transform:none}}
 
 /* Community-led copy and reserved spaces for approved event photographs. */

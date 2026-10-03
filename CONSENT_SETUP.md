@@ -4,7 +4,7 @@ Status: planned. No consent manager, Meta Pixel or LinkedIn Insight Tag is insta
 
 ## Choice
 
-Use CookieYes Free for `tournstack.com` when the first advertising tag is ready. The current free plan includes 5,000 pageviews per month and basic colour customization, covering the expected ~1,000 monthly views. Custom CSS and removal of CookieYes branding require a paid plan. Create the account under a TournStack-controlled email address and keep the site key in the installation snippet; it is not a password or API secret.
+CookieYes still offers a $0 Free plan for one domain with 5,000 pageviews per month, covering the expected ~1,000 monthly views. Its current comparison table says **custom colours are unavailable on Free**, as are custom CSS and removal of CookieYes branding. Therefore, do not choose it for TournStack if brand colours are required. A small, self-hosted consent manager such as [Klaro!](https://klaro.org/) is the preferred no-fee route; assess its Meta and LinkedIn blocking in a browser before enabling either tag. CookieYes Free remains an option only if its preset appearance is acceptable. Never start a paid trial to use the Free plan.
 
 ## Brand settings
 
@@ -17,11 +17,11 @@ Use CookieYes Free for `tournstack.com` when the first advertising tag is ready.
 
 ## Installation sequence
 
-1. Create the CookieYes site for `tournstack.com` and configure the GDPR opt-in banner.
-2. Add the account-specific CookieYes script near the start of each page's `<head>`, before any optional tracking script. Do not copy a sample key into production.
-3. Add Meta Pixel and LinkedIn Insight Tag under the **Advertisement** category only after CookieYes is active. Prefer consent-gated loading of the whole tag over allowing a tag to load and attempting to block only its cookies.
+1. Choose the consent manager before adding advertising tags. For branded, no-fee styling, implement and configure Klaro! locally for `tournstack.com`.
+2. Load the consent manager near the start of each page's `<head>`, before any optional tracking script.
+3. Add Meta Pixel and LinkedIn Insight Tag under the **Advertisement** category only after consent controls are active. Prefer consent-gated loading of the whole tag over allowing a tag to load and attempting to block only its cookies.
 4. Update `privacy.html` with the actual tag purposes, providers, data categories, cookie names and retention periods before enabling them.
 5. In a fresh browser profile, confirm neither advertising script nor its network requests/cookies run before consent or after **Reject all**. Confirm they run after advertising consent, stop after withdrawal, and that preferences can be reopened. Check all public pages and the contact form.
-6. Recheck the free-plan pageview limit and the published CookieYes pricing/features as traffic grows.
+6. If using CookieYes Free instead, recheck its pageview limit and published pricing/features as traffic grows.
 
 Sources: [CookieYes pricing](https://www.cookieyes.com/pricing/), [banner colour controls](https://www.cookieyes.com/documentation/customize-cookie-banner/), [HTML installation](https://www.cookieyes.com/documentation/cookie-banner-on-an-html-website/), and [prior-consent script blocking](https://www.cookieyes.com/documentation/implement-prior-consent-using-cookieyes/).
