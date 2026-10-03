@@ -159,3 +159,13 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 .vision-editorial .text-link{margin-top:18px;color:var(--action)}
 .vision-editorial .text-link>span{color:var(--action)}
 @media(max-width:760px){.lifestyle-caption{right:8px;bottom:6px;font-size:8px;padding:3px 6px}.hero-feature-list li:last-child{grid-column:auto;padding-top:13px}.hero-feature-list li:nth-child(3){border-bottom:0}.image-slot{grid-template-columns:1fr}.image-slot-art{min-height:160px}.image-slot figcaption{padding:24px}.future-layout{grid-template-columns:1fr;gap:22px}.future-layout>div:last-child{font-size:14px}}
+
+/* Keep the reading copy comfortable at phone widths. */
+@media(max-width:760px){
+  .hero-detail,.saas-inner p:not(.eyebrow),.section-intro h2+p,.audience-card>p:not(.card-kicker):not(.card-detail),.example-copy p,.vision-hero h1+p,.editorial-copy,.future-layout>div:last-child,.contact-inner p:not(.eyebrow),.contact-intro>p:not(.eyebrow),.faq-answer{font-size:16px;line-height:1.6}
+  .hero-feature-list{grid-template-columns:1fr;gap:0}
+  .hero-feature-list li:nth-child(3){border-bottom:1px solid var(--steel)}
+  .hero-feature-list h3,.faq-question{font-size:16px}
+  .hero-feature-list p,.hero-note,.hero-foot,.saas-inner .saas-note,.card-detail,.faq-group-heading p,.faq-sidebar-note,.image-slot figcaption span,.contact-form-card>p,.form-privacy,.form-status{font-size:14px;line-height:1.6}
+  .form-field label{font-size:14px}
+}
