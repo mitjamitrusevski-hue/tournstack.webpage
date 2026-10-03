@@ -10,3 +10,4 @@ data/
 .worker-build/
 .dev.vars
 .dev.vars.*
+desktop.ini

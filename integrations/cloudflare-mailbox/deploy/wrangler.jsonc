@@ -1,0 +1,33 @@
+{
+  "name": "tournstack-mailbox",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-03",
+  "workers_dev": true,
+  "vars": {
+    "MAX_CONTACTS_PER_DAY": "100",
+    "MAX_CONFIRMATIONS_PER_ADDRESS_PER_DAY": "3"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CONTACT_QUEUE",
+        "class_name": "ContactMailQueue"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "ContactMailQueue"
+      ]
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": false
+    }
+  }
+}

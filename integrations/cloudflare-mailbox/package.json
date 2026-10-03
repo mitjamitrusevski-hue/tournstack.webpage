@@ -1,0 +1,14 @@
+{
+  "name": "tournstack-cloudflare-mailbox",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check": "wrangler deploy --dry-run --outdir .worker-build",
+    "package": "npm run check && node build-deploy.mjs",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": { "wrangler": "4.147.0" }
+}
