@@ -138,3 +138,24 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 @media(max-width:1050px){.contact-page-grid{gap:42px}}
 @media(max-width:760px){.faq-item summary{padding:18px 16px;gap:10px}.faq-answer{padding:18px 18px 22px 47px}.interest-prompt{bottom:16px;right:16px;padding:24px}.contact-page-grid{grid-template-columns:1fr;gap:32px}.contact-intro h2{font-size:30px}.contact-form-card{padding:26px}}
 @media(prefers-reduced-motion:reduce){.reveal-pending{opacity:1;transform:none}}
+
+/* Community-led copy and reserved spaces for approved event photographs. */
+.lifestyle-banner{position:relative}
+.lifestyle-caption{position:absolute;right:20px;bottom:16px;padding:6px 10px;border-radius:6px;background:var(--slate);color:var(--soft);font-size:10px;letter-spacing:.02em}
+.image-slot{position:relative;overflow:hidden;min-height:245px;margin:32px auto 0;border:1px solid var(--steel);border-radius:var(--radius);background:var(--slate);color:var(--soft);display:grid;grid-template-columns:1fr 1fr;align-items:center}
+.image-slot-art{position:relative;min-height:245px;align-self:stretch;background:radial-gradient(circle at 73% 27%,#29416b 0,var(--raised) 47%,var(--slate) 100%);overflow:hidden}
+.court-line{position:absolute;border:2px solid #6ea0ff66;transform:rotate(-12deg)}
+.court-line-one{width:68%;height:78%;left:18%;top:25%}
+.court-line-two{width:42%;height:105%;left:34%;top:12%;border-color:#da57dd55}
+.court-ball{position:absolute;width:23px;height:23px;left:66%;top:23%;border-radius:50%;background:var(--gold);box-shadow:0 0 36px #ffc45888}
+.image-slot figcaption{padding:32px 38px;display:flex;flex-direction:column;gap:12px}
+.image-slot figcaption strong{font-size:clamp(23px,3vw,34px);line-height:1.2;letter-spacing:-.035em}
+.image-slot figcaption span{max-width:340px;color:var(--pale);font-size:13px;line-height:1.7}
+.image-slot-community{margin-top:46px}
+.future-layout{display:grid;grid-template-columns:.85fr 1.4fr;gap:70px}
+.future-layout>div:last-child{font-size:15px;color:var(--muted)}
+.future-layout .text-link{margin-top:18px;color:var(--action)}
+.future-layout .text-link>span{color:var(--action)}
+.vision-editorial .text-link{margin-top:18px;color:var(--action)}
+.vision-editorial .text-link>span{color:var(--action)}
+@media(max-width:760px){.lifestyle-caption{right:8px;bottom:6px;font-size:8px;padding:3px 6px}.hero-feature-list li:last-child{grid-column:auto;padding-top:13px}.hero-feature-list li:nth-child(3){border-bottom:0}.image-slot{grid-template-columns:1fr}.image-slot-art{min-height:160px}.image-slot figcaption{padding:24px}.future-layout{grid-template-columns:1fr;gap:22px}.future-layout>div:last-child{font-size:14px}}

@@ -1,15 +1,15 @@
-# TournStack website — v1.2
+# TournStack website — v1.3 editorial candidate
 
 A lightweight, static pre-launch website for TournStack. The repository root is the GitHub Pages publish directory; `CNAME` points to `tournstack.com`.
 
 ## Pages
 
-- `index.html`: product overview, five key points, individual organizers and sports centers, Lisbon example, team and an internal contact-page link.
+- `index.html`: product overview, four core parts, clubs and independent organizers, Lisbon example, future personal use, team and an internal contact-page link.
 - `vision.html`: source-grounded product vision, current status and next steps.
 - `contact.html`: Name, Email and Inquiry form connected through a separately deployed Google Apps Script endpoint.
-- `faq.html`: 20 expandable questions covering product fit, access, pilots, pricing and competitors. Rounded cards use right/down chevrons and a blue open/focus outline. Native HTML disclosures work without JavaScript.
+- `faq.html`: 29 expandable questions covering product fit, the four interfaces, branding, pilots, pricing and future personal use. Rounded cards use right/down chevrons and a blue open/focus outline. Native HTML disclosures work without JavaScript.
 
-The overview keeps its one-page structure. Five features sit beside the shield in the hero: website widgets, one organizer back office, venue screens, TournStack Draw and no player downloads. The SaaS access section explains the planned organizer client download and browser links for everyone else.
+The overview keeps its one-page structure and approved company slogan. Four features sit beside the shield: Organizer Dashboard, Tournament Portal, Live Screen and TournStack Draw. A short section explains B2B branding and standalone or embedded portal access; a later section states the future personal-organizer direction without implying current availability. The vision page now tells a shorter community, evidence and reliability story.
 
 All pages share fixed navigation with the original SVG wordmark, Overview / Our vision / FAQ tabs, an internal Contact us button and a full footer. Anchors have descriptive titles and English language metadata; source and event links use `rel="external"`. Internal links use `data-link-type="internal"` for explicit classification; `internal` is not a standard HTML `rel` token.
 
@@ -25,9 +25,13 @@ Visit `http://localhost:8000`. No package installation or build step is required
 
 GitHub Pages publishes the `main` branch from the repository root. The complete website assets and integration sources were restored and published on 2026-10-03 in commit `c52c9a8`; the existing `CNAME` and original asset names were preserved. All four public pages and the referenced stylesheet, scripts and hero image returned HTTP 200 after publication.
 
+The 2026-10-04 editorial and layout update refreshes all four pages and adds two clearly labeled image slots for later photography.
+
+App Store and Google Play badges are reserved for an actual store listing or official preorder. The current site describes personal use as a future goal and does not display availability badges.
+
 ## Assets and styling
 
-Original vector assets are in `assets/brand/`, with the supplied naming conventions preserved. Logos and favicons remain SVG. The approved AI-generated tennis lifestyle photograph is `assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp` (2048 × 768, approximately 197 KB). It appears directly below the fixed header on the overview without text or logo overlays. The desktop banner uses roughly half the viewport height, with a 240–600px range; mobile retains the full panoramic composition. The image loads eagerly with high fetch priority and explicit dimensions. The device screens are illustrative, not screenshots of the released app.
+Original vector assets are in `assets/brand/`, with the supplied naming conventions preserved. Logos and favicons remain SVG. The approved AI-generated tennis lifestyle photograph is `assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp` (2048 × 768, approximately 197 KB). It appears directly below the fixed header on the overview. The desktop banner uses roughly half the viewport height, with a 240–600px range; mobile retains the full panoramic composition. The image loads eagerly with high fetch priority and explicit dimensions. A visible caption identifies the device screens as illustrative, not screenshots of the released app. Two CSS-rendered image slots reserve space for approved Lisbon and community photographs; they contain no fabricated people or event evidence.
 
 The self-hosted Montserrat variable font is in `assets/fonts/` with its SIL Open Font License. CSS is in `assets/css/styles.css`. A temporary copy of the approved WebP is stored in the user's `_TMP` Drive folder; the website serves its own local asset, so no Drive permissions are needed by visitors.
 
@@ -47,7 +51,7 @@ Contact buttons link internally to `contact.html`, which retains `info@tournstac
 
 ## Structured data
 
-Each page includes a JSON-LD graph connecting the organization, website, logo, software project and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 20 `Question` / `Answer` pairs, and contact uses `ContactPage`. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
+Each page includes a JSON-LD graph connecting the organization, website, logo, software project and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 29 `Question` / `Answer` pairs, and contact uses `ContactPage`. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
 
 Keep JSON-LD descriptions and FAQ answers synchronized with the HTML when editing. Do not add invented prices, reviews, released-platform support or download links. Structured data helps machines interpret content; it does not guarantee indexing or AI citations. See `2026-10-02_TournStack_Website_Structured-Data.md` for sources and maintenance details.
 
@@ -70,6 +74,8 @@ Server validation, a honeypot, literal-text storage, a concurrency lock and six-
 On 2026-10-03, the official Schema.org validator reported zero errors and zero warnings for each of the four published pages. Live browser checks found one H1 per page, matching FAQ visible/schema answers, unique IDs, valid same-page anchors, the expected canonical URLs, four sitemap entries and working same-origin links and assets. The existing `CNAME` is preserved.
 
 Live browser checks confirmed 20 FAQ disclosures with only one open at a time, all scroll reveal targets becoming visible on desktop and mobile, and the invitation appearing after roughly 30 seconds of visible browsing across navigation. It did not take focus, closed with Escape and stayed dismissed in the same tab. The contact page showed no invitation and an enabled submit button. No controlled live contact submission or inbox check had been completed at this documentation update.
+
+The 2026-10-04 update has 29 visible FAQ disclosures with matching JSON-LD question IDs and answer text in local verification. The previous 20-question live browser result above is historical evidence for the earlier published version.
 
 The Cloudflare email implementation passed six automated SMTP/MIME/HTTP/queue checks, and six retained Node/Apps Script checks passed. The deployed Worker returned HTTP 401 for an unauthenticated `/health` request, confirming that its public route and authorization gate are active. The handoff reports a successful authenticated mailbox.org TLS/SMTP check. Actual inbox placement remains unverified.
 
