@@ -169,3 +169,20 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
   .hero-feature-list p,.hero-note,.hero-foot,.saas-inner .saas-note,.card-detail,.faq-group-heading p,.faq-sidebar-note,.image-slot figcaption span,.contact-form-card>p,.form-privacy,.form-status{font-size:14px;line-height:1.6}
   .form-field label{font-size:14px}
 }
+
+/* Privacy notice follows the same editorial grid as the vision page. */
+.policy-layout{display:grid;grid-template-columns:220px minmax(0,760px);gap:76px;align-items:start}
+.policy-toc{position:sticky;top:calc(var(--header-height) + 28px);display:flex;flex-direction:column;align-items:flex-start;gap:6px;font-size:14px}
+.policy-toc .eyebrow{margin-bottom:10px}
+.policy-toc a{color:var(--muted);min-height:36px;display:flex;align-items:center}
+.policy-toc a:hover,.policy-toc a:focus-visible{color:var(--action);text-decoration:underline}
+.policy-copy{font-size:16px;line-height:1.7;color:var(--steel)}
+.policy-copy>p{max-width:70ch}
+.policy-copy .policy-updated{font-size:14px;color:var(--muted);margin-bottom:18px}
+.policy-copy section{padding-top:30px;border-top:1px solid var(--line);margin-top:36px;scroll-margin-top:calc(var(--header-height) + 30px)}
+.policy-copy h2{font-size:clamp(24px,2.8vw,32px);color:var(--slate);margin-bottom:18px}
+.policy-copy p+p{margin-top:16px}
+.policy-copy strong{font-weight:600;color:var(--slate)}
+.policy-copy a{color:var(--action);text-decoration:underline;text-underline-offset:3px}
+.form-privacy a{color:var(--action);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:760px){.policy-layout{grid-template-columns:1fr;gap:36px}.policy-toc{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 14px}.policy-toc .eyebrow{grid-column:1/-1}.policy-toc a{font-size:13px}.policy-copy section{margin-top:32px;padding-top:26px}}

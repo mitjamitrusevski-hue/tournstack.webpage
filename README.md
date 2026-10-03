@@ -8,6 +8,7 @@ A lightweight, static pre-launch website for TournStack. The repository root is 
 - `vision.html`: source-grounded product vision, current status and next steps.
 - `contact.html`: Name, Email and Inquiry form connected through a separately deployed Google Apps Script endpoint.
 - `faq.html`: 29 expandable questions covering product fit, the four interfaces, branding, pilots, pricing and future personal use. Rounded cards use right/down chevrons and a blue open/focus outline. Native HTML disclosures work without JavaScript.
+- `privacy.html`: website privacy notice for visits and contact inquiries, linked from every footer and the contact form.
 
 The overview keeps its one-page structure and approved company slogan. Four features sit beside the shield: Organizer Dashboard, Tournament Portal, Live Screen and TournStack Draw. A short section explains B2B branding and standalone or embedded portal access; a later section states the future personal-organizer direction without implying current availability. The vision page now tells a shorter community, evidence and reliability story.
 
@@ -47,11 +48,17 @@ The app is clearly marked as in development. Avoid presenting planned leagues or
 
 Vision and founder copy is based on the supplied “WEB TournStack: Product Vision & Commercial Strategy” document. The Lisbon example describes one deployment on 28 September 2026; it does not establish validation across external organizers. The event link is `https://timelesspassion.fun/en/padel`.
 
-Contact buttons link internally to `contact.html`, which retains `info@tournstack.com` as a direct email alternative. All four pages include the supplied Plausible analytics snippet in the document head, loading `https://plausible.io/js/pa-hcj_wYFVMwBOaNDFRuGWR.js` asynchronously and initializing its queue. The live script returned HTTP 200; receipt of events in the Plausible dashboard remains unverified. Fonts and brand assets remain self-hosted.
+Contact buttons link internally to `contact.html`, which retains `info@tournstack.com` as a direct email alternative. All five pages include the supplied Plausible analytics snippet in the document head, loading `https://plausible.io/js/pa-hcj_wYFVMwBOaNDFRuGWR.js` asynchronously and initializing its queue. The live script returned HTTP 200; receipt of events in the Plausible dashboard remains unverified. Fonts and brand assets remain self-hosted.
 
 ## Structured data
 
-Each page includes a JSON-LD graph connecting the organization, website, logo, software project and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 29 `Question` / `Answer` pairs, and contact uses `ContactPage`. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
+The four product pages include a JSON-LD graph connecting the organization, website, logo, software project and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 29 `Question` / `Answer` pairs, and contact uses `ContactPage`. The privacy page uses a simple `WebPage` record. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
+
+## Privacy and planned consent setup
+
+`privacy.html` identifies Mitja Mitruševski as the current controller and `info@tournstack.com` as the contact point. It describes the website's current providers, cookieless Plausible analytics, session storage for the invitation, and the contact workflow. It states a 24-month limit after the last exchange for Google Sheet inquiry rows and mailbox conversation copies. The owner must review those two stores regularly and remove expired records; no automatic deletion is currently configured for them. The Cloudflare email queue has its separate 30-day purge.
+
+Meta Pixel and LinkedIn Insight Tag are planned but not installed. Before adding either, set up consent management, publish an updated privacy/cookie disclosure naming those providers and purposes, and verify that advertising requests remain blocked before consent and after rejection. CookieYes Free is the proposed managed service for the current traffic level. The account-specific installation key is not in this repository yet. Its free plan permits colour customization but not custom CSS or removal of CookieYes branding; keep the site's consent controls visually aligned through its colour and layout settings. See [CONSENT_SETUP.md](CONSENT_SETUP.md) for the account configuration and verification sequence.
 
 Keep JSON-LD descriptions and FAQ answers synchronized with the HTML when editing. Do not add invented prices, reviews, released-platform support or download links. Structured data helps machines interpret content; it does not guarantee indexing or AI citations. See `2026-10-02_TournStack_Website_Structured-Data.md` for sources and maintenance details.
 
