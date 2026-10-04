@@ -12,7 +12,7 @@ The copied Contacts spreadsheet is now the integration target. Its ID is `1QxdXh
 
 Use the user's [Apps Script project](https://script.google.com/u/0/home/projects/1Vol7BUmnv_jdAs_BRnorsQeW1CdT3EI8GNoM7agTTEqtY-PNEMGfLW4c/edit) while signed into that Gmail account. This editor link is not a deployed web app endpoint.
 
-The user supplied an updated deployment on **2026-10-03**: [Web app endpoint](https://script.google.com/macros/s/AKfycbykm7hoGEXYxCJyNb0An2oWpt2BX5kbZunBu5FjEeW8yjn14ICtC8YMaVPt761YAN65/exec). This `/exec` URL is now present in the live website configuration. The handoff reports a successful `verifyMailRelay` run: mailbox.org TLS connection and SMTP authentication succeeded, with no email sent. The selected implementation calls the deployed Cloudflare Worker at `https://tournstack-mailbox.tournstack.workers.dev`; see [Cloudflare Free setup](../cloudflare-mailbox/SETUP.md). The published website still needs one real contact submission to verify Sheet storage, notification delivery and visitor confirmation. SMTP authentication alone does not verify inbox delivery.
+The user supplied an updated deployment on **2026-10-03**: [Web app endpoint](https://script.google.com/macros/s/AKfycbykm7hoGEXYxCJyNb0An2oWpt2BX5kbZunBu5FjEeW8yjn14ICtC8YMaVPt761YAN65/exec). This `/exec` URL is now present in the live website configuration. The handoff reports a successful `verifyMailRelay` run: mailbox.org TLS connection and SMTP authentication succeeded, with no email sent. The selected implementation calls the deployed Cloudflare Worker at `https://tournstack-mailbox.tournstack.workers.dev`; see [Cloudflare Free setup](../cloudflare-mailbox/SETUP.md). A live Turnstile-protected submission has now shown a success receipt and saved one row in WEB Contacts. The notification and visitor confirmation emails were both reported received.
 
 ### Where appsscript.json belongs
 
@@ -45,15 +45,15 @@ No Google credentials, access tokens or secrets belong in the website repository
 
 ## Submission behavior
 
-### Turnstile rollout (widget created; deployment pending)
+### Turnstile protection (live)
 
-The contact form protection is prepared on the `feature/contact-turnstile` branch. Do not publish this branch until the Script Property and deployment are completed together. The public widget site key is configured in `assets/js/contact-config.js`.
+Turnstile protection was deployed on 4 October 2026. The existing Apps Script web app URL now serves version 4, and the matching website changes are published on `main`. The private widget secret is stored in Apps Script Script Properties as `TURNSTILE_SECRET`.
 
 1. The **Cloudflare Turnstile Free** managed widget named **TournStack contact** is created for `tournstack.com`, `www.tournstack.com`, `localhost` and `127.0.0.1`. Its public site key is `0x4AAAAAAFNJFQAZ8HI8s3Mx`; the widget secret is private. The website uses action `contact`.
-2. In the existing Apps Script project's **Project Settings → Script Properties**, add `TURNSTILE_SECRET` using the private widget secret. Do not send it in chat, add it to this repository or put it in website JavaScript.
+2. The private widget secret is in the existing Apps Script project's **Project Settings → Script Properties** as `TURNSTILE_SECRET`. Do not send it in chat, add it to this repository or put it in website JavaScript.
 3. The public site key is set in `assets/js/contact-config.js` as `turnstileSiteKey`. The contact form loads Turnstile only on `contact.html`.
-4. Update the existing Apps Script project with the revised `Code.gs`, preserving its current manifest, sheet ID, relay settings and deployment URL. Choose **Deploy → Manage deployments → Edit → New version → Deploy**. The current `/exec` URL should stay the same.
-5. Publish the matching website changes. Submit a real inquiry and confirm the success receipt, one Sheet row and the expected emails. Then submit directly to the `/exec` endpoint without `cf-turnstile-response`, and replay an already used token: neither attempt may save a row or send an email.
+4. The revised `Code.gs` is deployed as version 4 under the existing `/exec` URL. The manifest, sheet ID and relay settings were preserved.
+5. A direct POST without `cf-turnstile-response` returned a failure receipt. A live visitor submission showed the success receipt and saved one row in **WEB Contacts** at 02:41:43 Europe/Warsaw. The user confirmed both notification and visitor confirmation emails arrived. Replay rejection follows Cloudflare's single-use token behavior; a captured live-token replay was not performed.
 
 Apps Script verifies the token with Cloudflare before touching the Sheet or mail relay. It checks `success`, action `contact` and the exact hostname matching the allowed submitted origin. An invalid, expired, replayed or missing token fails closed. The existing honeypot and field checks remain active.
 
@@ -79,6 +79,6 @@ The allowed website origins are `https://tournstack.com` and `https://www.tourns
 
 ## Maintenance
 
-After changing server code, use **Deploy → Manage deployments → Edit → New version → Deploy** to keep the same endpoint URL. Changing only website CSS or copy does not require a new Apps Script version. Keep the spreadsheet ID, WEB Contacts tab and headers stable. Timestamp storage and email delivery have been verified with local service mocks; live Google execution and inbox delivery require the deployment test above.
+After changing server code, use **Deploy → Manage deployments → Edit → New version → Deploy** to keep the same endpoint URL. Changing only website CSS or copy does not require a new Apps Script version. Keep the spreadsheet ID, WEB Contacts tab and headers stable. Live Google execution, Sheet storage and both inbox deliveries have now been verified. The on-page success receipt was reported inconsistently; a local browser-message simulation confirmed the success-status handler.
 
 Primary documentation: [Apps Script web apps](https://developers.google.com/apps-script/guides/web), [URL Fetch](https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app), [LockService](https://developers.google.com/apps-script/reference/lock/lock-service), [HtmlService iframe restrictions](https://developers.google.com/apps-script/guides/html/restrictions), [HtmlOutput framing](https://developers.google.com/apps-script/reference/html/html-output).
