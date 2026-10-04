@@ -52,7 +52,7 @@ Contact buttons link internally to `contact.html`, which retains `info@tournstac
 
 ## Structured data
 
-The four product pages include a JSON-LD graph connecting the organization, website, logo, software project, named author and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 29 `Question` / `Answer` pairs, and contact uses `ContactPage`. The privacy page also uses a connected `WebPage` graph. Mitja Mitruševski is the author of first-party website content; TournStack is the publisher. His public, linked `ProfilePage` is `noindex` and stays out of the sitemap. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
+The four product pages include a JSON-LD graph connecting the organization, website, logo, software project, named author and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 29 `Question` / `Answer` pairs, and contact uses `ContactPage`. The privacy page also uses a connected `WebPage` graph. Mitja Mitruševski is the author of first-party website content; TournStack is the publisher. His public, linked `ProfilePage` is `noindex` and stays out of the sitemap. `Person.sameAs` contains Mitja's personal LinkedIn and Timeless Tech biography; `Organization.sameAs` contains TournStack's LinkedIn, Facebook, X and TikTok profiles. Keep those identities separate when adding future authors. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
 
 ## Privacy and consent setup
 
