@@ -75,6 +75,7 @@
         if (!window.turnstile) return;
         widgetId = window.turnstile.render('#contact-turnstile', {
           sitekey: siteKey,
+          theme: 'light',
           action: 'contact',
           callback: () => {
             verified = true;
