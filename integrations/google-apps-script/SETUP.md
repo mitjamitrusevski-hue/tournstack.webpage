@@ -45,13 +45,13 @@ No Google credentials, access tokens or secrets belong in the website repository
 
 ## Submission behavior
 
-### Turnstile rollout (pending widget and secret)
+### Turnstile rollout (widget created; deployment pending)
 
-The contact form protection is prepared on the `feature/contact-turnstile` branch. Do not publish this branch until the steps below are completed together. Its empty `turnstileSiteKey` deliberately disables the form.
+The contact form protection is prepared on the `feature/contact-turnstile` branch. Do not publish this branch until the Script Property and deployment are completed together. The public widget site key is configured in `assets/js/contact-config.js`.
 
-1. Create one **Cloudflare Turnstile Free** managed widget named **TournStack contact** for `tournstack.com` and `www.tournstack.com`. Use action `contact` in the website integration. The site key is public; the widget secret is private.
+1. The **Cloudflare Turnstile Free** managed widget named **TournStack contact** is created for `tournstack.com`, `www.tournstack.com`, `localhost` and `127.0.0.1`. Its public site key is `0x4AAAAAAFNJFQAZ8HI8s3Mx`; the widget secret is private. The website uses action `contact`.
 2. In the existing Apps Script project's **Project Settings → Script Properties**, add `TURNSTILE_SECRET` using the private widget secret. Do not send it in chat, add it to this repository or put it in website JavaScript.
-3. Set the public site key in `assets/js/contact-config.js` as `turnstileSiteKey`. The contact form loads Turnstile only on `contact.html`.
+3. The public site key is set in `assets/js/contact-config.js` as `turnstileSiteKey`. The contact form loads Turnstile only on `contact.html`.
 4. Update the existing Apps Script project with the revised `Code.gs`, preserving its current manifest, sheet ID, relay settings and deployment URL. Choose **Deploy → Manage deployments → Edit → New version → Deploy**. The current `/exec` URL should stay the same.
 5. Publish the matching website changes. Submit a real inquiry and confirm the success receipt, one Sheet row and the expected emails. Then submit directly to the `/exec` endpoint without `cf-turnstile-response`, and replay an already used token: neither attempt may save a row or send an email.
 
