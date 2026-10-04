@@ -17,7 +17,7 @@ The owner supplied the CookieYes installation code and selected it for TournStac
 ## Installation sequence
 
 1. Load the supplied CookieYes installation code near the start of each page's `<head>`, before optional tracking scripts. This is implemented on the current public pages.
-2. In CookieYes, finish the banner configuration for `tournstack.com`: choose a light preset, show clear Accept all / Reject all / Preferences actions, link the privacy policy, and enable a visible revisit control. Verify the account is on Free.
+2. In CookieYes, finish the banner configuration for `tournstack.com`: choose a light Bottom Banner preset, show clear Accept all / Reject all / Customise actions, and link the privacy policy. The site footer provides a Cookie settings button using CookieYes's supported `cky-banner-element` class. Verify the account is on Free. Replace the default message about personalised ads with: “We use a necessary cookie to remember your choice. Our current analytics do not use cookies. Read more in our privacy policy.”
 3. Add Meta Pixel and LinkedIn Insight Tag under the **Advertisement** category only after consent controls are active. Prefer consent-gated loading of the whole tag over allowing a tag to load and attempting to block only its cookies.
 4. Update `privacy.html` with the actual tag purposes, providers, data categories, cookie names and retention periods before enabling them.
 5. In a fresh browser profile, confirm neither advertising script nor its network requests/cookies run before consent or after **Reject all**. Confirm they run after advertising consent, stop after withdrawal, and that preferences can be reopened. Check all public pages and the contact form.
