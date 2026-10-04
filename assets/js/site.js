@@ -55,24 +55,63 @@
     const status = document.querySelector('#contact-status');
     const button = form.querySelector('button[type="submit"]');
     const endpoint = window.TOURNSTACK_CONFIG?.contactEndpoint || '';
-    const configured = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(endpoint);
+    const siteKey = window.TOURNSTACK_CONFIG?.turnstileSiteKey || '';
+    const configured = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(endpoint) &&
+      /^0x[\w-]+$/.test(siteKey);
+    let widgetId;
+    let verified = false;
     let pending = null;
     let timer = null;
     let lastPayload = '';
     let submissionId = '';
-    button.disabled = !configured;
+    button.disabled = true;
     if (configured) {
       form.action = endpoint;
-      status.textContent = '';
+      status.textContent = 'Checking that this form is ready…';
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      script.async = true;
+      script.onload = () => {
+        if (!window.turnstile) return;
+        widgetId = window.turnstile.render('#contact-turnstile', {
+          sitekey: siteKey,
+          action: 'contact',
+          callback: () => {
+            verified = true;
+            if (!pending) button.disabled = false;
+            status.textContent = '';
+          },
+          'expired-callback': () => {
+            verified = false;
+            button.disabled = true;
+            status.textContent = 'Verification expired. Please complete the check again.';
+          },
+          'error-callback': () => {
+            verified = false;
+            button.disabled = true;
+            status.textContent = 'Verification could not load. Refresh this page or email info@tournstack.com.';
+          }
+        });
+      };
+      script.onerror = () => {
+        status.textContent = 'Verification could not load. Refresh this page or email info@tournstack.com.';
+      };
+      document.head.append(script);
     } else {
-      status.textContent = 'The form is being connected. Please email info@tournstack.com for now.';
+      status.textContent = 'The form is temporarily unavailable. Please email info@tournstack.com for now.';
     }
+    const resetVerification = () => {
+      verified = false;
+      button.disabled = true;
+      if (widgetId !== undefined && window.turnstile) window.turnstile.reset(widgetId);
+    };
     [name, inquiry].forEach((field) => {
       field.addEventListener('input', () => field.setCustomValidity(''));
     });
     form.addEventListener('submit', (event) => {
-      if (!configured || pending) {
+      if (!configured || pending || !verified || !window.turnstile?.getResponse(widgetId)) {
         event.preventDefault();
+        if (!verified) status.textContent = 'Please complete the verification before sending.';
         return;
       }
       name.value = name.value.trim();
@@ -97,7 +136,7 @@
       status.textContent = 'Sending your inquiry…';
       timer = window.setTimeout(() => {
         pending = null;
-        button.disabled = false;
+        resetVerification();
         form.removeAttribute('aria-busy');
         status.textContent = 'We could not confirm receipt. Your inquiry may already be saved. Please retry or email info@tournstack.com.';
       }, 45000);
@@ -117,8 +156,8 @@
           receipt.submissionId !== pending || typeof receipt.ok !== 'boolean') return;
       window.clearTimeout(timer);
       pending = null;
-      button.disabled = false;
       form.removeAttribute('aria-busy');
+      resetVerification();
       if (receipt.ok) {
         form.reset();
         submissionId = '';

@@ -38,7 +38,9 @@ function doPost(e) {
     name.length > 0 && name.length <= 100 && !/[\r\n]/.test(name) &&
     email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
     inquiry.length > 0 && inquiry.length <= 5000;
-  if (!valid) return receipt_(origin, id, false);
+  if (!valid || !verifyTurnstile_(p['cf-turnstile-response'], origin)) {
+    return receipt_(origin, id, false);
+  }
 
   const lock = LockService.getScriptLock();
   let saved = false;
@@ -78,6 +80,28 @@ function doPost(e) {
     if (lock.hasLock()) lock.releaseLock();
   }
   return receipt_(origin, id, saved);
+}
+
+function verifyTurnstile_(token, origin) {
+  const secret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
+  if (typeof secret !== 'string' || !secret ||
+      typeof token !== 'string' || token.length < 1 || token.length > 2048) return false;
+  try {
+    const response = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'post',
+      contentType: 'application/x-www-form-urlencoded',
+      payload: {secret: secret, response: token},
+      muteHttpExceptions: true,
+      followRedirects: false
+    });
+    if (response.getResponseCode() !== 200) return false;
+    const result = JSON.parse(response.getContentText());
+    return result.success === true && result.action === 'contact' &&
+      result.hostname === origin.replace(/^https:\/\//, '');
+  } catch (error) {
+    console.error('Turnstile verification failed.');
+    return false;
+  }
 }
 
 function relaySettings_() {

@@ -14,7 +14,7 @@
   <link rel="canonical" href="https://tournstack.com/contact.html">
   <link rel="icon" type="image/svg+xml" href="assets/brand/TS_MasterFavicon_Shield_FullColor_DeepSlateBG_RGB.svg">
   <link rel="preload" href="assets/fonts/Montserrat-Latin.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261004-4">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261004-5">
   <!-- Privacy-friendly analytics by Plausible -->
   <script async src="https://plausible.io/js/pa-hcj_wYFVMwBOaNDFRuGWR.js"></script>
   <script>
@@ -137,8 +137,8 @@
   ]
 }
   </script>
-  <script defer src="assets/js/contact-config.js?v=20261003-2"></script>
-  <script defer src="assets/js/site.js?v=20261004-1"></script>
+  <script defer src="assets/js/contact-config.js?v=20261004-1"></script>
+  <script defer src="assets/js/site.js?v=20261004-2"></script>
 </head>
 <body data-page="contact">
   <a class="skip-link" href="#main" title="Skip navigation and go to the main content" hreflang="en" data-link-type="internal">Skip to content</a>
@@ -164,7 +164,8 @@
           <div class="form-field"><label for="contact-inquiry">Inquiry</label><textarea id="contact-inquiry" name="Inquiry" rows="6" required maxlength="5000"></textarea></div>
           <div hidden aria-hidden="true"><label for="contact-website">Leave this field empty</label><input id="contact-website" name="Website" type="text" tabindex="-1" autocomplete="off"></div>
           <input type="hidden" name="SubmissionId"><input type="hidden" name="Origin">
-          <p class="form-privacy" id="contact-privacy">Your details are used to respond to your inquiry. <a href="privacy.html" data-link-type="internal">Read our privacy policy</a>.</p>
+          <div id="contact-turnstile" class="contact-turnstile" aria-label="Human verification"></div>
+          <p class="form-privacy" id="contact-privacy">Your details are used to respond to your inquiry. Cloudflare checks this submission for spam. <a href="privacy.html" data-link-type="internal">Read our privacy policy</a>.</p>
           <button class="button button-light" type="submit" disabled>Send inquiry <span aria-hidden="true">→</span></button>
           <p class="form-status" id="contact-status" role="status" aria-live="polite" aria-atomic="true">The form is being connected. Please email info@tournstack.com for now.</p>
           <noscript><p>JavaScript is needed to send this form. Please email info@tournstack.com instead.</p></noscript>
