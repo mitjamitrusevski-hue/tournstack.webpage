@@ -9,7 +9,20 @@ A lightweight, static pre-launch website for TournStack. The repository root is 
 - `contact.html`: Name, Email and Inquiry form connected through a separately deployed Google Apps Script endpoint.
 - `faq.html`: 29 expandable questions covering product fit, the four interfaces, branding, pilots, pricing and future personal use. Rounded cards use right/down chevrons and a blue open/focus outline. Native HTML disclosures work without JavaScript.
 - `privacy.html`: website privacy notice for visits and contact inquiries, linked from every footer and the contact form.
-- `author-mitja-mitrusevski.html`: public, noindex author profile linked from the footer.
+- `author-mitja-mitrusevski.html`: substantive, indexable author profile linked from every footer and listed in the sitemap.
+
+### Public page register — checked 2026-10-06
+
+All six routes returned HTTP 200 on the public domain on this date. Their intended policy is indexable, their canonical points to the URL shown below, and each belongs in `sitemap.xml`. The connected graphs use Mitja Mitruševski (`https://tournstack.com/#mitja-mitrusevski`) as the current first-party author and TournStack (`https://tournstack.com/#organization`) as publisher. Response and deployment verification for a new commit must still be recorded separately.
+
+| Canonical URL | Purpose; title / H1 | Meta description | Schema type | Incoming links |
+|---|---|---|---|---|
+| `https://tournstack.com/` | Product overview; “TournStack — Tournament tools for organizers and clubs” / “More play. Less admin.” | We’re building TournStack to connect tournament registrations, schedules, results and public updates. Starting with clubs and sports centres. | `WebPage` | Header, footer, author profile and cross-page navigation. |
+| `https://tournstack.com/vision.html` | Product direction; “Our vision — TournStack” / “Keep organizing simple. Keep sport at the center.” | See why TournStack is building connected tournament tools, starting with sports centres and clubs and aiming to serve more sports over time. | `AboutPage` | Header, footer, overview and author profile. |
+| `https://tournstack.com/faq.html` | Product answers; “TournStack FAQ — Product, widgets, pilots and pricing” / “Good questions. Clear answers.” | Answers to 29 questions about TournStack, from the Tournament Portal and Live Screen to branding, pilots and future plans. | `FAQPage` | Header, footer, overview and author profile. |
+| `https://tournstack.com/contact.html` | Inquiry route; “Contact TournStack — Product questions and pilot interest” / “What are you working on?” | Tell us about your tournament, a possible partnership or an idea for TournStack. We’re open to hearing from clubs, organisers and supporters. | `ContactPage` | Header contact action, overview, FAQ, vision and footer. |
+| `https://tournstack.com/privacy.html` | Website privacy notice; “Privacy policy — TournStack” / “Privacy, explained.” | How TournStack handles website visits and contact inquiries, including analytics, browser storage and service providers. | `WebPage` | Footer, contact form and author profile. |
+| `https://tournstack.com/author-mitja-mitrusevski.html` | Writer biography; “Mitja Mitruševski — TournStack author” / “Mitja Mitruševski.” | Meet Mitja Mitruševski, TournStack's website author and vision and commercial lead. Read about his project work, background and selected writing. | `ProfilePage` with `Person` main entity | Attribution link in every footer. |
 
 The overview keeps its one-page structure and approved company slogan. Four features sit beside the shield: Organizer Dashboard, Tournament Portal, Live Screen and TournStack Draw. A short section explains B2B branding and standalone or embedded portal access; a later section states the future personal-organizer direction without implying current availability. The vision page now tells a shorter community, evidence and reliability story.
 
@@ -37,7 +50,7 @@ The supplied SVG logo masters are copied from `Marketing/VisualIdentity/SVG` int
 
 The approved AI-generated tennis lifestyle artwork `assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp` (2048 × 768) remains the desktop hero. A `<picture>` switches to the prepared 600 × 800 or 900 × 1200 portrait composition at 760 CSS pixels and below. The hero is eager with high fetch priority; a visible caption identifies its screens as illustrative. Below it, the Lisbon frame displays a real owner-supplied event photograph and the Vision frame displays a visibly labeled AI-generated multi-sport concept. Each frame uses 480, 800 and 1200-pixel WebP variants, intrinsic dimensions, `srcset`/`sizes` and lazy loading. Their captions are live HTML.
 
-The 1200 × 630 WebP social-share image is referenced by Open Graph and Twitter/X tags on the five indexable pages. Page titles, descriptions, canonicals and the established Person/Organization entity IDs remain page-specific. The author profile keeps its portrait share image and `noindex` policy.
+The 1200 × 630 WebP social-share image is referenced by Open Graph and Twitter/X tags on all six indexable pages. Page titles, descriptions, canonicals and the established Person/Organization entity IDs remain page-specific. The author profile uses its portrait in visible content and `Person.image`. A 1280 × 480 desktop hero derivative serves suitable intermediate widths; the approved 2048 × 768 artwork remains the largest candidate.
 
 The self-hosted Montserrat variable font is in `assets/fonts/` with its SIL Open Font License. CSS is in `assets/css/styles.css`. A temporary copy of the approved WebP is stored in the user's `_TMP` Drive folder; the website serves its own local asset, so no Drive permissions are needed by visitors.
 
@@ -57,7 +70,7 @@ Contact buttons link internally to `contact.html`, which retains `info@tournstac
 
 ## Structured data
 
-The four product pages include a JSON-LD graph connecting the organization, website, logo, software project, named author and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 29 `Question` / `Answer` pairs, and contact uses `ContactPage`. The privacy page also uses a connected `WebPage` graph. Mitja Mitruševski is the author of first-party website content; TournStack is the publisher. His public, linked `ProfilePage` is `noindex` and stays out of the sitemap. `Person.sameAs` contains Mitja's personal LinkedIn and Timeless Tech biography; `Organization.sameAs` contains TournStack's LinkedIn, Facebook, X and TikTok profiles. Keep those identities separate when adding future authors. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
+The four product pages include a JSON-LD graph connecting the organization, website, logo, software project, named author and verified team names. The overview uses `WebPage`, vision uses `AboutPage`, the FAQ uses `FAQPage` with 29 `Question` / `Answer` pairs, and contact uses `ContactPage`. The privacy page also uses a connected `WebPage` graph. Mitja Mitruševski is the author of first-party website content; TournStack is the publisher. His public, linked `ProfilePage` is indexable and in the sitemap. `Person.sameAs` contains Mitja's personal LinkedIn and Timeless Tech biography; `Organization.sameAs` contains TournStack's LinkedIn, Facebook, X and TikTok profiles. Keep those identities separate when adding future authors. Vision, FAQ and contact also include breadcrumbs. Canonical URLs and the sitemap use `https://tournstack.com/`.
 
 ## Privacy and consent setup
 
@@ -69,7 +82,7 @@ Keep JSON-LD descriptions and FAQ answers synchronized with the HTML when editin
 
 ## Motion and invitation
 
-`assets/js/site.js` progressively adds 750ms opacity/vertical reveals to below-fold content. Reduced-motion users receive static visible content. IntersectionObserver failures leave the page visible. A small, nonmodal invitation appears after 30 seconds of active visible time across page navigation, once per tab session. It never takes focus, is dismissible with its close button or Escape, and links to the contact form. It does not appear on the contact page.
+`assets/js/site.js` progressively adds 750ms opacity/vertical reveals to below-fold content. Geometry reads are batched before reveal classes are applied. Reduced-motion users receive static visible content. IntersectionObserver failures leave the page visible. A nonmodal invitation appears after 30 seconds of active visible time across page navigation, once per tab session. On phones it becomes a compact bottom card that keeps the contact action and close control visible while omitting its secondary text. It never takes focus, is dismissible with its close button or Escape, and links to the contact form. It does not appear on the contact page.
 
 ## Contact storage and email
 

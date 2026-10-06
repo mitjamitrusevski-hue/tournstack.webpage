@@ -31,8 +31,11 @@
           observer.unobserve(entry.target);
         });
       }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
-      blocks.forEach((block) => {
-        if (block.getBoundingClientRect().top < window.innerHeight) return;
+      const viewportHeight = window.innerHeight;
+      const belowViewport = [...blocks].filter(
+        (block) => block.getBoundingClientRect().top >= viewportHeight
+      );
+      belowViewport.forEach((block) => {
         block.classList.add('reveal-block', 'reveal-pending');
         observer.observe(block);
       });
