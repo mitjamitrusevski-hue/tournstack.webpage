@@ -193,7 +193,8 @@
   let shown = false;
   const consentDialogOpen = () => [...document.querySelectorAll(
     '.cky-consent-container, .cky-preference-center'
-  )].some((dialog) => dialog.getClientRects().length > 0);
+  )].some((dialog) => dialog.getClientRects().length > 0 &&
+    window.getComputedStyle(dialog).visibility !== 'hidden');
 
   const pause = () => {
     if (started !== null) elapsed += performance.now() - started;
