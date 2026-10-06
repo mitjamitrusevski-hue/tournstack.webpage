@@ -191,6 +191,9 @@
   let started = null;
   let timer = null;
   let shown = false;
+  const consentDialogOpen = () => [...document.querySelectorAll(
+    '.cky-consent-container, .cky-preference-center'
+  )].some((dialog) => dialog.getClientRects().length > 0);
 
   const pause = () => {
     if (started !== null) elapsed += performance.now() - started;
@@ -202,6 +205,12 @@
   const show = () => {
     pause();
     if (shown || document.hidden) return;
+    if (consentDialogOpen()) {
+      elapsed = 0;
+      write(elapsedKey, '0');
+      timer = window.setTimeout(start, 1000);
+      return;
+    }
     shown = true;
     write(seenKey, '1');
     prompt.hidden = false;
@@ -209,6 +218,10 @@
   };
   const start = () => {
     if (shown || document.hidden || started !== null) return;
+    if (consentDialogOpen()) {
+      timer = window.setTimeout(start, 1000);
+      return;
+    }
     started = performance.now();
     timer = window.setTimeout(show, Math.max(0, delay - elapsed));
   };

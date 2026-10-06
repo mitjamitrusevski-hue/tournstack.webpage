@@ -82,7 +82,7 @@ Keep JSON-LD descriptions and FAQ answers synchronized with the HTML when editin
 
 ## Motion and invitation
 
-`assets/js/site.js` progressively adds 750ms opacity/vertical reveals to below-fold content. Geometry reads are batched before reveal classes are applied. Reduced-motion users receive static visible content. IntersectionObserver failures leave the page visible. A nonmodal invitation appears after 30 seconds of active visible time across page navigation, once per tab session. On phones it becomes a compact bottom card that keeps the contact action and close control visible while omitting its secondary text. It never takes focus, is dismissible with its close button or Escape, and links to the contact form. It does not appear on the contact page.
+`assets/js/site.js` progressively adds 750ms opacity/vertical reveals to below-fold content. Geometry reads are batched before reveal classes are applied. Reduced-motion users receive static visible content. IntersectionObserver failures leave the page visible. A nonmodal invitation appears after 30 seconds of active visible time across page navigation, once per tab session. The timer waits while the CookieYes choice or preference panel is open. On phones the invitation becomes a compact bottom card that keeps the contact action and close control visible while omitting its secondary text. It never takes focus, is dismissible with its close button or Escape, and links to the contact form. It does not appear on the contact page.
 
 ## Contact storage and email
 
