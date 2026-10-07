@@ -11,9 +11,9 @@ A lightweight, static pre-launch website for TournStack. The repository root is 
 - `privacy.html`: website privacy notice for visits and contact inquiries, linked from every footer and the contact form.
 - `author-mitja-mitrusevski.html`: substantive, indexable author profile linked from every footer and listed in the sitemap.
 
-### Public page register — local source updated 2026-10-07
+### Public page register — published source updated 2026-10-07
 
-All six routes returned HTTP 200 on the public domain on 2026-10-06. The table below describes the current **local source** and does not claim that the 2026-10-07 edits are deployed. Their intended policy is indexable, their canonicals point to the URLs shown below, and each belongs in `sitemap.xml`. The connected graphs use Mitja Mitruševski (`https://tournstack.com/#mitja-mitrusevski`) as the current first-party author and TournStack (`https://tournstack.com/#organization`) as publisher. Response and deployment verification for a new commit must be recorded separately.
+The 2026-10-07 Wizard-first content update was published from commit `5e4717395429b5ac4a9ce0a110caf6579130b456` and verified on the public domain. The table below describes that published page content; a later local edit may differ until separately released. All six routes returned HTTP 200 and matched the committed HTML bytes during verification. Their intended policy is indexable, their canonicals point to the URLs shown below, and each belongs in `sitemap.xml`. The connected graphs use Mitja Mitruševski (`https://tournstack.com/#mitja-mitrusevski`) as the current first-party author and TournStack (`https://tournstack.com/#organization`) as publisher. The release record under `Marketing/WebPublishing/Operations/Releases` holds the deployment evidence.
 
 | Canonical URL | Purpose; title / H1 | Meta description | Schema type | Incoming links |
 |---|---|---|---|---|
