@@ -8,6 +8,8 @@ status: Ready for upload; visual browser review pending
 
 # TournStack website v1.1
 
+> Historical handoff from 2 October 2026. The page counts, feature examples, sport focus and schema descriptions below describe that edition; they are not current maintenance instructions. For current copy and structured data, read the maintained HTML in this repository, the [website README](README.md), and the current [marketing handbook](../../../Guides/index.md), especially its messaging, claims and schema guides.
+
 The update keeps the existing product overview, audience sections, Lisbon example, team and vision page. It adds five prominent hero features, a concise SaaS access explanation, fixed navigation, a full footer, an expandable FAQ page and Schema.org JSON-LD.
 
 ## Page and entity map

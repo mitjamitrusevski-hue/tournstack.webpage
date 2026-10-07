@@ -215,3 +215,14 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
   .lifestyle-banner picture{aspect-ratio:3/4}
   .lifestyle-banner img{width:100%;height:100%;object-fit:contain;object-position:center}
 }
+
+/* Wizard-first explanation: visible and readable without JavaScript. */
+.hero-reassurance{color:var(--soft);font-size:15px;line-height:1.65;max-width:460px;margin-top:14px}
+.workflow-section{scroll-margin-top:calc(var(--header-height) + 24px)}
+.workflow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin-top:42px}
+.workflow-step{border-top:1px solid var(--line);padding-top:22px;min-width:0}
+.workflow-number{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;background:#e4edfc;color:var(--action);font-size:12px;font-weight:650;margin-bottom:18px}
+.workflow-step h3{font-size:20px}
+.workflow-step p{color:var(--muted);font-size:14px;line-height:1.75;margin-top:12px}
+.workflow-note{max-width:850px;margin-top:38px;border-left:3px solid var(--action);padding:14px 20px;background:var(--surface);color:var(--muted);font-size:15px;line-height:1.7}
+@media(max-width:760px){.hero-reassurance{font-size:16px;max-width:540px}.workflow-grid{grid-template-columns:1fr;gap:26px;margin-top:32px}.workflow-step{padding-top:20px}.workflow-step p,.workflow-note{font-size:16px;line-height:1.6}.workflow-note{margin-top:32px;padding:16px}}

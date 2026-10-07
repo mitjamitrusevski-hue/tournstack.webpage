@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TournStack — Tournament tools for organizers and clubs</title>
-  <meta name="description" content="We’re building TournStack to connect tournament registrations, schedules, results and public updates. Starting with clubs and sports centres.">
+  <title>TournStack — Tournament Setup &amp; League Management</title>
+  <meta name="description" content="We’re building guided ten-minute tournament setup, automatic forms and event emails, simple event control and league management.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#0F172A">
   <meta property="og:title" content="TournStack — More play. Less admin.">
-  <meta property="og:description" content="We’re building TournStack to connect tournament registrations, schedules, results and public updates. Starting with clubs and sports centres.">
+  <meta property="og:description" content="We’re building guided ten-minute tournament setup, automatic forms and event emails, simple event control and league management.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tournstack.com/">
   <meta property="og:image" content="https://tournstack.com/assets/images/2026-10-06_TS_Social-Share_Tennis-Lifestyle_1200x630_RGB.webp">
@@ -18,13 +18,13 @@
   <meta property="og:image:alt" content="TournStack logo and More play. Less admin. slogan over an illustrative tennis scene.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="TournStack — More play. Less admin.">
-  <meta name="twitter:description" content="We’re building TournStack to connect tournament registrations, schedules, results and public updates. Starting with clubs and sports centres.">
+  <meta name="twitter:description" content="We’re building guided ten-minute tournament setup, automatic forms and event emails, simple event control and league management.">
   <meta name="twitter:image" content="https://tournstack.com/assets/images/2026-10-06_TS_Social-Share_Tennis-Lifestyle_1200x630_RGB.webp">
   <meta name="twitter:image:alt" content="TournStack logo and More play. Less admin. slogan over an illustrative tennis scene.">
   <link rel="canonical" href="https://tournstack.com/">
   <link rel="icon" type="image/svg+xml" href="assets/brand/TS_MasterFavicon_Shield_FullColor_Transparent_RGB.svg">
   <link rel="preload" href="assets/fonts/Montserrat-Latin.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="assets/css/styles.css?v=20261006-2">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20261007-1">
   <!-- Privacy-friendly analytics by Plausible -->
   <!-- Start cookieyes banner -->
   <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/e9d335d0f9967ac125f2bc1619ff6298/script.js"></script>
@@ -44,7 +44,7 @@
       "name": "TournStack",
       "url": "https://tournstack.com/",
       "email": "info@tournstack.com",
-      "description": "Tournament-management project in development, connecting organizer work with public event information.",
+      "description": "Tournament-and-league management project in development, connecting guided setup and organiser control with public event information.",
       "logo": {
         "@id": "https://tournstack.com/#logo"
       },
@@ -80,25 +80,28 @@
       "publisher": {
         "@id": "https://tournstack.com/#organization"
       },
-      "description": "TournStack tournament-management project, vision and answers to common questions."
+      "description": "TournStack’s tournament-and-league management project, product vision and answers to common questions."
     },
     {
       "@type": "SoftwareApplication",
       "@id": "https://tournstack.com/#software",
       "name": "TournStack",
       "url": "https://tournstack.com/",
-      "applicationCategory": "Sports tournament management software",
-      "applicationSubCategory": "Tournament management",
-      "description": "TournStack is a tournament-management project in development. It brings registrations, schedules, results, player updates, a public tournament page and live score displays together for organizers and people following an event.",
+      "applicationCategory": "Sports tournament and league management software",
+      "applicationSubCategory": "Tournament and league management",
+      "description": "TournStack is a tournament-and-league management project in development. It combines guided initial tournament setup with a ten-minute objective, generated registration resources, configured event emails and organiser-controlled scores and event changes. Connected public tournament pages, live score displays, event announcements and a prize draw support the event experience.",
       "creativeWorkStatus": "In development",
       "publisher": {
         "@id": "https://tournstack.com/#organization"
       },
       "featureList": [
-        "Organizer Dashboard: private organizer workspace",
+        "Tournament Wizard: guided initial tournament setup and registration resources",
+        "Organizer Dashboard: scores, event changes and announcements",
+        "Configured registration and event emails",
         "Tournament Portal: public tournament page, standalone or embedded",
-        "Live Screen: scores while an event is live",
-        "TournStack Draw: event prize draw"
+        "Live Screen: live scores and event announcements",
+        "TournStack Draw: event prize draw",
+        "Tournament and league management in development"
       ]
     },
     {
@@ -124,8 +127,8 @@
       "@type": "WebPage",
       "@id": "https://tournstack.com/#webpage",
       "url": "https://tournstack.com/",
-      "name": "TournStack — Tournament tools for organizers and clubs",
-      "description": "TournStack connects tournament organization with public event information. Starting with clubs and sports centres, in development.",
+      "name": "TournStack — Tournament Setup & League Management",
+      "description": "We’re building guided ten-minute tournament setup, automatic forms and event emails, simple event control and league management.",
       "mainEntity": {
         "@id": "https://tournstack.com/#software"
       },
@@ -139,7 +142,7 @@
       "publisher": {
         "@id": "https://tournstack.com/#organization"
       },
-      "dateModified": "2026-10-06",
+      "dateModified": "2026-10-07",
       "author": {
         "@id": "https://tournstack.com/#mitja-mitrusevski"
       }
@@ -163,32 +166,44 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <p class="status"><span aria-hidden="true"></span> Tournament tools · In development</p>
+          <p class="status"><span aria-hidden="true"></span> 10-minute setup goal · In development</p>
           <h1>More play.<br><span>Less admin.</span></h1>
           <p class="hero-description">Your tournament, connected.</p>
-          <p class="hero-detail">We’re building TournStack to make sports tournaments easier to set up and run. Bring registrations, schedules, results and player updates together, with a public tournament page and live score displays that people can follow in their browser.</p>
+          <p class="hero-detail">We’re building a way to create your tournament in 10 minutes. The Tournament Wizard guides you through the sport, format and event details, then creates player and guest registration forms and handles event emails. During play, manage scores, changes and announcements from the Organizer Dashboard.</p>
+          <p class="hero-reassurance">Players can register and follow the event in their browser—no app download needed.</p>
           <div class="hero-actions"><a class="button button-dark" href="contact.html" title="Contact TournStack about your event or project inquiry" hreflang="en" data-link-type="internal">Contact the team <span aria-hidden="true">→</span></a><a class="text-link" href="vision.html" title="TournStack product vision and next steps" hreflang="en" data-link-type="internal">Explore our vision <span aria-hidden="true">→</span></a></div>
-          <p class="hero-note">Starting with sports centres and local clubs. In development, with padel and tennis as our starting point.</p>
+          <p class="hero-note">Starting with sports centres and local clubs. Currently in development.</p>
         </div>
         <div class="hero-features" aria-labelledby="hero-features-title">
           <div class="hero-features-brand"><img src="assets/brand/TS_BrandMark_Shield_FullColor_Transparent_RGB.svg" alt="" width="1024" height="1024"><div><p class="eyebrow">THE TOURNSTACK APPROACH</p><h2 id="hero-features-title">Built around your event.</h2></div></div>
           <ul class="hero-feature-list">
-            <li><span class="hero-feature-index feature-blue" aria-hidden="true">01</span><div><h3>Organizer Dashboard</h3><p>A private workspace to prepare and run your tournament, with registrations, schedules and results together.</p></div></li>
-            <li><span class="hero-feature-index feature-magenta" aria-hidden="true">02</span><div><h3>Tournament Portal</h3><p>A public tournament page with event information, participants and results. Use it on its own or within your website.</p></div></li>
-            <li><span class="hero-feature-index feature-pink" aria-hidden="true">03</span><div><h3>Live Screen</h3><p>Live scores for venue screens, so players and spectators can follow the action.</p></div></li>
-            <li><span class="hero-feature-index feature-coral" aria-hidden="true">04</span><div><h3>TournStack Draw</h3><p>A prize draw for eligible players, spectators and entrants added by the organiser.</p></div></li>
+            <li><span class="hero-feature-index feature-blue" aria-hidden="true">01</span><div><h3>Organizer Dashboard</h3><p>Create your tournament with guided setup, then manage registrations, schedules, scores and event changes from one place.</p></div></li>
+            <li><span class="hero-feature-index feature-magenta" aria-hidden="true">02</span><div><h3>Tournament Portal</h3><p>A public tournament page for registrations, participants and results. Share it on its own or display it within your website.</p></div></li>
+            <li><span class="hero-feature-index feature-pink" aria-hidden="true">03</span><div><h3>Live Screen</h3><p>Show live scores and organiser announcements on venue screens, keeping players and spectators informed during the event.</p></div></li>
+            <li><span class="hero-feature-index feature-coral" aria-hidden="true">04</span><div><h3>TournStack Draw</h3><p>Bring eligible players, spectators and people you add into your event’s prize draw.</p></div></li>
           </ul>
         </div>
       </div>
       <div class="container hero-foot"><span>Built around the event</span><span>Public pages in the browser</span><span>No player app needed</span></div>
+    </section>
+    <section class="section workflow-section" id="how-it-works" aria-labelledby="workflow-title">
+      <div class="container">
+        <div class="section-intro"><p class="eyebrow">HOW IT WORKS</p><h2 id="workflow-title">From setup to the final score.</h2><p>Guided choices get the event started. The organiser stays in control as it unfolds.</p></div>
+        <div class="workflow-grid">
+          <article class="workflow-step"><span class="workflow-number" aria-hidden="true">01</span><h3>Set it up</h3><p>Follow the Tournament Wizard. It explains the supported sport and format choices and creates your registration resources.</p></article>
+          <article class="workflow-step"><span class="workflow-number" aria-hidden="true">02</span><h3>Keep it moving</h3><p>Enter scores and handle injuries, withdrawals, substitutions and disruptions through the Organizer Dashboard.</p></article>
+          <article class="workflow-step"><span class="workflow-number" aria-hidden="true">03</span><h3>Keep everyone informed</h3><p>Send one announcement to all of your event’s Tournament Portals and Live Screens.</p></article>
+        </div>
+        <p class="workflow-note">TournStack handles configured registration confirmations and event emails when the relevant action occurs. You review the settings and stay in control of event decisions.</p>
+      </div>
     </section>
     <section class="saas-section" aria-labelledby="approach-title"><div class="container saas-inner"><div><p class="eyebrow">YOUR EVENT, YOUR COMMUNITY</p><h2 id="approach-title">Your club stays in front.</h2></div><div><p>The B2B version can use your logo, colours and name, with the option to remove TournStack branding. Your Tournament Portal can stand alone or appear within your existing website. Players and spectators follow through browser links.</p><p class="saas-note">TournStack is in development. Ask us about the scope available for a pilot.</p></div></div></section>
     <section class="section section-tint" aria-labelledby="audience-title">
       <div class="container audience-layout">
         <div class="section-intro"><p class="eyebrow">WHO IT’S FOR</p><h2 id="audience-title">For the people who make game day happen.</h2><p>From a club calendar to a community tournament, the people running the event should have more room to enjoy it too.</p></div>
         <div class="audience-cards">
-          <article class="audience-card"><p class="card-kicker">FOR SPORTS CENTERS &amp; CLUBS</p><h3>Let your community lead.</h3><p>Keep the tournament connected to your venue and your identity. Your public page can use your logo, colours and name while the organizer team works from a private dashboard.</p><p class="card-detail">Discuss the B2B scope for your events.</p></article>
-          <article class="audience-card"><p class="card-kicker">FOR INDEPENDENT ORGANIZERS</p><h3>Bring the moving parts together.</h3><p>Whether you run a local competition or a recurring tournament, we want to make the work around the game easier to follow.</p><p class="card-detail">Tell us about the event you organize.</p></article>
+          <article class="audience-card"><p class="card-kicker">FOR SPORTS CENTERS &amp; CLUBS</p><h3>Let your community lead.</h3><p>Bring your club’s tournaments and leagues together. Set up competitions with guided choices, manage changes from a private dashboard and keep your community informed through public event pages and live score displays. The B2B version can use your logo, colours and name.</p><p class="card-detail">Discuss the B2B scope for your events.</p></article>
+          <article class="audience-card"><p class="card-kicker">FOR INDEPENDENT ORGANIZERS</p><h3>Bring the moving parts together.</h3><p>From a birthday tournament to a local competition, the aim is the same: guided setup without prior organising expertise and simple control during play. Broader personal access follows once the B2B experience is ready.</p><p class="card-detail">Tell us about the event you organize.</p></article>
         </div>
       </div>
     </section>
@@ -210,7 +225,7 @@
         </figcaption>
       </figure>
     </section>
-    <section class="section section-tint" aria-labelledby="future-title"><div class="container future-layout"><div><p class="eyebrow">THE LONG VIEW</p><h2 id="future-title">Room for every kind of tournament.</h2></div><div><p>Sports centres and local clubs come first. Once TournStack has proved reliable across more events, we want to bring the same four-part experience to individual organisers too—from a backyard birthday tournament to a semi-pro competition.</p><p>That future personal offering would keep the Organizer Dashboard, Tournament Portal, Live Screen and TournStack Draw, adapted to the size of the event and carrying TournStack branding. We’ll add sports and formats as they’re tested, learning from real events along the way.</p><a class="text-link" href="vision.html" title="Read about TournStack’s longer-term direction" hreflang="en" data-link-type="internal">Read our vision <span aria-hidden="true">→</span></a></div></div></section>
+    <section class="section section-tint" aria-labelledby="future-title"><div class="container future-layout"><div><p class="eyebrow">THE LONG VIEW</p><h2 id="future-title">From one tournament to a season of play.</h2></div><div><p>We’re developing TournStack for one-off tournaments and ongoing leagues, from recreational events to regional competition. Sports centres and local clubs come first, with each sport and format tested as the product develops.</p><p>Broader personal access follows once the setup and event experience are ready. That version would retain TournStack branding, while players and spectators continue to use browser links to join and follow events.</p><a class="text-link" href="vision.html" title="Read about TournStack’s longer-term direction" hreflang="en" data-link-type="internal">Read our vision <span aria-hidden="true">→</span></a></div></div></section>
     <section class="section section-team" aria-labelledby="team-title">
       <div class="container team-layout">
         <div class="section-intro"><p class="eyebrow">THE PEOPLE BEHIND IT</p><h2 id="team-title">We care about the work behind the game.</h2><a class="text-link light-link" href="vision.html" title="TournStack product vision and next steps" hreflang="en" data-link-type="internal">Read about the project <span aria-hidden="true">→</span></a></div>
@@ -220,7 +235,7 @@
     <section class="contact-section" aria-labelledby="contact-title"><div class="container contact-inner"><div><p class="eyebrow">LET’S TALK</p><h2 id="contact-title">Have an event or idea in mind?</h2><p>If you run a club, organize tournaments or see a useful way to work together, tell us what you’re thinking. We’re open to a conversation.</p></div><a class="contact-email" href="contact.html" title="Contact TournStack about your event or project inquiry" hreflang="en" data-link-type="internal">Tell us about it <span aria-hidden="true">→</span></a></div></section>
   </main>
   <footer class="site-footer"><div class="container footer-top"><div class="footer-identity"><a class="footer-brand" href="./" aria-label="TournStack home" title="TournStack overview and current development status" hreflang="en" data-link-type="internal"><img src="assets/brand/TS_Primary_H_Reversed_DarkBG_RGB.svg" alt="TournStack" width="1024" height="165" loading="lazy"></a><p>More play. Less admin.<br>Your tournament, connected.</p></div><nav class="footer-nav" aria-label="Footer navigation"><p class="footer-label">EXPLORE</p><a href="./" title="TournStack overview and current development status" hreflang="en" data-link-type="internal">Overview</a><a href="vision.html" title="TournStack product vision and next steps" hreflang="en" data-link-type="internal">Our vision</a><a href="faq.html" title="TournStack frequently asked questions" hreflang="en" data-link-type="internal">FAQ</a><a href="privacy.html" title="Read how TournStack handles website and contact data" hreflang="en" data-link-type="internal">Privacy</a></nav><div class="footer-contact"><p class="footer-label">CONTACT</p><a href="contact.html" title="Contact TournStack about your event or project inquiry" hreflang="en" data-link-type="internal">Contact the team</a><p>For project information,<br>demonstrations and pilot interest.</p></div></div>  <div class="container footer-credit"><p>Website content by <a href="author-mitja-mitrusevski.html" data-link-type="internal">Mitja Mitruševski</a></p><nav aria-label="TournStack social profiles"><a href="https://www.linkedin.com/company/tournstack/" aria-label="TournStack on LinkedIn" title="TournStack on LinkedIn"><img src="assets/brand/social-linkedin.svg" alt="" width="24" height="24" aria-hidden="true"></a><a href="https://www.facebook.com/TournStack" aria-label="TournStack on Facebook" title="TournStack on Facebook"><img src="assets/brand/social-facebook.svg" alt="" width="24" height="24" aria-hidden="true"></a><a href="https://x.com/tournstack" aria-label="TournStack on X" title="TournStack on X"><img src="assets/brand/social-x.svg" alt="" width="24" height="24" aria-hidden="true"></a><a href="https://www.tiktok.com/@tournstack" aria-label="TournStack on TikTok" title="TournStack on TikTok"><img src="assets/brand/social-tiktok.svg" alt="" width="24" height="24" aria-hidden="true"></a></nav><button class="cky-banner-element footer-cookie-button" type="button">Cookie settings</button></div>
-<div class="container footer-bottom"><p>© 2026 TournStack</p><p><span class="footer-status" aria-hidden="true"></span> Currently in development</p><p>Starting with padel &amp; tennis</p></div></footer>
+<div class="container footer-bottom"><p>© 2026 TournStack</p><p><span class="footer-status" aria-hidden="true"></span> Currently in development</p><p>Tournament and league tools · In development</p></div></footer>
   <aside class="interest-prompt" id="interest-prompt" hidden aria-label="TournStack project invitation">
     <button class="prompt-close" type="button" data-dismiss-prompt aria-label="Dismiss this invitation" title="Dismiss this invitation">×</button>
     <p class="eyebrow">LET’S TALK TOURNAMENTS</p>
