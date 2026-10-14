@@ -2,10 +2,12 @@ import { reject } from './queue.mjs';
 
 export const NEWSLETTER_ORIGIN='https://tournstack-mailbox.tournstack.workers.dev';
 export function validateNewsletter(value){
-  const keys=['SubmissionId','Email','VerificationURL','UnsubscribeURL'];
+  const already=value?.MessageKind==='already-subscribed';
+  const keys=already?['SubmissionId','Email','MessageKind']:['SubmissionId','Email','VerificationURL','UnsubscribeURL'];
   if(!value || typeof value!=='object' || Array.isArray(value) || Object.keys(value).some(k=>!keys.includes(k)) || keys.some(k=>typeof value[k]!=='string'))throw reject(400);
   const m=Object.fromEntries(keys.map(k=>[k,value[k].trim()]));
   if(!/^[a-zA-Z0-9-]{16,80}$/.test(m.SubmissionId) || m.Email.length>254 || !/^[\x21-\x7e]+$/.test(m.Email) || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(m.Email))throw reject(400);
+  if(already)return m;
   for(const [key,pathname] of [['VerificationURL','/newsletter/confirm'],['UnsubscribeURL','/newsletter/unsubscribe']]){
     let u;try{u=new URL(m[key]);}catch{throw reject(400);}
     if(u.origin!==NEWSLETTER_ORIGIN || u.pathname!==pathname || u.searchParams.size!==1 || !/^[a-f0-9]{128}$/.test(u.searchParams.get('token')||'') || u.hash || u.username || u.password)throw reject(400);

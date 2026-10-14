@@ -120,3 +120,20 @@ test('newsletter GET never subscribes; forged and cross-origin POSTs do not reac
     r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',headers:{Origin:'null','Sec-Fetch-Site':'same-origin'},body:new URLSearchParams({token})}),env);assert((await r.text()).includes('on the list'));assert.equal(calls,2);
   }finally{globalThis.fetch=original;}
 });
+
+
+test('already-subscribed notice has its own job kind, correct branding and a clear subject',()=>{
+  const {store,db}=queue();
+  try{
+    const notice=validateNewsletter({SubmissionId:c.SubmissionId,Email:c.Email,MessageKind:'already-subscribed'});
+    store.enqueueNewsletter(notice,'notice');store.enqueueNewsletter(notice,'notice');
+    const job=store.claim();assert.equal(job.kind,'newsletter-already-subscribed');
+    assert.equal(db.prepare('SELECT COUNT(*) AS n FROM jobs').get().n,1);
+    const raw=makeMIME(job.kind,notice).raw;assert(raw.includes("Subject: Whoops! You're already on the TournStack list"));
+    const parts=raw.split('Content-Transfer-Encoding: base64\r\n\r\n').slice(1).map(p=>Buffer.from(p.split('\r\n--')[0].replace(/\r\n/g,''),'base64').toString('utf8'));
+    assert(parts.some(p=>p.includes('Whoops! You’re already on the list!')));
+    assert(parts.some(p=>p.includes('https://tournstack.com/assets/brand/TS_EmailLogo_Reversed_DarkBG_RGB.png')));
+    assert(!parts.some(p=>p.includes('Confirm subscription')));
+    assert.throws(()=>validateNewsletter({...notice,MessageKind:'unknown'}),e=>e.status===400);
+  }finally{db.close()}
+});

@@ -33,7 +33,7 @@ function newsletterToken_(purpose, secret) {
 function newsletterReceipt_(origin, id, ok) {
   const target = ALLOWED_ORIGINS.indexOf(origin) !== -1 ? origin : ALLOWED_ORIGINS[0];
   const data = JSON.stringify({type:'tournstack-newsletter-result', submissionId:id, ok:ok}).replace(/</g, '\\u003c');
-  return HtmlService.createHtmlOutput('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>TournStack newsletter request</title></head><body><p>' + (ok ? 'Please check your email for a confirmation link.' : 'We could not confirm your request. Please try again.') + '</p><script>window.top.postMessage(' + data + ',' + JSON.stringify(target) + ');</script></body></html>').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  return HtmlService.createHtmlOutput('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>TournStack newsletter request</title></head><body><p>' + (ok ? 'Please check your inbox for signup details. If you already joined, you’re all set.' : 'We could not confirm your request. Please try again.') + '</p><script>window.top.postMessage(' + data + ',' + JSON.stringify(target) + ');</script></body></html>').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
 function newsletterSignup_(p) {
@@ -49,7 +49,24 @@ function newsletterSignup_(p) {
     const rows = sheet.getLastRow() > 1 ? sheet.getRange(2, 1, sheet.getLastRow() - 1, NEWSLETTER_HEADERS.length).getValues() : [];
     const index = rows.findIndex(row => row[0] === email), old = index === -1 ? null : rows[index];
     // Generic receipts avoid revealing whether an address is already subscribed.
-    if (old && (old[1] === 'confirmed' || (old[9] && Date.now() - new Date(old[9]).getTime() < 86400000))) return newsletterReceipt_(origin, id, true);
+    if (old && old[1] === 'confirmed') {
+      // Send status privately to the mailbox, never disclose list membership in the browser.
+      const noticeRecentlyQueued = String(old[10]).indexOf('notice:') === 0 && old[9] && Date.now() - new Date(old[9]).getTime() < 86400000;
+      if (!noticeRecentlyQueued) {
+        const noticeSettings = relaySettings_(), noticeId = Utilities.getUuid();
+        const noticeResponse = UrlFetchApp.fetch(noticeSettings.url.replace(/\/contact-email$/, '/newsletter-request'), {
+          method:'post', contentType:'application/json', headers:{Authorization:'Bearer ' + noticeSettings.token},
+          payload:JSON.stringify({SubmissionId:noticeId, Email:email, MessageKind:'already-subscribed'}),
+          muteHttpExceptions:true, followRedirects:false
+        });
+        if (noticeResponse.getResponseCode() === 202) {
+          sheet.getRange(index + 2, 10).setValue(new Date()).setNumberFormat('yyyy-mm-dd hh:mm:ss');
+          sheet.getRange(index + 2, 11).setValue('notice:' + noticeId);
+        }
+      }
+      return newsletterReceipt_(origin, id, true);
+    }
+    if (old && old[9] && Date.now() - new Date(old[9]).getTime() < 86400000) return newsletterReceipt_(origin, id, true);
     if (rows.length >= 50000) throw new Error('Newsletter capacity reached.');
     const settings = relaySettings_();
     const token = newsletterToken_('confirm', settings.token);

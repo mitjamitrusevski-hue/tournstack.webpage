@@ -46,6 +46,13 @@ assert.equal(context.doPost({parameter:{...request,Signature:'0'.repeat(64)}}).o
 assert.equal(context.doPost({parameter:{...request,Timestamp:String(Date.now()-400000)}}).ok,false);
 assert.equal(context.doPost({parameter:request}).ok,true);assert.equal(sheet.rows[1][1],'confirmed');assert.equal(sheet.rows[1][6],'');
 assert.equal(context.doPost({parameter:request}).ok,false,'confirmation token is single use');
+const confirmedBefore=sheet.rows[1].slice(),queuedBefore=queued.length;
+context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});
+assert.equal(queued.length,queuedBefore+1);assert.equal(queued.at(-1).MessageKind,'already-subscribed');
+assert.equal(sheet.rows.length,2);for(const column of [0,1,2,3,4,5,6,7,8,11])assert.equal(sheet.rows[1][column],confirmedBefore[column]);
+context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});assert.equal(queued.length,queuedBefore+1,'one already-subscribed message per 24 hours');
+sheet.rows[1][9]=new Date(Date.now()-86400001);context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});assert.equal(queued.length,queuedBefore+2,'notice allowed after cooldown');
+
 assert.equal(context.doPost({parameter:action('newsletter-unsubscribe',unsubscribe)}).ok,true);assert.equal(sheet.rows.length,1);
 context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});const expired=new URL(queued.at(-1).VerificationURL).searchParams.get('token');sheet.rows[1][7]=new Date(Date.now()-1);
 assert.equal(context.doPost({parameter:action('newsletter-confirm',expired)}).ok,false);

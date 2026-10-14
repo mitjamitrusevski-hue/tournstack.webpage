@@ -34,7 +34,7 @@ export function queueStore(sql,transaction,{now=Date.now,maxContacts=100,maxConf
         if(run('SELECT COUNT(*) AS n FROM contacts WHERE created>?',time-86400000)[0].n>=maxContacts)throw reject(429);
         if(run('SELECT COUNT(*) AS n FROM contacts WHERE email=? AND created>?',message.Email.toLowerCase(),time-86400000)[0].n>=maxConfirmations)throw reject(429);
         run('INSERT INTO contacts VALUES(?,?,?,?)',message.SubmissionId,hash,message.Email.toLowerCase(),time);
-        run('INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)',message.SubmissionId,'newsletter-verification',JSON.stringify(message),time);
+        run('INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)',message.SubmissionId,message.MessageKind==='already-subscribed'?'newsletter-already-subscribed':'newsletter-verification',JSON.stringify(message),time);
       });
     },
     claim() {

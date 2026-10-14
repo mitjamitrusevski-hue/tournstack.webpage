@@ -10,6 +10,11 @@ export function buildMessage(kind, contact) {
     from, to: SENDER, replyTo: contact.Email, subject: 'New Contact',
     text: `Name: ${contact.Name}\nEmail: ${contact.Email}\nInquiry: ${contact.Inquiry}`
   };
+  if (kind === 'newsletter-already-subscribed') return {
+    from, to: contact.Email, replyTo: SENDER, subject: "Whoops! You're already on the TournStack list",
+    text: `Whoops! You’re already on the list!\n\nLooks like you’re one step ahead. Your subscription is confirmed, so there’s nothing else to do. We’ll email you when our newsletter is ready.\n\nTo unsubscribe, use the link in your original signup email or email info@tournstack.com.\n\nThe TournStack Marketing Team`,
+    html: `<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body style="margin:0;background:#EEF2F7;color:#0F172A;font-family:Montserrat,Arial,sans-serif"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:28px 12px"><table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#F8FAFC"><tr><td style="background:#0F172A;padding:28px 32px"><img src="${LOGO_URL}" alt="TournStack" width="256" height="41" style="display:block;border:0;width:256px;max-width:100%;height:auto"></td></tr><tr><td style="padding:32px;font-size:16px;line-height:1.65"><h1 style="font-size:24px">Whoops! You’re already on the list!</h1><p>Looks like you’re one step ahead. Your subscription is confirmed, so there’s nothing else to do.</p><p>We’ll email you when our newsletter is ready.</p><p>The TournStack Marketing Team</p><p style="font-size:13px">To unsubscribe, use the link in your original signup email or <a href="mailto:info@tournstack.com">email us</a>. <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></td></tr></table></td></tr></table></body></html>`
+  };
   if (kind === 'newsletter-verification') {
     const url = escapeHTML(contact.VerificationURL);
     return {

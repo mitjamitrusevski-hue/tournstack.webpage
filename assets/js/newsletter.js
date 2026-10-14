@@ -63,7 +63,7 @@
     const receipt = event.data;
     if (!google || !pending || receipt?.type !== 'tournstack-newsletter-result' || receipt.submissionId !== pending || typeof receipt.ok !== 'boolean') return;
     window.clearTimeout(timer); pending = null; reset();
-    if (receipt.ok) { form.reset(); status.textContent = 'Check your email and confirm to join the list.'; }
+    if (receipt.ok) { form.reset(); status.textContent = 'Check your inbox for signup details. Already joined? You’re all set.'; }
     else status.textContent = 'We couldn’t send your confirmation link. Please try again.';
   });
 })();

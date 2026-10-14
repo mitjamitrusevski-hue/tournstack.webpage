@@ -50,7 +50,7 @@ function queueStore(sql, transaction, { now = Date.now, maxContacts = 100, maxCo
         if (run("SELECT COUNT(*) AS n FROM contacts WHERE created>?", time - 864e5)[0].n >= maxContacts) throw reject(429);
         if (run("SELECT COUNT(*) AS n FROM contacts WHERE email=? AND created>?", message.Email.toLowerCase(), time - 864e5)[0].n >= maxConfirmations) throw reject(429);
         run("INSERT INTO contacts VALUES(?,?,?,?)", message.SubmissionId, hash, message.Email.toLowerCase(), time);
-        run("INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)", message.SubmissionId, "newsletter-verification", JSON.stringify(message), time);
+        run("INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)", message.SubmissionId, message.MessageKind === "already-subscribed" ? "newsletter-already-subscribed" : "newsletter-verification", JSON.stringify(message), time);
       });
     },
     claim() {
@@ -91,10 +91,12 @@ __name(queueStore, "queueStore");
 // newsletter.mjs
 var NEWSLETTER_ORIGIN = "https://tournstack-mailbox.tournstack.workers.dev";
 function validateNewsletter(value) {
-  const keys = ["SubmissionId", "Email", "VerificationURL", "UnsubscribeURL"];
+  const already = value?.MessageKind === "already-subscribed";
+  const keys = already ? ["SubmissionId", "Email", "MessageKind"] : ["SubmissionId", "Email", "VerificationURL", "UnsubscribeURL"];
   if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).some((k) => !keys.includes(k)) || keys.some((k) => typeof value[k] !== "string")) throw reject(400);
   const m = Object.fromEntries(keys.map((k) => [k, value[k].trim()]));
   if (!/^[a-zA-Z0-9-]{16,80}$/.test(m.SubmissionId) || m.Email.length > 254 || !/^[\x21-\x7e]+$/.test(m.Email) || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(m.Email)) throw reject(400);
+  if (already) return m;
   for (const [key, pathname] of [["VerificationURL", "/newsletter/confirm"], ["UnsubscribeURL", "/newsletter/unsubscribe"]]) {
     let u;
     try {
@@ -248,6 +250,20 @@ function buildMessage(kind, contact) {
     text: `Name: ${contact.Name}
 Email: ${contact.Email}
 Inquiry: ${contact.Inquiry}`
+  };
+  if (kind === "newsletter-already-subscribed") return {
+    from,
+    to: contact.Email,
+    replyTo: SENDER,
+    subject: "Whoops! You're already on the TournStack list",
+    text: `Whoops! You\u2019re already on the list!
+
+Looks like you\u2019re one step ahead. Your subscription is confirmed, so there\u2019s nothing else to do. We\u2019ll email you when our newsletter is ready.
+
+To unsubscribe, use the link in your original signup email or email info@tournstack.com.
+
+The TournStack Marketing Team`,
+    html: `<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body style="margin:0;background:#EEF2F7;color:#0F172A;font-family:Montserrat,Arial,sans-serif"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:28px 12px"><table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#F8FAFC"><tr><td style="background:#0F172A;padding:28px 32px"><img src="${LOGO_URL}" alt="TournStack" width="256" height="41" style="display:block;border:0;width:256px;max-width:100%;height:auto"></td></tr><tr><td style="padding:32px;font-size:16px;line-height:1.65"><h1 style="font-size:24px">Whoops! You\u2019re already on the list!</h1><p>Looks like you\u2019re one step ahead. Your subscription is confirmed, so there\u2019s nothing else to do.</p><p>We\u2019ll email you when our newsletter is ready.</p><p>The TournStack Marketing Team</p><p style="font-size:13px">To unsubscribe, use the link in your original signup email or <a href="mailto:info@tournstack.com">email us</a>. <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></td></tr></table></td></tr></table></body></html>`
   };
   if (kind === "newsletter-verification") {
     const url = escapeHTML(contact.VerificationURL);
