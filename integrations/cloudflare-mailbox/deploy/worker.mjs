@@ -137,7 +137,23 @@ function page(title, text, { token = "", action = "", button = "" } = {}) {
   return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>${title} \u2014 TournStack</title><style>body{margin:0;background:#EEF2F7;color:#0F172A;font:17px/1.65 Arial,sans-serif}main{max-width:560px;margin:8vh auto;padding:32px;background:#F8FAFC;border-radius:16px}h1{font-size:28px;line-height:1.25}button{font:inherit;background:#1855CC;color:#F8FAFC;border:0;border-radius:8px;padding:14px 20px;cursor:pointer}a{color:#1855CC}button:focus-visible,a:focus-visible{outline:3px solid #1855CC;outline-offset:4px}@media(max-width:620px){main{margin:24px 16px;padding:24px}}</style></head><body><main><p><strong>TournStack</strong></p><h1>${title}</h1><p>${text}</p>${form}<p><a href="https://tournstack.com/">Back to TournStack</a> \xB7 <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></main></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Robots-Tag": "noindex, nofollow", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'" } });
 }
 __name(page, "page");
-async function newsletterPublic(request, env) {
+async function recordConfirmation(request) {
+  const ip = request.headers.get("CF-Connecting-IP"), agent = request.headers.get("User-Agent");
+  if (!ip || !agent || request.headers.get("DNT") === "1" || request.headers.get("Sec-GPC") === "1") return;
+  try {
+    const response = await fetch("https://plausible.io/api/event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "User-Agent": agent, "X-Forwarded-For": ip },
+      body: JSON.stringify({ name: "Newsletter Subscription Confirmed", domain: "tournstack.com", url: "https://tournstack.com/newsletter-confirmed" }),
+      signal: AbortSignal.timeout(4e3)
+    });
+    if (!response.ok || response.headers.get("x-plausible-dropped") === "1") console.warn("Newsletter confirmation analytics not recorded.");
+  } catch {
+    console.warn("Newsletter confirmation analytics unavailable.");
+  }
+}
+__name(recordConfirmation, "recordConfirmation");
+async function newsletterPublic(request, env, ctx) {
   const url = new URL(request.url), confirm = url.pathname === "/newsletter/confirm";
   if (!confirm && url.pathname !== "/newsletter/unsubscribe") return null;
   if (request.method === "GET") {
@@ -170,6 +186,11 @@ async function newsletterPublic(request, env) {
   try {
     const result = await newsletterBackend(env, confirm ? "newsletter-confirm" : "newsletter-unsubscribe", token);
     if (!result.ok) return page("This link has expired or was already used.", "You can request a fresh signup link from the TournStack website.");
+    if (confirm) {
+      const recording = recordConfirmation(request);
+      if (ctx?.waitUntil) ctx.waitUntil(recording);
+      else await recording;
+    }
     return page(confirm ? "You\u2019re on the list." : "You\u2019re unsubscribed.", confirm ? "Thanks for joining us. We\u2019ll email you when our newsletter is ready." : "Your newsletter signup has been removed. You won\u2019t receive our newsletter.");
   } catch {
     return page("Please try again shortly.", "We couldn\u2019t confirm that update. Please try this link again or email info@tournstack.com.");
@@ -179,9 +200,9 @@ __name(newsletterPublic, "newsletterPublic");
 
 // http.mjs
 var json = /* @__PURE__ */ __name((status, value = {}) => Response.json({ ok: status >= 200 && status < 300, ...value }, { status, headers: { "Cache-Control": "no-store" } }), "json");
-async function handleRequest(request, env) {
+async function handleRequest(request, env, ctx) {
   const publicPath = new URL(request.url).pathname;
-  if (publicPath === "/newsletter/confirm" || publicPath === "/newsletter/unsubscribe") return newsletterPublic(request, env);
+  if (publicPath === "/newsletter/confirm" || publicPath === "/newsletter/unsubscribe") return newsletterPublic(request, env, ctx);
   const token = env.MAIL_RELAY_TOKEN || "";
   if (token.length < 32) return json(503);
   const digest = /* @__PURE__ */ __name(async (v) => new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(v))), "digest");

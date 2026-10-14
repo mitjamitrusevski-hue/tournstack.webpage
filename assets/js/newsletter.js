@@ -49,6 +49,7 @@
       event.preventDefault(); if (!pending) status.textContent = 'Enter your email and complete the human check.'; return;
     }
     pending = window.crypto.randomUUID();
+    try { window.plausible?.('Newsletter Signup Requested'); } catch (_) { /* Keep signup independent of analytics. */ }
     form.elements.namedItem('SubmissionId').value = pending;
     form.elements.namedItem('Origin').value = window.location.origin;
     form.elements.namedItem('SourcePath').value = window.location.pathname;

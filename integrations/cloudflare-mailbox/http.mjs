@@ -1,8 +1,8 @@
 import { newsletterPublic } from './newsletter.mjs';
 const json=(status,value={})=>Response.json({ok:status>=200 && status<300,...value},{status,headers:{'Cache-Control':'no-store'}});
-export async function handleRequest(request,env) {
+export async function handleRequest(request,env,ctx) {
   const publicPath=new URL(request.url).pathname;
-  if(publicPath==='/newsletter/confirm' || publicPath==='/newsletter/unsubscribe')return newsletterPublic(request,env);
+  if(publicPath==='/newsletter/confirm' || publicPath==='/newsletter/unsubscribe')return newsletterPublic(request,env,ctx);
   const token=env.MAIL_RELAY_TOKEN || '';
   if(token.length<32)return json(503);
   const digest=async v=>new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));
