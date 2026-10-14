@@ -248,7 +248,7 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 .newsletter-signup button{margin-top:10px;min-height:44px;padding:10px 16px;border:0;border-radius:8px;background:#6897FF;color:#0F172A;font:inherit;font-size:14px;font-weight:650;cursor:pointer}
 .newsletter-signup button:disabled{opacity:.65;cursor:default}
 .newsletter-signup .newsletter-note,.newsletter-signup .newsletter-status{font-size:12px;line-height:1.6;margin-top:10px;color:#CBD5E1}
-.newsletter-signup .newsletter-note a{color:#A6C2FF;font-size:inherit}
+.newsletter-signup .newsletter-note a{color:#A6C2FF;font-size:inherit;text-decoration:underline;text-underline-offset:3px}
 .newsletter-signup .newsletter-honeypot{position:absolute;left:-9999px}
 #newsletter-turnstile{margin-top:12px}
 .receipt-dialog{border:1px solid #CBD5E1;border-radius:16px;padding:32px;background:#F8FAFC;color:#0F172A;width:calc(100% - 40px);max-width:480px;box-sizing:border-box}
