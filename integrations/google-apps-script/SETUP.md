@@ -31,6 +31,14 @@ Google references: [bound script ownership and copying](https://developers.googl
 
 ## One-time deployment
 
+### Deployment audit — 2026-10-14
+
+The website's configured deployment remains version **4**, whose code was fetched from Apps Script and matched the local `Code.gs` after line-ending normalization. It validates `cf-turnstile-response` through Siteverify before contacting Sheets or the mail relay, requiring `success: true`, action `contact` and the hostname corresponding to the explicitly allowed site origin. `TURNSTILE_SECRET` stays in Script Properties; no key was rotated or exposed.
+
+An older public deployment (`AKfycby2kIr96tdxn-aGEhq1_RSegdXTNNNSDk16qmHw7cbSGs9T92f80XtbD8gvNjZ3hVAx`) still pointed to pre-verification version 1. Its URL was updated to the existing protected version **4**, preserving the endpoint while closing that older unprotected path. The configured website endpoint did not change. Retain historical versions for evidence, but never restore version 1 to a public contact endpoint. For rollback, restore a reviewed protected version or disable a retired deployment; do not restore a verification bypass.
+
+Live framed POST tests against both URLs rejected missing and invalid tokens. The Contacts sheet retained its original one timestamp row after the rejection tests. The deployed control flow returns before any spreadsheet/relay call on rejection; direct queue telemetry was not available. Existing local gate tests also passed. The Cloudflare dashboard warning's cause remains unresolved without account analytics and a successfully completed valid submission: this older endpoint finding does not establish the cause of that warning. See the dated Audience-Anchors-and-Turnstile release record for the separately authorised positive test and current remaining checks.
+
 The Cloudflare Worker is deployed and its three secret names are configured. The handoff reports that **MAIL_RELAY_URL** and **MAIL_RELAY_TOKEN** are entered in **Project Settings → Script Properties**; confirm them there if relay calls fail. SMTP credentials stay in Cloudflare's secrets, not in Apps Script or the website. The Node SMTP relay remains an optional alternative if a server becomes available.
 
 1. Open the Apps Script project linked above while signed into **mitja.mitrusevski@gmail.com**. Name the project **TournStack WEB Contacts**.

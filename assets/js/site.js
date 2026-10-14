@@ -12,6 +12,20 @@
     });
   });
 
+  // Keep question deep links usable with the native accordion and browser history.
+  const openLinkedQuestion = () => {
+    let id;
+    try {
+      id = decodeURIComponent(window.location.hash.slice(1));
+    } catch (_) {
+      return;
+    }
+    const target = document.getElementById(id);
+    if (questions.includes(target)) target.open = true;
+  };
+  openLinkedQuestion();
+  window.addEventListener('hashchange', openLinkedQuestion);
+
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (!reducedMotion.matches && 'IntersectionObserver' in window) {
     const blocks = document.querySelectorAll(
