@@ -16,7 +16,7 @@
   const render = () => {
     if (!window.turnstile || widgetId !== undefined) return;
     widgetId = window.turnstile.render('#newsletter-turnstile', {
-      sitekey: siteKey, action: 'newsletter', theme: 'dark', size: 'compact',
+      sitekey: siteKey, action: 'newsletter', theme: 'dark', size: 'normal',
       callback: () => { if (!pending) button.disabled = false; if (/^(Checking that|The human check|Please complete)/.test(status.textContent)) status.textContent = ''; },
       'expired-callback': expired,
       'error-callback': () => { button.disabled = true; status.textContent = 'The human check could not load. Please refresh and try again.'; }

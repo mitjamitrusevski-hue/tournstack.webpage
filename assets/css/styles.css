@@ -257,3 +257,8 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 .receipt-dialog p{margin:0 0 18px;line-height:1.65}
 .receipt-dialog button{min-width:100px}
 @media(max-width:760px){.newsletter-signup{max-width:360px}.receipt-dialog{padding:24px}.receipt-dialog h2{font-size:24px}}
+
+/* Keep the standard 300 x 65 human check below the newsletter email field. */
+.footer-top{grid-template-columns:minmax(0,1.45fr) minmax(0,.7fr) minmax(300px,1fr)}
+@media(max-width:760px){.footer-top{grid-template-columns:1fr 1fr}.footer-contact{grid-column:1/-1}}
+@media(max-width:380px){.site-footer .footer-top{width:calc(100% - 16px)}}

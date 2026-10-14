@@ -44,16 +44,15 @@ test('SMTP timeout fails before acceptance but a missing QUIT reply does not res
   const accepted=smtpMock('220 Ready\r\n250 AUTH PLAIN\r\n235 OK\r\n250 OK\r\n250 OK\r\n354 Data\r\n250 Queued\r\n',{hang:true});
   assert((await mailboxSMTP(accepted.connect,{user:'info@tournstack.com',password:'test-password'},makeMIME('notification',c),20)).accepted);
 });
-test('MIME includes branded inline logo, personalized escaped text and correct sender/reply destinations',()=>{
+test('MIME includes hosted branded PNG logo, personalized escaped text and correct sender/reply destinations',()=>{
   const m=makeMIME('confirmation',c);
   assert(m.raw.includes('From: TournStack <info@tournstack.com>'));
   assert(m.raw.includes('Reply-To: info@tournstack.com'));
-  assert(m.raw.includes(`Content-ID: <logo.${c.SubmissionId}@tournstack.com>`));assert(m.raw.includes('Content-Type: image/png'));
-  assert(m.raw.includes('type="multipart/alternative"'));
+  assert(!m.raw.includes('Content-ID:'));assert(!m.raw.includes('multipart/related'));
   assert(m.raw.includes('multipart/alternative'));
   const parts=m.raw.split('Content-Transfer-Encoding: base64\r\n\r\n').slice(1).map(p=>Buffer.from(p.split('\r\n--')[0].replace(/\r\n/g,''),'base64').toString('utf8'));
   assert(parts.some(p=>p.includes('Jane &lt;Player&gt;')));
-  assert(parts.some(p=>p.includes(`cid:logo.${c.SubmissionId}@tournstack.com`)));
+  assert(parts.some(p=>p.includes('https://tournstack.com/assets/brand/TS_EmailLogo_Reversed_DarkBG_RGB.png')));
   assert(parts.some(p=>p.includes('utm_campaign=contact-confirmation')));
   assert(!parts.some(p=>p.includes(c.Inquiry)));
 });
@@ -100,7 +99,7 @@ test('newsletter queue keeps verification separate, bounded and deduplicated',()
     assert.equal(db.prepare('SELECT COUNT(*) AS n FROM jobs').get().n,1);assert.equal(store.claim().kind,'newsletter-verification');
     assert.throws(()=>store.enqueueNewsletter({...valid,SubmissionId:'bbbbbbbb-bbbb-cccc-dddd-000000000002'},'next'),e=>e.status===429);
     assert.throws(()=>validateNewsletter({...message,VerificationURL:'https://attacker.example/?token='+token}),e=>e.status===400);
-    const mime=makeMIME('newsletter-verification',message);assert(mime.raw.includes('multipart/related'));
+    const mime=makeMIME('newsletter-verification',message);assert(mime.raw.includes('multipart/alternative'));
   }finally{db.close();}
 });
 
@@ -113,7 +112,11 @@ test('newsletter GET never subscribes; forged and cross-origin POSTs do not reac
     let r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm?token='+token),env);
     assert((await r.text()).includes('Confirm subscription'));assert.equal(calls,0);assert.equal(r.headers.get('Referrer-Policy'),'no-referrer');
     r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',headers:{Origin:'https://attacker.example'},body:new URLSearchParams({token})}),env);assert.equal(r.status,403);assert.equal(calls,0);
+    for(const site of ['cross-site','none']){
+      r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',headers:{Origin:'null','Sec-Fetch-Site':site},body:new URLSearchParams({token})}),env);assert.equal(r.status,403);assert.equal(calls,0);
+    }
     r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',body:new URLSearchParams({token:'b'.repeat(128)})}),env);assert((await r.text()).includes('invalid'));assert.equal(calls,0);
     r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',headers:{Origin:'https://tournstack-mailbox.tournstack.workers.dev'},body:new URLSearchParams({token})}),env);assert((await r.text()).includes('on the list'));assert.equal(calls,1);
+    r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',headers:{Origin:'null','Sec-Fetch-Site':'same-origin'},body:new URLSearchParams({token})}),env);assert((await r.text()).includes('on the list'));assert.equal(calls,2);
   }finally{globalThis.fetch=original;}
 });

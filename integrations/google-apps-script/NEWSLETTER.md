@@ -31,7 +31,15 @@ The thank-you page is noindex and absent from the sitemap. Direct visits or refr
 
 ## Email logo
 
-The existing reversed PNG logo is retained byte-for-byte. Email image Content-IDs now use globally unique, domain-qualified values matching their HTML cid URLs, and multipart/related declares its multipart/alternative root type. This corrects MIME standard defects; an actual fresh Gmail message is still needed to verify rendering. Previously received emails do not change retroactively. See RFC 2392 and RFC 2387.
+The existing reversed PNG logo is retained byte-for-byte and published at `https://tournstack.com/assets/brand/TS_EmailLogo_Reversed_DarkBG_RGB.png`. Acknowledgement and newsletter emails reference that HTTPS asset and use multipart/alternative text and HTML. The earlier inline Content-ID correction did not resolve the owner's rendering failure. Fresh email rendering needs client verification; previously received messages retain their original markup. Recipients may need to enable remote images.
+
+## Confirmation request origin
+
+The page keeps `Referrer-Policy: no-referrer` to protect private tokens. Chrome consequently sends `Origin: null` for its native form POST. The Worker accepts this only with `Sec-Fetch-Site: same-origin`, alongside signed purpose-bound token checks. Explicit cross-origin requests and opaque origins with cross-site or absent Fetch Metadata are rejected. GET requests never subscribe or unsubscribe.
+
+## Newsletter human check presentation
+
+Use the standard 300 x 65 horizontal Managed widget below the email field, matching the contact form's dimensions. The footer contact column spans the mobile grid so the widget fits without cropping or scaling. Backend Siteverify remains mandatory before saving a signup.
 
 ## Checks and rollback
 

@@ -48,7 +48,10 @@ export async function newsletterPublic(request,env){
   }
   if(request.method!=='POST')return new Response(null,{status:405,headers:{Allow:'GET, POST','Cache-Control':'no-store'}});
   const origin=request.headers.get('Origin');
-  if(origin && origin!==url.origin)return new Response('Request rejected.',{status:403});
+  // Native forms with no-referrer can send Origin: null. Only accept that
+  // browser case when Fetch Metadata identifies a same-origin submission.
+  const sameOriginOpaque=origin==='null' && request.headers.get('Sec-Fetch-Site')==='same-origin';
+  if(origin && origin!==url.origin && !sameOriginOpaque)return new Response('Request rejected.',{status:403});
   if(!/^application\/x-www-form-urlencoded(?:;|$)/i.test(request.headers.get('Content-Type')||''))return new Response('Request rejected.',{status:415});
   const reader=request.body?.getReader();if(!reader)return new Response('Request rejected.',{status:400});
   let raw='',length=0;const decoder=new TextDecoder();
