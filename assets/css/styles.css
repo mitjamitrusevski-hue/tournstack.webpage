@@ -226,3 +226,17 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 .workflow-step p{color:var(--muted);font-size:14px;line-height:1.75;margin-top:12px}
 .workflow-note{max-width:850px;margin-top:38px;border-left:3px solid var(--action);padding:14px 20px;background:var(--surface);color:var(--muted);font-size:15px;line-height:1.7}
 @media(max-width:760px){.hero-reassurance{font-size:16px;max-width:540px}.workflow-grid{grid-template-columns:1fr;gap:26px;margin-top:32px}.workflow-step{padding-top:20px}.workflow-step p,.workflow-note{font-size:16px;line-height:1.6}.workflow-note{margin-top:32px;padding:16px}}
+
+/* Native section targets supplement html's existing responsive fixed-header scroll padding. */
+#features,
+#how-it-works,
+#organizer-dashboard,
+#tournament-portal,
+#live-screen,
+#prize-draw,
+#branding,
+#sports-organisers,
+#lisbon-example,
+#team,
+#contact-form,
+.faq-group{scroll-margin-top:24px}

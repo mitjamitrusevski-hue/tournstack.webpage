@@ -28,6 +28,43 @@ The overview leads with the Tournament Wizard and a ten-minute **initial tournam
 
 All pages share fixed navigation with the original SVG wordmark, Overview / Our vision / FAQ tabs, an internal Contact us button and a full footer. Anchors have descriptive titles and English language metadata; source and event links use `rel="external"`. Internal links use `data-link-type="internal"` for explicit classification; `internal` is not a standard HTML `rel` token.
 
+## Stable section-link registry — 2026-10-14
+
+This registry owns the current website's public section destinations and their source implementation. Use [Internal Linking and Site Architecture](https://drive.google.com/file/d/1clmbGo2qP8lOdYrQTd1sEr_EamISss-2/view) for shared linking rules and TS-MKT-015 for external-entry UTMs. All 15 targets below are implemented and locally verified. The retained workflow/contact/FAQ IDs were also found once each in their live pages during the pre-release check on 2026-10-14. The owner approved publication of the scoped anchor update on that date; the dated handoff in Marketing/WebPublishing/Operations/Releases records the actual release commit, deployment and live verification. Source implementation alone is not evidence that a destination is already live.
+
+| Clean destination | Source / real target | Suggested link text | Status |
+|---|---|---|---|
+| `/#features` | `index.html`, `.hero-features` wrapper headed “Built around your event.” | Explore the event tools | Implemented; local verified |
+| `/#how-it-works` | `index.html`, existing workflow section; `workflow-title` retained | See how it works | Existing; local and live ID verified |
+| `/#organizer-dashboard` | `index.html`, Organizer Dashboard list card | Explore the Organizer Dashboard | Implemented; local verified |
+| `/#tournament-portal` | `index.html`, Tournament Portal list card | See the Tournament Portal | Implemented; local verified |
+| `/#live-screen` | `index.html`, Live Screen list card | See the venue score display | Implemented; local verified |
+| `/#prize-draw` | `index.html`, TournStack Draw list card | Explore the prize draw | Implemented; local verified |
+| `/#branding` | `index.html`, existing section labelled by `approach-title` | See customer branding options | Implemented; local verified |
+| `/#sports-organisers` | `index.html`, existing audience section labelled by `audience-title` | See who TournStack is for | Implemented; local verified |
+| `/#lisbon-example` | `index.html`, existing example section labelled by `lisbon-title` | See the Lisbon example | Implemented; local verified |
+| `/#team` | `index.html`, existing team section labelled by `team-title` | Meet the team | Implemented; local verified |
+| `/contact.html#contact-form` | `contact.html`, existing inquiry form | Contact the TournStack team | Existing; local and live ID verified |
+| `/faq.html#getting-started` | `faq.html`, existing FAQ group | Read the setup answers | Existing; local and live ID verified |
+| `/faq.html#running-events` | `faq.html`, existing FAQ group | Read about running an event | Existing; local and live ID verified |
+| `/faq.html#public-experience` | `faq.html`, existing FAQ group | See how participants follow the event | Existing; local and live ID verified |
+| `/faq.html#plans-and-contact` | `faq.html`, existing FAQ group | Read about development and next steps | Existing; local and live ID verified |
+
+The new audience destination points to the existing club/independent-organiser copy. Broader “Sports organisers” audience-copy work, including agencies and organisations, remains a separate task. This anchor update changes no audience copy, product claims, pitch PDFs or existing heading/ARIA IDs. Vision remains a whole-page destination. No author/privacy-page anchors were added.
+
+Reserved only: `leagues` for a substantive league-management section; `pricing` for approved published packages/prices; `case-studies` for a genuine case-study collection. Final page paths are undecided. These reservations create no new HTML targets or links. The existing FAQ's pricing question remains an FAQ answer, not a published pricing page.
+
+Use clean links for navigation within this website. Intentional external distribution uses the approved five-field UTM convention, with query parameters before the fragment. Prospective follow-up examples:
+
+```text
+https://tournstack.com/?utm_source=tournstack&utm_medium=offline&utm_campaign=non-dilutive-funding&utm_content=product-overview-en-follow-up&utm_term=text-body#how-it-works
+https://tournstack.com/contact.html?utm_source=tournstack&utm_medium=offline&utm_campaign=non-dilutive-funding&utm_content=product-overview-en-follow-up&utm_term=cta-button#contact-form
+```
+
+These examples describe a deliberate future follow-up material variant, not a PDF edit. The current introductory PDF's recorded variant remains `product-overview-en-intro-v05`. Use the actual sender/platform/channel for each distribution; do not label every social/email link offline. Keep canonicals and sitemap entries free of UTMs and fragments. Internal navigation preserves incoming attribution and adds no fresh UTMs, events, pixels or storage.
+
+Local checks covered all 15 destinations at 1440 and 390 px, with JavaScript enabled and disabled (60 direct-load target checks), both tagged examples, back/forward history, keyboard entry to the form, FAQ keyboard toggling and reduced motion. All original IDs, visible text, head metadata, script blocks and form markup were preserved. The three tested pages' unscrolled screenshots matched their pre-edit screenshots byte for byte at both widths. No form submission or mail delivery test was performed. Native scrolling uses the existing responsive header padding plus a small target margin; no routing, focus or forced-scroll script was introduced.
+
 ## Run locally
 
 ```sh
