@@ -240,3 +240,20 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 #team,
 #contact-form,
 .faq-group{scroll-margin-top:24px}
+
+/* Optional newsletter signup and persistent-receipt confirmation. */
+.newsletter-signup{margin-top:24px;max-width:320px}
+.newsletter-signup label{display:block;color:var(--soft);font-size:14px;line-height:1.5;margin-bottom:10px}
+.newsletter-signup input[type=email]{display:block;width:100%;min-width:0;box-sizing:border-box;padding:12px;border:1px solid #64748B;border-radius:8px;background:var(--soft);color:var(--slate);font:inherit;font-size:15px}
+.newsletter-signup button{margin-top:10px;min-height:44px;padding:10px 16px;border:0;border-radius:8px;background:#6897FF;color:#0F172A;font:inherit;font-size:14px;font-weight:650;cursor:pointer}
+.newsletter-signup button:disabled{opacity:.65;cursor:default}
+.newsletter-signup .newsletter-note,.newsletter-signup .newsletter-status{font-size:12px;line-height:1.6;margin-top:10px;color:#CBD5E1}
+.newsletter-signup .newsletter-note a{color:#A6C2FF;font-size:inherit}
+.newsletter-signup .newsletter-honeypot{position:absolute;left:-9999px}
+#newsletter-turnstile{margin-top:12px}
+.receipt-dialog{border:1px solid #CBD5E1;border-radius:16px;padding:32px;background:#F8FAFC;color:#0F172A;width:calc(100% - 40px);max-width:480px;box-sizing:border-box}
+.receipt-dialog::backdrop{background:rgb(15 23 42 / .65)}
+.receipt-dialog h2{font-size:28px;line-height:1.25;margin:0 0 18px}
+.receipt-dialog p{margin:0 0 18px;line-height:1.65}
+.receipt-dialog button{min-width:100px}
+@media(max-width:760px){.newsletter-signup{max-width:360px}.receipt-dialog{padding:24px}.receipt-dialog h2{font-size:24px}}

@@ -1,5 +1,8 @@
+import { newsletterPublic } from './newsletter.mjs';
 const json=(status,value={})=>Response.json({ok:status>=200 && status<300,...value},{status,headers:{'Cache-Control':'no-store'}});
 export async function handleRequest(request,env) {
+  const publicPath=new URL(request.url).pathname;
+  if(publicPath==='/newsletter/confirm' || publicPath==='/newsletter/unsubscribe')return newsletterPublic(request,env);
   const token=env.MAIL_RELAY_TOKEN || '';
   if(token.length<32)return json(503);
   const digest=async v=>new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));
@@ -12,7 +15,7 @@ export async function handleRequest(request,env) {
   try {
     if(request.method==='GET' && path==='/health')return json(200,{queue:await queue.stats()});
     if(request.method==='POST' && path==='/smtp-check'){await queue.verifySMTP();return json(200);}
-    if(request.method!=='POST' || path!=='/contact-email')return json(404);
+    if(request.method!=='POST' || !['/contact-email','/newsletter-request'].includes(path))return json(404);
     if(!/^application\/json(?:;|$)/i.test(request.headers.get('Content-Type') || ''))return json(415);
     if(Number(request.headers.get('Content-Length') || 0)>32768)return json(413);
     const reader=request.body?.getReader();if(!reader)return json(400);
@@ -21,7 +24,7 @@ export async function handleRequest(request,env) {
       if(length>32768){await reader.cancel();return json(413);}chunks.push(part.value);}
     const bytes=new Uint8Array(length);let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length;}
     let value;try{value=JSON.parse(new TextDecoder().decode(bytes));}catch{return json(400);}
-    const result=await queue.enqueue(value);
+    const result=path==='/contact-email'?await queue.enqueue(value):await queue.enqueueNewsletter(value);
     return json(result.status);
   } catch {return json(503);}
 }

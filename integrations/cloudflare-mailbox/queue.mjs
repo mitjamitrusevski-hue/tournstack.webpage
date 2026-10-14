@@ -27,6 +27,16 @@ export function queueStore(sql,transaction,{now=Date.now,maxContacts=100,maxConf
         if(count<maxConfirmations)run('INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)',contact.SubmissionId,'confirmation',JSON.stringify(contact),time);
       });
     },
+    enqueueNewsletter(message,hash) {
+      return transaction(()=>{
+        const time=now(),old=run('SELECT hash FROM contacts WHERE id=?',message.SubmissionId)[0];
+        if(old){if(old.hash!==hash)throw reject(409);return;}
+        if(run('SELECT COUNT(*) AS n FROM contacts WHERE created>?',time-86400000)[0].n>=maxContacts)throw reject(429);
+        if(run('SELECT COUNT(*) AS n FROM contacts WHERE email=? AND created>?',message.Email.toLowerCase(),time-86400000)[0].n>=maxConfirmations)throw reject(429);
+        run('INSERT INTO contacts VALUES(?,?,?,?)',message.SubmissionId,hash,message.Email.toLowerCase(),time);
+        run('INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)',message.SubmissionId,'newsletter-verification',JSON.stringify(message),time);
+      });
+    },
     claim() {
       return transaction(()=>{
         const job=run("SELECT * FROM jobs WHERE state IN ('pending','sending') AND due<=? ORDER BY due LIMIT 1",now())[0];

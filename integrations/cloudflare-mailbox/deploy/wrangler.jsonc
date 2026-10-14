@@ -5,7 +5,8 @@
   "workers_dev": true,
   "vars": {
     "MAX_CONTACTS_PER_DAY": "100",
-    "MAX_CONFIRMATIONS_PER_ADDRESS_PER_DAY": "3"
+    "MAX_CONFIRMATIONS_PER_ADDRESS_PER_DAY": "3",
+    "NEWSLETTER_BACKEND_URL": "https://script.google.com/macros/s/AKfycbykm7hoGEXYxCJyNb0An2oWpt2BX5kbZunBu5FjEeW8yjn14ICtC8YMaVPt761YAN65/exec"
   },
   "durable_objects": {
     "bindings": [

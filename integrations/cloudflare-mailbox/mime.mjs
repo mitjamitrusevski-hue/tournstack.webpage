@@ -17,7 +17,7 @@ export function makeMIME(kind, contact) {
   const part=(type,value)=>`Content-Type: ${type}; charset=utf-8\r\nContent-Transfer-Encoding: base64\r\n\r\n${wrapped(base64UTF8(value))}\r\n`;
   let body;
   if (m.html) {
-    headers.push(`Content-Type: multipart/related; boundary="${boundary}"`);
+    headers.push(`Content-Type: multipart/related; boundary="${boundary}"; type="multipart/alternative"`);
     const image=m.attachments[0];
     body=`--${boundary}\r\nContent-Type: multipart/alternative; boundary="${alt}"\r\n\r\n`+
       `--${alt}\r\n${part('text/plain',m.text)}--${alt}\r\n${part('text/html',m.html)}--${alt}--\r\n`+

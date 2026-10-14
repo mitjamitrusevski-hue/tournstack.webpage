@@ -28,6 +28,8 @@ function doGet() {
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
+  if (['newsletter-confirm', 'newsletter-unsubscribe', 'newsletter-cleanup'].indexOf(p.Action) !== -1) return newsletterAction_(p);
+  if (p.Kind === 'newsletter') return newsletterSignup_(p);
   const origin = String(p.Origin || '');
   const id = String(p.SubmissionId || '');
   const name = String(p.Name || '').trim();
@@ -82,7 +84,7 @@ function doPost(e) {
   return receipt_(origin, id, saved);
 }
 
-function verifyTurnstile_(token, origin) {
+function verifyTurnstile_(token, origin, expectedAction) {
   const secret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
   if (typeof secret !== 'string' || !secret ||
       typeof token !== 'string' || token.length < 1 || token.length > 2048) return false;
@@ -96,7 +98,7 @@ function verifyTurnstile_(token, origin) {
     });
     if (response.getResponseCode() !== 200) return false;
     const result = JSON.parse(response.getContentText());
-    return result.success === true && result.action === 'contact' &&
+    return result.success === true && result.action === (expectedAction || 'contact') &&
       result.hostname === origin.replace(/^https:\/\//, '');
   } catch (error) {
     console.error('Turnstile verification failed.');

@@ -66,6 +66,33 @@
 
   const form = document.querySelector('#contact-form');
   if (form) {
+    const successDialog = document.querySelector('#inquiry-sent');
+    let returnURL = '';
+    const countedInquiries = new Set();
+    successDialog?.querySelector('button')?.addEventListener('click', () => successDialog.close());
+    successDialog?.addEventListener('close', () => {
+      if (returnURL) window.history.replaceState(window.history.state, '', returnURL);
+      returnURL = '';
+    });
+    const showSuccess = (id) => {
+      try {
+        window.sessionStorage.setItem('tournstack-contact-receipt', JSON.stringify({id, expires:Date.now()+600000, returnURL:window.location.href}));
+        window.location.assign('/inquiry-received.html');
+        return;
+      } catch (_) {
+        // A blocked storage API must not hide a successful inquiry.
+      }
+      if (!countedInquiries.has(id)) {
+        countedInquiries.add(id);
+        if (typeof window.plausible === 'function') window.plausible('Contact Inquiry Submitted');
+      }
+      if (!successDialog || typeof successDialog.showModal !== 'function') return;
+      returnURL = window.location.href;
+      const url = new URL(returnURL);
+      url.hash = 'inquiry-sent';
+      window.history.replaceState(window.history.state, '', url);
+      successDialog.showModal();
+    };
     const name = form.elements.namedItem('Name');
     const email = form.elements.namedItem('Email');
     const inquiry = form.elements.namedItem('Inquiry');
@@ -97,7 +124,7 @@
           callback: () => {
             verified = true;
             if (!pending) button.disabled = false;
-            status.textContent = '';
+            if (/^(Checking that|Verification|Please complete)/.test(status.textContent)) status.textContent = '';
           },
           'expired-callback': () => {
             verified = false;
@@ -173,6 +200,7 @@
           receipt.type !== 'tournstack-contact-result' ||
           receipt.submissionId !== pending || typeof receipt.ok !== 'boolean') return;
       window.clearTimeout(timer);
+      const completedId = pending;
       pending = null;
       form.removeAttribute('aria-busy');
       resetVerification();
@@ -181,6 +209,7 @@
         submissionId = '';
         lastPayload = '';
         status.textContent = 'Your inquiry has been received. Thank you — we’ll be in touch.';
+        showSuccess(completedId);
       } else {
         status.textContent = 'Your inquiry could not be saved. Please try again or email info@tournstack.com.';
       }

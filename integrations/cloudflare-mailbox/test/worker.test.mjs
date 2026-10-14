@@ -5,6 +5,8 @@ import { makeMIME } from '../mime.mjs';
 import { mailboxSMTP } from '../smtp.mjs';
 import { queueStore, validateContact, retention } from '../queue.mjs';
 import { handleRequest } from '../http.mjs';
+import { validateNewsletter, newsletterPublic } from '../newsletter.mjs';
+import { createHmac } from 'node:crypto';
 
 const c={SubmissionId:'aaaaaaaa-bbbb-cccc-dddd-000000000001',Name:'Jane <Player>',Email:'player@example.com',Inquiry:'Please help with a league.'};
 function queue(options={}){
@@ -46,10 +48,12 @@ test('MIME includes branded inline logo, personalized escaped text and correct s
   const m=makeMIME('confirmation',c);
   assert(m.raw.includes('From: TournStack <info@tournstack.com>'));
   assert(m.raw.includes('Reply-To: info@tournstack.com'));
-  assert(m.raw.includes('Content-ID: <tournstack-logo>'));assert(m.raw.includes('Content-Type: image/png'));
+  assert(m.raw.includes(`Content-ID: <logo.${c.SubmissionId}@tournstack.com>`));assert(m.raw.includes('Content-Type: image/png'));
+  assert(m.raw.includes('type="multipart/alternative"'));
   assert(m.raw.includes('multipart/alternative'));
   const parts=m.raw.split('Content-Transfer-Encoding: base64\r\n\r\n').slice(1).map(p=>Buffer.from(p.split('\r\n--')[0].replace(/\r\n/g,''),'base64').toString('utf8'));
   assert(parts.some(p=>p.includes('Jane &lt;Player&gt;')));
+  assert(parts.some(p=>p.includes(`cid:logo.${c.SubmissionId}@tournstack.com`)));
   assert(parts.some(p=>p.includes('utm_campaign=contact-confirmation')));
   assert(!parts.some(p=>p.includes(c.Inquiry)));
 });
@@ -86,4 +90,30 @@ test('Worker authentication, limited payload, unknown recipient override rejecti
     assert(!JSON.stringify(health).includes(c.Email));
     assert.equal((await handleRequest(req('/contact-email',{...c,Inquiry:'a'.repeat(40000)}),env)).status,413);
   }finally{db.close();}
+});
+
+test('newsletter queue keeps verification separate, bounded and deduplicated',()=>{
+  const {store,db}=queue({maxContacts:2,maxConfirmations:1});
+  const token='a'.repeat(128),message={SubmissionId:c.SubmissionId,Email:c.Email,VerificationURL:'https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm?token='+token,UnsubscribeURL:'https://tournstack-mailbox.tournstack.workers.dev/newsletter/unsubscribe?token='+token};
+  try{
+    const valid=validateNewsletter(message);store.enqueueNewsletter(valid,'first');store.enqueueNewsletter(valid,'first');
+    assert.equal(db.prepare('SELECT COUNT(*) AS n FROM jobs').get().n,1);assert.equal(store.claim().kind,'newsletter-verification');
+    assert.throws(()=>store.enqueueNewsletter({...valid,SubmissionId:'bbbbbbbb-bbbb-cccc-dddd-000000000002'},'next'),e=>e.status===429);
+    assert.throws(()=>validateNewsletter({...message,VerificationURL:'https://attacker.example/?token='+token}),e=>e.status===400);
+    const mime=makeMIME('newsletter-verification',message);assert(mime.raw.includes('multipart/related'));
+  }finally{db.close();}
+});
+
+test('newsletter GET never subscribes; forged and cross-origin POSTs do not reach the backend',async()=>{
+  const secret='s'.repeat(64),random='a'.repeat(64),token=random+createHmac('sha256',secret).update('confirm:'+random).digest('hex');
+  const env={MAIL_RELAY_TOKEN:secret,NEWSLETTER_BACKEND_URL:'https://script.google.com/macros/s/test/exec'};
+  const original=globalThis.fetch;let calls=0;
+  globalThis.fetch=async(url,options)=>{calls++;assert.equal(url,env.NEWSLETTER_BACKEND_URL);const p=options.body;assert.equal(p.get('Action'),'newsletter-confirm');assert.equal(p.get('Token'),token);assert.equal(p.get('Signature'),createHmac('sha256',secret).update([p.get('Action'),token,p.get('Timestamp')].join('\n')).digest('hex'));return Response.json({ok:true});};
+  try{
+    let r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm?token='+token),env);
+    assert((await r.text()).includes('Confirm subscription'));assert.equal(calls,0);assert.equal(r.headers.get('Referrer-Policy'),'no-referrer');
+    r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',headers:{Origin:'https://attacker.example'},body:new URLSearchParams({token})}),env);assert.equal(r.status,403);assert.equal(calls,0);
+    r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',body:new URLSearchParams({token:'b'.repeat(128)})}),env);assert((await r.text()).includes('invalid'));assert.equal(calls,0);
+    r=await newsletterPublic(new Request('https://tournstack-mailbox.tournstack.workers.dev/newsletter/confirm',{method:'POST',headers:{Origin:'https://tournstack-mailbox.tournstack.workers.dev'},body:new URLSearchParams({token})}),env);assert((await r.text()).includes('on the list'));assert.equal(calls,1);
+  }finally{globalThis.fetch=original;}
 });
