@@ -2,6 +2,14 @@
 
 A lightweight, static pre-launch website for TournStack. The repository root is the GitHub Pages publish directory; `CNAME` points to `tournstack.com`.
 
+## Positioning copy update — 2026-10-15
+
+Overview, Vision, FAQ and Contact have targeted text edits prepared against the current marketing guides. Before editing, all four local pages matched tournstack.com after newline and documented email-off comment normalization (checked 2026-10-15T16:38:36Z). Existing Wizard wording, slogans, ten-minute setup goal, development disclosures, audience scope and later personal access were already implemented and retained.
+
+The workflow introduction now names less copying and clearer event status; the sports-organiser card explains repeat-event preparation. Vision adds the owner's Google Forms/Sheets, email-list and separate event/prize-draw tool experience, including repeated player, guest, waiting-list and jersey-size checks. FAQ clarifies connected administration and tailored business delivery, including agreed customer-specific development where needed; pricing stays unconfirmed. Contact adds a short event-needs suggestion and keeps collaboration enquiries welcome. Page metadata and affected FAQ JSON-LD are synchronized. Source modification timestamps identify these local edits, not a public release.
+
+Design, images, anchors, links, forms, scripts, consent and backend behavior are unchanged. All 72 CI contract/receiver tests, 33-asset validation, 31 FAQ/schema pairs, 154 internal links and 15 registered destinations passed; desktop/mobile renders at 1440/390 pixels had no horizontal overflow. The owner approved publication after reviewing the local changes. The local verification record is `Operations/Audits/2026-10-15_TournStack_Positioning-Copy_Local-Verification.md`; exact commit, deployment, public verification and archive evidence belong in `Operations/Releases/2026-10-15_TournStack_Positioning-Copy.md` outside this repo.
+
 ## Meta and LinkedIn consent release - 2026-10-15
 
 This source enables Meta Pixel `1637153127858631` and the normal LinkedIn Insight Tag `11117593` only after a completed Advertisement choice and a matching `advertising-2026-10-15-v2` marker. Meta-only v1 choices do not enable this expanded scope. The owner reconfirmed the LinkedIn ID and accepted a warned reload on withdrawal. Unwarned cross-tab withdrawal stops advertising requests immediately and keeps unsent text available to copy before reloading; no field contents are persisted.
@@ -48,8 +56,8 @@ The table describes the current source. The 2026-10-14 audience revision follows
 
 | Canonical URL | Purpose; title / H1 | Meta description | Schema type | Incoming links |
 |---|---|---|---|---|
-| `https://tournstack.com/` | Product overview; “TournStack — Tournament Setup & League Management” / “More play. Less admin.” | We’re building guided tournament setup, registration forms and event emails, with simple event control and league tools for sports organisers. | `WebPage` | Header, footer, author profile and cross-page navigation. |
-| `https://tournstack.com/vision.html` | Product direction; “Our Vision — Simple Tournament & League Organisation” / “Keep organizing simple. Keep sport at the center.” | Why we’re building guided tournament setup and connected league tools, starting with sports organisers. | `AboutPage` | Header, footer, overview and author profile. |
+| `https://tournstack.com/` | Product overview; “TournStack — Tournament Setup & League Management” / “More play. Less admin.” | We’re building tournament and league tools for sports organisers, connecting guided setup and event administration with less copying and repeated preparation. | `WebPage` | Header, footer, author profile and cross-page navigation. |
+| `https://tournstack.com/vision.html` | Product direction; “Our Vision — Simple Tournament & League Organisation” / “Keep organizing simple. Keep sport at the center.” | Why our own events led us to connect registrations, communication and event administration for sports organisers. TournStack is in development. | `AboutPage` | Header, footer, overview and author profile. |
 | `https://tournstack.com/faq.html` | Product answers; “TournStack FAQ — Setup, Automation & League Management” / “Good questions. Clear answers.” | Answers about the Tournament Wizard, ten-minute setup goal, automation, live event control, announcements, leagues and pilot access. | `FAQPage` | Header, footer, overview and author profile. |
 | `https://tournstack.com/contact.html` | Inquiry route; “Contact TournStack — Tournaments, Leagues & Pilot Interest” / “What are you working on?” | Tell us about your tournament or league, a possible pilot, partnership or useful idea for TournStack. | `ContactPage` | Header contact action, overview, FAQ, vision and footer. |
 | `https://tournstack.com/privacy.html` | Website privacy notice; “Privacy Policy — TournStack” / “Privacy, explained.” | How TournStack handles website visits and contact inquiries, including analytics, browser storage and service providers. | `WebPage` | Footer, contact form and author profile. |
