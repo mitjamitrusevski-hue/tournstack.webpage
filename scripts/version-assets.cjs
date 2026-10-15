@@ -8,7 +8,7 @@ const previous=fs.existsSync(manifestPath)?JSON.parse(fs.readFileSync(manifestPa
 const digest=b=>crypto.createHash('sha256').update(b).digest('hex');
 const canonical=(b,ext)=>['.css','.js','.svg'].includes(ext)?Buffer.from(b.toString('utf8').replace(/\r\n/g,'\n')):b;
 const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
-const originals=walk(path.join(root,'assets')).filter(f=>!f.includes(path.sep+'versioned'+path.sep)&&/\.(css|js|svg|png|webp|woff2?)$/.test(f)).sort();
+const originals=walk(path.join(root,'assets')).filter(f=>!f.includes(path.sep+'versioned'+path.sep)&&/\.(css|js|svg|png|webp|avif|woff2?)$/.test(f)).sort();
 const mapping=new Map(),outputs=new Map(),assets=[];
 function compile(file){
  const source=path.relative(root,file).split(path.sep).join('/'),ext=path.extname(file);

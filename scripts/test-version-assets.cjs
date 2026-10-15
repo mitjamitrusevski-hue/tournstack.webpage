@@ -6,9 +6,12 @@ try{
  write('scripts/version-assets.cjs',fs.readFileSync(path.join(__dirname,'version-assets.cjs')));
  write('assets/fonts/font.woff',Buffer.from([1,2,3]));write('assets/css/styles.css',"@font-face{src:url('../fonts/font.woff')}\r\nbody{color:red}");
  write('assets/js/app.js','window.fixture=true;\r\n');
- write('index.html','<h1>Unchanged content</h1><link href="assets/css/styles.css?v=1"><script src="assets/js/app.js?v=1"></script>');
+ write('assets/images/hero.avif',Buffer.from([8,9,10]));
+ write('index.html','<h1>Unchanged content</h1><picture><source type="image/avif" srcset="assets/images/hero.avif 420w"><img src="assets/images/hero.avif" alt="Fixture"></picture><link href="assets/css/styles.css?v=1"><script src="assets/js/app.js?v=1"></script>');
  assert.notEqual(run('--check').status,0);assert.equal(run().status,0);assert.equal(run('--check').status,0);
  const first=JSON.parse(fs.readFileSync(path.join(fixture,'assets/asset-manifest.json')));
+ const avif=first.assets.find(x=>x.source==='assets/images/hero.avif');assert(avif,'AVIF must be versioned');
+ assert(fs.readFileSync(path.join(fixture,'index.html'),'utf8').includes('srcset="'+avif.url.slice(1)+' 420w"'),'AVIF srcset must use its immutable URL');
  write('assets/fonts/font.woff',Buffer.from([4,5,6]));assert.notEqual(run('--check').status,0);assert.equal(run().status,0);
  const second=JSON.parse(fs.readFileSync(path.join(fixture,'assets/asset-manifest.json')));
  for(const source of ['assets/fonts/font.woff','assets/css/styles.css']){

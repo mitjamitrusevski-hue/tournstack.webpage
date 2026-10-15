@@ -179,6 +179,34 @@
       "size_bytes": 142384
     },
     {
+      "source": "assets/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_420x560_RGB.avif",
+      "url": "/assets/versioned/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_420x560_RGB.24dbaa6794b836cf.avif",
+      "sha256": "24dbaa6794b836cf4661862206b06201f2cf960157d824fe4d54f229ec01e7e9",
+      "source_sha256": "24dbaa6794b836cf4661862206b06201f2cf960157d824fe4d54f229ec01e7e9",
+      "size_bytes": 26959
+    },
+    {
+      "source": "assets/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_420x560_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_420x560_RGB.b4516b7c309e7b86.webp",
+      "sha256": "b4516b7c309e7b861ee0a8650c67f2f401dafc64479eb96e76be0b56bd24196e",
+      "source_sha256": "b4516b7c309e7b861ee0a8650c67f2f401dafc64479eb96e76be0b56bd24196e",
+      "size_bytes": 40822
+    },
+    {
+      "source": "assets/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_600x800_RGB.avif",
+      "url": "/assets/versioned/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_600x800_RGB.77c7dc95e21811c7.avif",
+      "sha256": "77c7dc95e21811c7ceb11bccddcdd5679cda4adda0525f0d71662760f8871a14",
+      "source_sha256": "77c7dc95e21811c7ceb11bccddcdd5679cda4adda0525f0d71662760f8871a14",
+      "size_bytes": 43918
+    },
+    {
+      "source": "assets/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.avif",
+      "url": "/assets/versioned/images/2026-10-15_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.84beb8873b6ace55.avif",
+      "sha256": "84beb8873b6ace55c2baca3b723ae78384f35d95c223cc9429507b1b2d591641",
+      "source_sha256": "84beb8873b6ace55c2baca3b723ae78384f35d95c223cc9429507b1b2d591641",
+      "size_bytes": 79582
+    },
+    {
       "source": "assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp",
       "url": "/assets/versioned/images/TS_Hero_Tennis_Lifestyle_RGB.580dd2e17b6837e4.webp",
       "sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",

@@ -2,6 +2,12 @@
 
 A lightweight, static pre-launch website for TournStack. The repository root is the GitHub Pages publish directory; `CNAME` points to `tournstack.com`.
 
+## Mobile hero delivery — 2026-10-15
+
+The owner approved publication of the verified optimisation. The existing portrait artwork now has AVIF candidates at 420 × 560, 600 × 800 and 900 × 1200, plus a 420 × 560 WebP fallback alongside the existing 600/900-pixel WebPs. The AVIF source is limited to the existing mobile breakpoint; desktop artwork and delivery are unchanged. The source crop, CSS dimensions, alt text and high loading priority are preserved. The asset generator now versions AVIF and its regression fixture verifies AVIF srcset rewriting.
+
+Cold local Chrome checks at 412 CSS pixels selected 26,959 bytes at DPR 1 (previously 95,278) and 79,582 bytes at DPR 1.5/2/2.625 (previously 159,684). Ten viewport/density comparisons passed with one hero request, identical layout dimensions and no horizontal overflow; the WebP fallback branch also passed. These are measured image-byte reductions, not a measured LCP improvement or a promise to remove Lighthouse's entire estimated saving. See `Operations/Audits/2026-10-15_TournStack_Mobile-Hero-Delivery.md` outside this repo for provenance and local evidence; exact commit, deployment, public readback and archive evidence belong in `Operations/Releases/2026-10-15_TournStack_Mobile-Hero-Delivery.md`.
+
 ## Positioning copy update — 2026-10-15
 
 Overview, Vision, FAQ and Contact have targeted text edits prepared against the current marketing guides. Before editing, all four local pages matched tournstack.com after newline and documented email-off comment normalization (checked 2026-10-15T16:38:36Z). Existing Wizard wording, slogans, ten-minute setup goal, development disclosures, audience scope and later personal access were already implemented and retained.
@@ -124,7 +130,7 @@ App Store and Google Play badges are reserved for an actual store listing or off
 
 The supplied SVG logo masters are copied from `Marketing/VisualIdentity/SVG` into `assets/brand/`. Header and footer use the reversed horizontal wordmark; schema uses the full-colour light-background master. Four Soft White footer icons are vector derivatives extracted from the supplied `TS_SocialMediaLogo_Pack.eps`, with the source geometry retained.
 
-The approved AI-generated tennis lifestyle artwork `assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp` (2048 × 768) remains the desktop hero. A `<picture>` switches to the prepared 600 × 800 or 900 × 1200 portrait composition at 760 CSS pixels and below. The hero is eager with high fetch priority; a visible caption identifies its screens as illustrative. Below it, the Lisbon frame displays a real owner-supplied event photograph and the Vision frame displays a visibly labeled AI-generated multi-sport concept. Each frame uses 480, 800 and 1200-pixel WebP variants, intrinsic dimensions, `srcset`/`sizes` and lazy loading. Their captions are live HTML.
+The approved AI-generated tennis lifestyle artwork `assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp` (2048 × 768) remains the desktop hero. A `<picture>` switches to the portrait composition at 760 CSS pixels and below, with 420 × 560, 600 × 800 and 900 × 1200 AVIF candidates and WebP fallback at the same widths. The hero is eager with high fetch priority; a visible caption identifies its screens as illustrative. Below it, the Lisbon frame displays a real owner-supplied event photograph and the Vision frame displays a visibly labeled AI-generated multi-sport concept. Each frame uses 480, 800 and 1200-pixel WebP variants, intrinsic dimensions, `srcset`/`sizes` and lazy loading. Their captions are live HTML.
 
 The 1200 × 630 WebP social-share image is referenced by Open Graph and Twitter/X tags on all six indexable pages. Page titles, descriptions, canonicals and the established Person/Organization entity IDs remain page-specific. The author profile uses its portrait in visible content and `Person.image`. A 1280 × 480 desktop hero derivative serves suitable intermediate widths; the approved 2048 × 768 artwork remains the largest candidate.
 
