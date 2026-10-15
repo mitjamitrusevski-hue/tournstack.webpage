@@ -1,0 +1,23 @@
+{
+  "name": "TournStack versioned asset browser headers",
+  "kind": "zone",
+  "phase": "http_response_headers_transform",
+  "rules": [
+    {
+      "ref": "tournstack_immutable_asset_header",
+      "description": "Long browser freshness only for successful hashed asset responses",
+      "expression": "(http.host in {\"tournstack.com\" \"www.tournstack.com\"} and http.request.method in {\"GET\" \"HEAD\"} and starts_with(http.request.uri.path, \"/assets/versioned/\") and http.response.code eq 200)",
+      "action": "rewrite",
+      "action_parameters": { "headers": { "cache-control": { "operation": "set", "value": "public, max-age=31536000, immutable" } } },
+      "enabled": true
+    },
+    {
+      "ref": "tournstack_asset_error_no_store",
+      "description": "Never retain missing, redirected or failed versioned asset responses",
+      "expression": "(http.host in {\"tournstack.com\" \"www.tournstack.com\"} and starts_with(http.request.uri.path, \"/assets/versioned/\") and http.response.code ne 200)",
+      "action": "rewrite",
+      "action_parameters": { "headers": { "cache-control": { "operation": "set", "value": "no-store" } } },
+      "enabled": true
+    }
+  ]
+}

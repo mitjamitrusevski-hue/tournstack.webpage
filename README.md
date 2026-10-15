@@ -2,6 +2,10 @@
 
 A lightweight, static pre-launch website for TournStack. The repository root is the GitHub Pages publish directory; `CNAME` points to `tournstack.com`.
 
+## Versioned assets and Cloudflare cache preparation — 2026-10-15
+
+Edit original assets, run `node scripts/version-assets.cjs`, then `node scripts/version-assets.cjs --check`. Commit original source, generated HTML, assets/asset-manifest.json and new assets/versioned files together. Keep historical versioned files intact. The build validates immutable hashes and references before publishing. [Cloudflare setup](integrations/cloudflare-cache/SETUP.md) owns DNS, cache rules, response headers and rollback. Preparing/publishing asset URLs does not activate Cloudflare: cache headers remain GitHub-controlled until DNS and zone rules are separately configured and verified. Original image/logo/font/script URLs remain available, including older email links and the stable author portrait source URL.
+
 ## Pages
 
 - `index.html`: Wizard-first tournament setup, live organiser control, connected outputs, three-step workflow, four core modules, sports organisers and later personal events, Lisbon example, tournament-and-league direction, team and contact route.

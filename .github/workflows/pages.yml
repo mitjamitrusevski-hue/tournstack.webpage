@@ -1,0 +1,48 @@
+name: Validate and deploy website
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: read
+concurrency:
+  group: website-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify immutable assets and HTML references
+        run: |
+          node scripts/test-version-assets.cjs
+          node scripts/version-assets.cjs --check
+      - name: Prepare committed public source
+        run: |
+          mkdir _site
+          git ls-files -z | rsync -a --from0 --files-from=- --exclude='.github/' --exclude='desktop.ini' ./ _site/
+      - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
+      - uses: actions/upload-pages-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          path: _site
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy verified source
+        id: deployment
+        uses: actions/deploy-pages@v4

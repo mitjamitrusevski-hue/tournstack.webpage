@@ -1,0 +1,231 @@
+{
+  "format_version": 1,
+  "hash_algorithm": "sha256",
+  "hash_prefix_length": 16,
+  "assets": [
+    {
+      "source": "assets/brand/TS_BrandMark_Shield_FullColor_Transparent_RGB.svg",
+      "url": "/assets/versioned/brand/TS_BrandMark_Shield_FullColor_Transparent_RGB.ee8786ed955e36d6.svg",
+      "sha256": "ee8786ed955e36d6c2c987ae3d5a9b828ad155481031d7d02f1e88d0267dd4f3",
+      "source_sha256": "ee8786ed955e36d6c2c987ae3d5a9b828ad155481031d7d02f1e88d0267dd4f3",
+      "size_bytes": 61917
+    },
+    {
+      "source": "assets/brand/TS_EmailLogo_Reversed_DarkBG_RGB.png",
+      "url": "/assets/versioned/brand/TS_EmailLogo_Reversed_DarkBG_RGB.24822508a36ff571.png",
+      "sha256": "24822508a36ff5714f28d6d266002fdf3031591d62000b90a529c76193d5e479",
+      "source_sha256": "24822508a36ff5714f28d6d266002fdf3031591d62000b90a529c76193d5e479",
+      "size_bytes": 21985
+    },
+    {
+      "source": "assets/brand/TS_MasterFavicon_Shield_FullColor_DeepSlateBG_RGB.svg",
+      "url": "/assets/versioned/brand/TS_MasterFavicon_Shield_FullColor_DeepSlateBG_RGB.9e29743fd39f2f13.svg",
+      "sha256": "9e29743fd39f2f139123ea7da19d0be990bda49d07763d20725baea2eb448ab1",
+      "source_sha256": "9e29743fd39f2f139123ea7da19d0be990bda49d07763d20725baea2eb448ab1",
+      "size_bytes": 63360
+    },
+    {
+      "source": "assets/brand/TS_MasterFavicon_Shield_FullColor_Transparent_RGB.svg",
+      "url": "/assets/versioned/brand/TS_MasterFavicon_Shield_FullColor_Transparent_RGB.e47d4552b09c74e6.svg",
+      "sha256": "e47d4552b09c74e627ea9abd25b9f3f1c62890e91ec093ba2e4ec3351691de37",
+      "source_sha256": "e47d4552b09c74e627ea9abd25b9f3f1c62890e91ec093ba2e4ec3351691de37",
+      "size_bytes": 63307
+    },
+    {
+      "source": "assets/brand/TS_Primary_H_FullColor_LightBG_RGB.svg",
+      "url": "/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+      "sha256": "fa1887797d2619a4111498bc4a9ad6b91b8b4832549ad96bfa9176be8a722bbc",
+      "source_sha256": "fa1887797d2619a4111498bc4a9ad6b91b8b4832549ad96bfa9176be8a722bbc",
+      "size_bytes": 65804
+    },
+    {
+      "source": "assets/brand/TS_Primary_H_Reversed_DarkBG_RGB.svg",
+      "url": "/assets/versioned/brand/TS_Primary_H_Reversed_DarkBG_RGB.51bb0b6621af525a.svg",
+      "sha256": "51bb0b6621af525a7eb80076d97ca10c212ffabc77134a194dd5e041f0350230",
+      "source_sha256": "51bb0b6621af525a7eb80076d97ca10c212ffabc77134a194dd5e041f0350230",
+      "size_bytes": 65804
+    },
+    {
+      "source": "assets/brand/TS_Stacked_V_FullColor_LightBG_RGB.svg",
+      "url": "/assets/versioned/brand/TS_Stacked_V_FullColor_LightBG_RGB.73fe7e8b5b51b007.svg",
+      "sha256": "73fe7e8b5b51b0072a69c5ca797968ec1f984fd4607a80324f9168e36b5a085c",
+      "source_sha256": "73fe7e8b5b51b0072a69c5ca797968ec1f984fd4607a80324f9168e36b5a085c",
+      "size_bytes": 66349
+    },
+    {
+      "source": "assets/brand/TS_Stacked_V_Reversed_DarkBG_RGB.svg",
+      "url": "/assets/versioned/brand/TS_Stacked_V_Reversed_DarkBG_RGB.36918d669921642f.svg",
+      "sha256": "36918d669921642f5690b8688477eabe68749cbb171c0c136fbaebe2cede1ee6",
+      "source_sha256": "36918d669921642f5690b8688477eabe68749cbb171c0c136fbaebe2cede1ee6",
+      "size_bytes": 66354
+    },
+    {
+      "source": "assets/brand/social-facebook.svg",
+      "url": "/assets/versioned/brand/social-facebook.58ff12be255eeaf2.svg",
+      "sha256": "58ff12be255eeaf250f944d5d3fc704e1bd5a74f4389572ab81407354419ed83",
+      "source_sha256": "58ff12be255eeaf250f944d5d3fc704e1bd5a74f4389572ab81407354419ed83",
+      "size_bytes": 528
+    },
+    {
+      "source": "assets/brand/social-linkedin.svg",
+      "url": "/assets/versioned/brand/social-linkedin.b9f080e32af12f00.svg",
+      "sha256": "b9f080e32af12f003fce597521dc75ef0261cbb1513a491aacdf277de6d73ab5",
+      "source_sha256": "b9f080e32af12f003fce597521dc75ef0261cbb1513a491aacdf277de6d73ab5",
+      "size_bytes": 2268
+    },
+    {
+      "source": "assets/brand/social-reddit.svg",
+      "url": "/assets/versioned/brand/social-reddit.8cd6e18dc0bd0fbf.svg",
+      "sha256": "8cd6e18dc0bd0fbf6c138ddbc2877d89e111e98608e96cae1fb7be0f2b581690",
+      "source_sha256": "8cd6e18dc0bd0fbf6c138ddbc2877d89e111e98608e96cae1fb7be0f2b581690",
+      "size_bytes": 2029
+    },
+    {
+      "source": "assets/brand/social-tiktok.svg",
+      "url": "/assets/versioned/brand/social-tiktok.364d731e0701a57d.svg",
+      "sha256": "364d731e0701a57d55a08ed6a40d1d6d1a5e4bec6dcc1c498ec5de29949645b4",
+      "source_sha256": "364d731e0701a57d55a08ed6a40d1d6d1a5e4bec6dcc1c498ec5de29949645b4",
+      "size_bytes": 716
+    },
+    {
+      "source": "assets/brand/social-x.svg",
+      "url": "/assets/versioned/brand/social-x.f676d7bfc2a81ffe.svg",
+      "sha256": "f676d7bfc2a81ffe161585ce99d5b8af28461ad741c14c20b13310a0dbf8dd29",
+      "source_sha256": "f676d7bfc2a81ffe161585ce99d5b8af28461ad741c14c20b13310a0dbf8dd29",
+      "size_bytes": 466
+    },
+    {
+      "source": "assets/css/styles.css",
+      "url": "/assets/versioned/css/styles.c2e2970a22b8f811.css",
+      "sha256": "c2e2970a22b8f811dd5c1f964adf9e6e587d664fc54d8b2bda173a56ecc19641",
+      "source_sha256": "44bac95479d921c56d69b61ecfdb0549a0df29989fab2daf8cf9c7974f0ed40a",
+      "size_bytes": 40639
+    },
+    {
+      "source": "assets/fonts/Montserrat-Latin.woff",
+      "url": "/assets/versioned/fonts/Montserrat-Latin.16b6ffa02b466bb7.woff",
+      "sha256": "16b6ffa02b466bb75c49ea8361e2e8fbcdcf3b4d7033f1de5dbfa824201c79ef",
+      "source_sha256": "16b6ffa02b466bb75c49ea8361e2e8fbcdcf3b4d7033f1de5dbfa824201c79ef",
+      "size_bytes": 36804
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Hero_Tennis-Lifestyle_Desktop_1280x480_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Hero_Tennis-Lifestyle_Desktop_1280x480_RGB.91bb99af6f553257.webp",
+      "sha256": "91bb99af6f5532577df9c7a7f056839115153e41158f3d78381565fc9aecfd8e",
+      "source_sha256": "91bb99af6f5532577df9c7a7f056839115153e41158f3d78381565fc9aecfd8e",
+      "size_bytes": 99524
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Hero_Tennis-Lifestyle_Mobile_600x800_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Hero_Tennis-Lifestyle_Mobile_600x800_RGB.41e423bc1077bb1e.webp",
+      "sha256": "41e423bc1077bb1e6046a428dfeb53c80c2ccbcb390a040a7a9e760be8fe7d4a",
+      "source_sha256": "41e423bc1077bb1e6046a428dfeb53c80c2ccbcb390a040a7a9e760be8fe7d4a",
+      "size_bytes": 95278
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.7db4133e18768970.webp",
+      "sha256": "7db4133e18768970312634ce7e35a6ef7490d9cb50ce527d08f2aa6d14e935ab",
+      "source_sha256": "7db4133e18768970312634ce7e35a6ef7490d9cb50ce527d08f2aa6d14e935ab",
+      "size_bytes": 159684
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Social-Share_Tennis-Lifestyle_1200x630_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Social-Share_Tennis-Lifestyle_1200x630_RGB.d02863e1357ba09a.webp",
+      "sha256": "d02863e1357ba09a3c2f7ee67d47bffc17f2d557a45a52e38818b7e1a6515611",
+      "source_sha256": "d02863e1357ba09a3c2f7ee67d47bffc17f2d557a45a52e38818b7e1a6515611",
+      "size_bytes": 88508
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Web_Lisbon-Padel-Tournament_1200x800_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Web_Lisbon-Padel-Tournament_1200x800_RGB.0e6f92f6d8e33212.webp",
+      "sha256": "0e6f92f6d8e33212d282b7d39ea0a5d8e6f6292bd2bc6063fc51312d7ef75961",
+      "source_sha256": "0e6f92f6d8e33212d282b7d39ea0a5d8e6f6292bd2bc6063fc51312d7ef75961",
+      "size_bytes": 96436
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Web_Lisbon-Padel-Tournament_480x320_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Web_Lisbon-Padel-Tournament_480x320_RGB.5d0984b185e49b5a.webp",
+      "sha256": "5d0984b185e49b5a3e0090cefb585775cd074ff218186f2c68dec8c2aa24b002",
+      "source_sha256": "5d0984b185e49b5a3e0090cefb585775cd074ff218186f2c68dec8c2aa24b002",
+      "size_bytes": 24276
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Web_Lisbon-Padel-Tournament_800x533_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Web_Lisbon-Padel-Tournament_800x533_RGB.8a42b7ca278431aa.webp",
+      "sha256": "8a42b7ca278431aaa3197dbfeef118147c4e8eaf4824022817471539e340549b",
+      "source_sha256": "8a42b7ca278431aaa3197dbfeef118147c4e8eaf4824022817471539e340549b",
+      "size_bytes": 48496
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Web_Vision-Multi-Sport-Venue_1200x800_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Web_Vision-Multi-Sport-Venue_1200x800_RGB.e0c045f6d8977ad6.webp",
+      "sha256": "e0c045f6d8977ad6e3492bdc36b511897f8c47825887171f8f09490fc626f62a",
+      "source_sha256": "e0c045f6d8977ad6e3492bdc36b511897f8c47825887171f8f09490fc626f62a",
+      "size_bytes": 258284
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Web_Vision-Multi-Sport-Venue_480x320_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Web_Vision-Multi-Sport-Venue_480x320_RGB.49f5ec07718941d8.webp",
+      "sha256": "49f5ec07718941d83130d926fc7a2a732302e7a726fb1f3f7bd6fc79b608ae06",
+      "source_sha256": "49f5ec07718941d83130d926fc7a2a732302e7a726fb1f3f7bd6fc79b608ae06",
+      "size_bytes": 59942
+    },
+    {
+      "source": "assets/images/2026-10-06_TS_Web_Vision-Multi-Sport-Venue_800x533_RGB.webp",
+      "url": "/assets/versioned/images/2026-10-06_TS_Web_Vision-Multi-Sport-Venue_800x533_RGB.740dce57d07c31da.webp",
+      "sha256": "740dce57d07c31daed16d32158f50f752398e81988ce5684f8ebf64703b11c3a",
+      "source_sha256": "740dce57d07c31daed16d32158f50f752398e81988ce5684f8ebf64703b11c3a",
+      "size_bytes": 142384
+    },
+    {
+      "source": "assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp",
+      "url": "/assets/versioned/images/TS_Hero_Tennis_Lifestyle_RGB.580dd2e17b6837e4.webp",
+      "sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",
+      "source_sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",
+      "size_bytes": 201680
+    },
+    {
+      "source": "assets/images/mitja-mitrusevski.webp",
+      "url": "/assets/versioned/images/mitja-mitrusevski.72354b1de625eddb.webp",
+      "sha256": "72354b1de625eddbb1dd6c4181d56e72f97c3adfc3e977be12c56eb7c65527f3",
+      "source_sha256": "72354b1de625eddbb1dd6c4181d56e72f97c3adfc3e977be12c56eb7c65527f3",
+      "size_bytes": 55446
+    },
+    {
+      "source": "assets/js/contact-config.js",
+      "url": "/assets/versioned/js/contact-config.675b25f6f19ce600.js",
+      "sha256": "675b25f6f19ce600678ec0492404de03e46c027a793ecce9d3f89daeee121042",
+      "source_sha256": "675b25f6f19ce600678ec0492404de03e46c027a793ecce9d3f89daeee121042",
+      "size_bytes": 449
+    },
+    {
+      "source": "assets/js/inquiry-received.js",
+      "url": "/assets/versioned/js/inquiry-received.0bbdb03e0212f78c.js",
+      "sha256": "0bbdb03e0212f78cd0b0712900ab84598b099b9ab3135ae10e1b07622a3bb765",
+      "source_sha256": "0bbdb03e0212f78cd0b0712900ab84598b099b9ab3135ae10e1b07622a3bb765",
+      "size_bytes": 1759
+    },
+    {
+      "source": "assets/js/interaction-analytics.js",
+      "url": "/assets/versioned/js/interaction-analytics.a036e12134d80ed2.js",
+      "sha256": "a036e12134d80ed29e3375c8140f094ec6c766c92242f482a6f02d618dfb3410",
+      "source_sha256": "a036e12134d80ed29e3375c8140f094ec6c766c92242f482a6f02d618dfb3410",
+      "size_bytes": 1670
+    },
+    {
+      "source": "assets/js/newsletter.js",
+      "url": "/assets/versioned/js/newsletter.71d8081d51d6b75d.js",
+      "sha256": "71d8081d51d6b75d5fd4d928791db612937b18ff1e8ce463e4420d6e086bc939",
+      "source_sha256": "71d8081d51d6b75d5fd4d928791db612937b18ff1e8ce463e4420d6e086bc939",
+      "size_bytes": 4766
+    },
+    {
+      "source": "assets/js/site.js",
+      "url": "/assets/versioned/js/site.ddc7f79087f687e9.js",
+      "sha256": "ddc7f79087f687e95cd54575e4a76e034048dde5d691794f090ed9e9edc54699",
+      "source_sha256": "ddc7f79087f687e95cd54575e4a76e034048dde5d691794f090ed9e9edc54699",
+      "size_bytes": 11408
+    }
+  ]
+}

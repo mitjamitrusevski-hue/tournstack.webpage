@@ -1,0 +1,2 @@
+# Content-hashed files must retain their exact bytes across operating systems.
+assets/versioned/** -text
