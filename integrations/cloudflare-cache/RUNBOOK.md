@@ -101,6 +101,10 @@ The second transform matches every non-200 response, including 206/304; the edge
 
 Edge caching and browser freshness are separate because response-header transforms run after edge-cache decisions. An unconditional one-year Browser TTL override could retain a missing asset; status-scoped headers avoid that.
 
+### Keep public contact addresses usable without JavaScript
+
+Live verification of the messaging release found Cloudflare replacing public contact text/mailto links on FAQ, Contact, Privacy and Unsubscribe with email-protection URLs and injecting `email-decode.min.js`. This was an edge HTML transformation, not a stale Pages file. Those intentionally public addresses are now surrounded by Cloudflare's documented `<!--email_off-->` / `<!--/email_off-->` comments. Preserve the comments when editing fallback/contact copy. No zone setting was changed. Verify the served email text and mailto URLs with JavaScript disabled, and check that no decoder is injected. See [Cloudflare's address-specific exclusion](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/#prevent-cloudflare-from-obfuscating-email).
+
 | Response / service | Policy |
 |---|---|
 | Versioned asset GET/HEAD, 200 | Edge one month; browser one year, immutable |
