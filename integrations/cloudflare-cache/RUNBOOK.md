@@ -97,7 +97,7 @@ Set static `Cache-Control` = `public, max-age=31536000, immutable`.
 
 Set static `Cache-Control` = `no-store`; placed last.
 
-The second transform matches every non-200 response, including 206/304; the edge >=300 condition also includes 304. Conditional/range behavior was not separately tested. Revisit these conditions if optimizing those flows later; do not describe them as only 4xx/5xx handling.
+The second transform matches every non-200 response, including 206/304; the edge >=300 condition also includes 304. Follow-up on 2026-10-15 at 10:53:36Z tested a real versioned image: conditional ETag GET returned **304, no-store, HIT**, and `Range: bytes=0-99` returned **206, 100 bytes, no-store, HIT**. These conservative headers can reduce browser reuse for conditional/partial responses. No rule was changed in the messaging release; revisit status conditions only with a separate edge/browser regression check. Do not describe this rule as only 4xx/5xx handling.
 
 Edge caching and browser freshness are separate because response-header transforms run after edge-cache decisions. An unconditional one-year Browser TTL override could retain a missing asset; status-scoped headers avoid that.
 
@@ -140,7 +140,7 @@ The PC resolver temporarily cached GitHub addresses after activation. Checks use
 
 For routine checks use `curl -I` on the homepage, www, a real URL from the manifest (twice) and a missing versioned URL. Check CF-Ray/Server cloudflare, expected Cache-Control and repeat HIT/Age. For browser reuse keep DevTools Disable cache unchecked; edge HIT does not prove browser disk-cache reuse.
 
-No real inquiries, emails, subscriber changes or conversion events were generated. DNS parity does not prove inbox delivery. Full resolver propagation, browser-cache reuse, conditional/range handling and a new comparable Lighthouse result were not established by the activation checks. Run comparable device/network/consent conditions before claiming measured savings.
+No real inquiries, emails, subscriber changes or conversion events were generated. DNS parity does not prove inbox delivery. Full resolver propagation, browser-cache reuse and a new comparable Lighthouse result were not established by the activation checks. The later conditional/range sample is recorded above. Normal resolver requests at 10:53:36Z reached Cloudflare: CSS/JS/image samples had one-year immutable headers and repeat HIT/Age; HTML and original mutable JS retained max-age=600/DYNAMIC; missing versioned JS returned 404/no-store/BYPASS. Run comparable device/network/consent conditions before claiming measured savings.
 
 ## Rollback and future changes
 

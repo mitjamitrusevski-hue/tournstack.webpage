@@ -2,6 +2,8 @@
 
 Updated: 2026-10-15
 
+Messaging-alignment follow-up: `site.js` and `inquiry-received.js` now isolate exceptions thrown by optional Plausible calls, so a saved contact still opens its success dialog, including when session storage is blocked. The event remains `Contact Inquiry Submitted`; it is not renamed or triggered on an attempt. `integrations/advertising/browser-regression.cjs` tests both paths with mocked receiver/analytics and no production conversion. Advertising has a separate [disabled candidate integration](advertising.md), not a new Plausible goal or consent rule.
+
 Plausible site: `tournstack.com`. Create Custom event goals with these exact names:
 
 | Event | Trigger | Optional breakdown properties |

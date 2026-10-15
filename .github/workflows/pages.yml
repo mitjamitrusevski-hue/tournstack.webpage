@@ -22,6 +22,9 @@ jobs:
         run: |
           node scripts/test-version-assets.cjs
           node scripts/version-assets.cjs --check
+      - name: Verify consent and receiver failure gates without network
+        run: |
+          node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/verification-failures.test.cjs integrations/google-apps-script/turnstile-gate.test.cjs integrations/google-apps-script/newsletter.test.cjs
       - name: Prepare committed public source
         run: |
           mkdir _site

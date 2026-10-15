@@ -13,14 +13,16 @@
     if (url.origin === window.location.origin && url.pathname === '/contact.html') returnURL = url.href;
   } catch (_) { /* Use the ordinary contact destination. */ }
   // Load analytics only after consuming a recent saved-inquiry receipt. No personal fields or IDs are sent.
-  window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments); };
-  window.plausible.init = window.plausible.init || function (options) { window.plausible.o = options || {}; };
-  window.plausible.init();
-  window.plausible('Contact Inquiry Submitted');
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://plausible.io/js/pa-hcj_wYFVMwBOaNDFRuGWR.js';
-  document.head.append(script);
+  try {
+    window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments); };
+    window.plausible.init = window.plausible.init || function (options) { window.plausible.o = options || {}; };
+    window.plausible.init();
+    window.plausible('Contact Inquiry Submitted');
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://plausible.io/js/pa-hcj_wYFVMwBOaNDFRuGWR.js';
+    document.head.append(script);
+  } catch (_) { /* Analytics failure must not hide the saved-inquiry dialog. */ }
   const dialog = document.querySelector('#inquiry-sent');
   const close = () => window.location.replace(returnURL);
   dialog.querySelector('button').addEventListener('click', () => dialog.close());

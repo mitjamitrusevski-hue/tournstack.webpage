@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { openQueue, createHandler } from '../relay.mjs';
 import { buildMessage, LOGO_LINK } from '../messages.mjs';
+import { LOGO_URL } from '../../email/messages.mjs';
 
 const contact = {SubmissionId:'aaaaaaaa-bbbb-cccc-dddd-000000000001',Name:'Jane <Player>',Email:'player@example.com',Inquiry:'How can I organize a league?'};
 const token = 'a'.repeat(64);
@@ -39,7 +40,8 @@ test('authentication, fixed sender, JSON/header validation, and durable deduplic
     assert.equal(sent[0].text,`Name: ${contact.Name}\nEmail: ${contact.Email}\nInquiry: ${contact.Inquiry}`);
     assert.equal(sent[1].to,contact.Email);assert.equal(sent[1].replyTo,'info@tournstack.com');
     assert(sent[1].html.includes('Jane &lt;Player&gt;'));
-    assert(sent[1].html.includes('cid:tournstack-logo'));
+    assert(sent[1].html.includes('src="'+LOGO_URL+'"'));
+    assert.equal(new URL(LOGO_URL).origin,'https://tournstack.com');
     assert.equal(new URL(LOGO_LINK).searchParams.get('utm_term'),'logo');
     assert(!/#[fF]{6}\b|#0{6}\b/.test(sent[1].html));
     assert(queue.db.prepare('SELECT payload FROM jobs').all().every(j=>j.payload===''));

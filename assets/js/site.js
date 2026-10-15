@@ -84,7 +84,9 @@
       }
       if (!countedInquiries.has(id)) {
         countedInquiries.add(id);
-        if (typeof window.plausible === 'function') window.plausible('Contact Inquiry Submitted');
+        try { window.plausible?.('Contact Inquiry Submitted'); } catch (_) {
+          // An optional analytics failure must not hide the saved-inquiry dialog.
+        }
       }
       if (!successDialog || typeof successDialog.showModal !== 'function') return;
       returnURL = window.location.href;
@@ -221,12 +223,11 @@
 
   const seenKey = 'tournstack-invitation-seen-v2';
   const elapsedKey = 'tournstack-invitation-elapsed-v2';
-  const read = (key) => {
-    try { return window.sessionStorage.getItem(key); } catch { return null; }
-  };
-  const write = (key, value) => {
-    try { window.sessionStorage.setItem(key, value); } catch { /* Optional. */ }
-  };
+  // This optional invitation does not need browser storage. Remember its timer
+  // and dismissal only in this document; navigation starts a fresh timer.
+  const invitationState = new Map();
+  const read = (key) => invitationState.get(key);
+  const write = (key, value) => invitationState.set(key, value);
   if (read(seenKey)) return;
 
   const delay = 30000;

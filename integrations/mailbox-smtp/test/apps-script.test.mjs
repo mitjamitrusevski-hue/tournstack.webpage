@@ -11,17 +11,22 @@ test('Apps Script saves before authenticated relay request and preserves contact
     setNumberFormat(){return this;},setFontFamily(){return this;},setFontColor(){return this;},setBackground(){return this;},setFontWeight(){return this;},setWrap(){return this;}
   };}};
   const ctx={console:{error(){}},SpreadsheetApp:{openById:id=>{assert.equal(id,'1QxdXhDRPlZpUEjz28vgcRnAW17QeCl-7jqnIb8Aa8gM');return {getSheetByName:()=>sheet,setSpreadsheetTimeZone(){}};},flush(){}},
-    PropertiesService:{getScriptProperties:()=>({getProperty:k=>({MAIL_RELAY_URL:'https://relay.example.com/contact-email',MAIL_RELAY_TOKEN:'a'.repeat(64)})[k]})},
-    UrlFetchApp:{fetch(url,options){requests.push({url,options});events.push('queue');return {getResponseCode:()=>fail?503:202};}},
+    PropertiesService:{getScriptProperties:()=>({getProperty:k=>({TURNSTILE_SECRET:'test-secret',MAIL_RELAY_URL:'https://relay.example.com/contact-email',MAIL_RELAY_TOKEN:'a'.repeat(64)})[k]})},
+    UrlFetchApp:{fetch(url,options){
+      if(url==='https://challenges.cloudflare.com/turnstile/v0/siteverify'){
+        assert.equal(options.payload.response,'test-token');events.push('verify');
+        return {getResponseCode:()=>200,getContentText:()=>JSON.stringify({success:true,action:'contact',hostname:'tournstack.com'})};
+      }
+      requests.push({url,options});events.push('queue');return {getResponseCode:()=>fail?503:202};}},
     LockService:{getScriptLock:()=>({waitLock(){locked=true;},hasLock:()=>locked,releaseLock(){locked=false;}})},
     CacheService:{getScriptCache:()=>({get:k=>cache.get(k),put:(k,v)=>cache.set(k,v)})},
     HtmlService:{XFrameOptionsMode:{ALLOWALL:'allowall'},createHtmlOutput:html=>({html,setXFrameOptionsMode(){return this;}})},
     ContentService:{createTextOutput:v=>v}};
   vm.createContext(ctx);vm.runInContext(readFileSync(new URL('../../google-apps-script/Code.gs',import.meta.url),'utf8'),ctx);
   ctx.setupContacts();assert.equal(requests.length,0);
-  const contact={Origin:'https://tournstack.com',SubmissionId:'aaaaaaaa-bbbb-cccc-dddd-000000000001',Name:'Test Organizer',Email:'organizer@example.com',Inquiry:'Please tell me about pilots.'};
+  const contact={Origin:'https://tournstack.com',SubmissionId:'aaaaaaaa-bbbb-cccc-dddd-000000000001',Name:'Test Organizer',Email:'organizer@example.com',Inquiry:'Please tell me about pilots.','cf-turnstile-response':'test-token'};
   assert(ctx.doPost({parameter:contact}).html.includes('"ok":true'));
-  assert.deepEqual(events,['save','queue']);assert.equal(rows.length,2);
+  assert.deepEqual(events,['verify','save','queue']);assert.equal(rows.length,2);
   assert.equal(Object.prototype.toString.call(rows[1][0]),'[object Date]');
   assert.equal(requests[0].options.headers.Authorization,'Bearer '+'a'.repeat(64));
   assert.equal(requests[0].options.followRedirects,false);
