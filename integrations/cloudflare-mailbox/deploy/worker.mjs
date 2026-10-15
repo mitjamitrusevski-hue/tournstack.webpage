@@ -50,7 +50,7 @@ function queueStore(sql, transaction, { now = Date.now, maxContacts = 100, maxCo
         if (run("SELECT COUNT(*) AS n FROM contacts WHERE created>?", time - 864e5)[0].n >= maxContacts) throw reject(429);
         if (run("SELECT COUNT(*) AS n FROM contacts WHERE email=? AND created>?", message.Email.toLowerCase(), time - 864e5)[0].n >= maxConfirmations) throw reject(429);
         run("INSERT INTO contacts VALUES(?,?,?,?)", message.SubmissionId, hash, message.Email.toLowerCase(), time);
-        run("INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)", message.SubmissionId, message.MessageKind === "already-subscribed" ? "newsletter-already-subscribed" : "newsletter-verification", JSON.stringify(message), time);
+        run("INSERT INTO jobs(id,kind,payload,due) VALUES(?,?,?,?)", message.SubmissionId, message.MessageKind === "already-subscribed" ? "newsletter-already-subscribed" : message.MessageKind === "unsubscribe-link" ? "newsletter-unsubscribe-link" : "newsletter-verification", JSON.stringify(message), time);
       });
     },
     claim() {
@@ -92,12 +92,14 @@ __name(queueStore, "queueStore");
 var NEWSLETTER_ORIGIN = "https://tournstack-mailbox.tournstack.workers.dev";
 function validateNewsletter(value) {
   const already = value?.MessageKind === "already-subscribed";
-  const keys = already ? ["SubmissionId", "Email", "MessageKind"] : ["SubmissionId", "Email", "VerificationURL", "UnsubscribeURL"];
+  const unsubscribe = value?.MessageKind === "unsubscribe-link";
+  const keys = already ? ["SubmissionId", "Email", "MessageKind"] : unsubscribe ? ["SubmissionId", "Email", "MessageKind", "UnsubscribeURL"] : ["SubmissionId", "Email", "VerificationURL", "UnsubscribeURL"];
   if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).some((k) => !keys.includes(k)) || keys.some((k) => typeof value[k] !== "string")) throw reject(400);
   const m = Object.fromEntries(keys.map((k) => [k, value[k].trim()]));
   if (!/^[a-zA-Z0-9-]{16,80}$/.test(m.SubmissionId) || m.Email.length > 254 || !/^[\x21-\x7e]+$/.test(m.Email) || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(m.Email)) throw reject(400);
   if (already) return m;
   for (const [key, pathname] of [["VerificationURL", "/newsletter/confirm"], ["UnsubscribeURL", "/newsletter/unsubscribe"]]) {
+    if (unsubscribe && key === "VerificationURL") continue;
     let u;
     try {
       u = new URL(m[key]);
@@ -191,7 +193,7 @@ async function newsletterPublic(request, env, ctx) {
       if (ctx?.waitUntil) ctx.waitUntil(recording);
       else await recording;
     }
-    return page(confirm ? "You\u2019re on the list." : "You\u2019re unsubscribed.", confirm ? "Thanks for joining us. We\u2019ll email you when our newsletter is ready." : "Your newsletter signup has been removed. You won\u2019t receive our newsletter.");
+    return page(confirm ? "You\u2019re on the list." : "You\u2019re unsubscribed.", confirm ? "Thanks for joining us. We\u2019ll email you when our newsletter is ready." : "Your newsletter subscription is inactive. You won\u2019t receive our newsletter.");
   } catch {
     return page("Please try again shortly.", "We couldn\u2019t confirm that update. Please try this link again or email info@tournstack.com.");
   }
@@ -263,6 +265,21 @@ var LOGO_LINK = "https://tournstack.com/?utm_source=tournstack&utm_medium=email&
 var escapeHTML = /* @__PURE__ */ __name((value) => value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]), "escapeHTML");
 function buildMessage(kind, contact) {
   const from = { name: "TournStack", address: SENDER };
+  if (kind === "newsletter-unsubscribe-link") return {
+    from,
+    to: contact.Email,
+    replyTo: SENDER,
+    subject: "Unsubscribe from TournStack news",
+    text: `Someone requested an unsubscribe link for this address.
+
+To stop receiving TournStack news, open this link and choose Unsubscribe:
+${contact.UnsubscribeURL}
+
+If you did not request this, ignore this email. Your subscription stays unchanged until you confirm. Use the most recent unsubscribe email if you request another link.
+
+The TournStack Marketing Team`,
+    html: `<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body style="margin:0;background:#EEF2F7;color:#0F172A;font-family:Montserrat,Arial,sans-serif"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:28px 12px"><table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#F8FAFC"><tr><td style="background:#0F172A;padding:28px 32px"><img src="${LOGO_URL}" alt="TournStack" width="256" height="41" style="display:block;border:0;width:256px;max-width:100%;height:auto"></td></tr><tr><td style="padding:32px;font-size:16px;line-height:1.65"><h1 style="font-size:24px">Ready to leave the list?</h1><p>Someone requested an unsubscribe link for this address. To stop receiving TournStack news, open the link below and confirm.</p><p><a href="${escapeHTML(contact.UnsubscribeURL)}" style="display:inline-block;background:#1855CC;color:#F8FAFC;padding:14px 18px;border-radius:8px;text-decoration:none">Unsubscribe</a></p><p>If you didn\u2019t request this, ignore this email. Your subscription stays unchanged until you confirm. Use the most recent email if you request another link.</p><p>The TournStack Marketing Team</p><p><a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></td></tr></table></td></tr></table></body></html>`
+  };
   if (kind === "notification") return {
     from,
     to: SENDER,
@@ -281,10 +298,10 @@ Inquiry: ${contact.Inquiry}`
 
 Looks like you\u2019re one step ahead. Your subscription is confirmed, so there\u2019s nothing else to do. We\u2019ll email you when our newsletter is ready.
 
-To unsubscribe, use the link in your original signup email or email info@tournstack.com.
+To unsubscribe, use the link in your original signup email, request a new link at https://tournstack.com/unsubscribe.html or email info@tournstack.com.
 
 The TournStack Marketing Team`,
-    html: `<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body style="margin:0;background:#EEF2F7;color:#0F172A;font-family:Montserrat,Arial,sans-serif"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:28px 12px"><table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#F8FAFC"><tr><td style="background:#0F172A;padding:28px 32px"><img src="${LOGO_URL}" alt="TournStack" width="256" height="41" style="display:block;border:0;width:256px;max-width:100%;height:auto"></td></tr><tr><td style="padding:32px;font-size:16px;line-height:1.65"><h1 style="font-size:24px">Whoops! You\u2019re already on the list!</h1><p>Looks like you\u2019re one step ahead. Your subscription is confirmed, so there\u2019s nothing else to do.</p><p>We\u2019ll email you when our newsletter is ready.</p><p>The TournStack Marketing Team</p><p style="font-size:13px">To unsubscribe, use the link in your original signup email or <a href="mailto:info@tournstack.com">email us</a>. <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></td></tr></table></td></tr></table></body></html>`
+    html: `<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body style="margin:0;background:#EEF2F7;color:#0F172A;font-family:Montserrat,Arial,sans-serif"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="padding:28px 12px"><table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;background:#F8FAFC"><tr><td style="background:#0F172A;padding:28px 32px"><img src="${LOGO_URL}" alt="TournStack" width="256" height="41" style="display:block;border:0;width:256px;max-width:100%;height:auto"></td></tr><tr><td style="padding:32px;font-size:16px;line-height:1.65"><h1 style="font-size:24px">Whoops! You\u2019re already on the list!</h1><p>Looks like you\u2019re one step ahead. Your subscription is confirmed, so there\u2019s nothing else to do.</p><p>We\u2019ll email you when our newsletter is ready.</p><p>The TournStack Marketing Team</p><p style="font-size:13px">To unsubscribe, use your original signup email, <a href="https://tournstack.com/unsubscribe.html">request a new unsubscribe link</a> or <a href="mailto:info@tournstack.com">email us</a>. <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></td></tr></table></td></tr></table></body></html>`
   };
   if (kind === "newsletter-verification") {
     const url = escapeHTML(contact.VerificationURL);

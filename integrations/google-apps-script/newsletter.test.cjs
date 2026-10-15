@@ -3,6 +3,7 @@ const secret='test-relay-'.repeat(8),sheets=new Map(),queued=[];
 class Sheet {
   constructor(){this.rows=[];}
   getLastRow(){return this.rows.length;} getMaxRows(){return 1000;}
+  getMaxColumns(){return 14;} insertColumnsAfter(){}
   insertRowsAfter(){} setFrozenRows(){} hideColumns(){}
   deleteRow(n){this.rows.splice(n-1,1);}
   getRange(r,c,n=1,m=1){const s=this;return {
@@ -53,11 +54,25 @@ assert.equal(sheet.rows.length,2);for(const column of [0,1,2,3,4,5,6,7,8,11])ass
 context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});assert.equal(queued.length,queuedBefore+1,'one already-subscribed message per 24 hours');
 sheet.rows[1][9]=new Date(Date.now()-86400001);context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});assert.equal(queued.length,queuedBefore+2,'notice allowed after cooldown');
 
-assert.equal(context.doPost({parameter:action('newsletter-unsubscribe',unsubscribe)}).ok,true);assert.equal(sheet.rows.length,1);
+assert.equal(sheet.rows[1][12],'active');assert(sheet.rows[1][13] instanceof Date);
+assert.equal(context.doPost({parameter:action('newsletter-unsubscribe',unsubscribe)}).ok,true);assert.equal(sheet.rows.length,2);assert.equal(sheet.rows[1][12],'inactive');assert.equal(sheet.rows[1][1],'unsubscribed');
+const inactiveAt=sheet.rows[1][13];assert.equal(context.doPost({parameter:action('newsletter-unsubscribe',unsubscribe)}).ok,true);assert.equal(sheet.rows[1][13],inactiveAt,'repeat unsubscribe does not reset status date');
 context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});const expired=new URL(queued.at(-1).VerificationURL).searchParams.get('token');sheet.rows[1][7]=new Date(Date.now()-1);
+assert.equal(sheet.rows[1][12],'inactive','signup alone does not reactivate');assert.equal(sheet.rows[1][13],inactiveAt);
 assert.equal(context.doPost({parameter:action('newsletter-confirm',expired)}).ok,false);
 sheet.rows[1][2]=new Date(Date.now()-8*86400000);
-assert.equal(context.doPost({parameter:action('newsletter-cleanup','')}).ok,true);assert.equal(sheet.rows.length,1);
+assert.equal(context.doPost({parameter:action('newsletter-cleanup','')}).ok,true);assert.equal(sheet.rows.length,2,'inactive history uses its own retention');
+sheet.rows[1][7]=new Date(Date.now()+86400000);assert.equal(context.doPost({parameter:action('newsletter-confirm',expired)}).ok,true);assert.equal(sheet.rows[1][12],'active');
+const activeAt=sheet.rows[1][13],beforeUnsubscribeRequest=queued.length;
+context.doPost({parameter:{...input,Kind:'newsletter-unsubscribe-request',SubmissionId:crypto.randomUUID()}});
+assert.equal(queued.length,beforeUnsubscribeRequest+1);assert.equal(queued.at(-1).MessageKind,'unsubscribe-link');assert.equal(sheet.rows[1][12],'active');assert.equal(sheet.rows[1][13],activeAt,'request alone does not change status');
+const privateUnsubscribe=new URL(queued.at(-1).UnsubscribeURL).searchParams.get('token');
+context.doPost({parameter:{...input,Kind:'newsletter-unsubscribe-request',SubmissionId:crypto.randomUUID()}});assert.equal(queued.length,beforeUnsubscribeRequest+1,'unsubscribe request cooldown');
+context.doPost({parameter:{...input,Kind:'newsletter-unsubscribe-request',Email:'unknown@example.invalid',SubmissionId:crypto.randomUUID()}});assert.equal(queued.length,beforeUnsubscribeRequest+1,'unknown address not mailed');
+assert.equal(context.doPost({parameter:action('newsletter-unsubscribe',privateUnsubscribe)}).ok,true);assert.equal(sheet.rows[1][12],'inactive');assert.equal(sheet.rows.length,2);
+sheet.rows[1][13]=new Date(Date.now()-731*86400000);context.doPost({parameter:action('newsletter-cleanup','')});assert.equal(sheet.rows.length,1);
+context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});sheet.rows[1][2]=new Date(Date.now()-8*86400000);context.doPost({parameter:action('newsletter-cleanup','')});assert.equal(sheet.rows.length,1);
 context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});sheet.rows[1][1]='confirmed';sheet.rows[1][3]=new Date(Date.now()-731*86400000);
 context.doPost({parameter:action('newsletter-cleanup','')});assert.equal(sheet.rows.length,1);
+context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});sheet.rows[0]=sheet.rows[0].slice(0,12);sheet.rows[1]=sheet.rows[1].slice(0,12);sheet.rows[1][1]='confirmed';sheet.rows[1][3]=new Date();const confirmedAt=sheet.rows[1][3];context.newsletterSheet_();assert.equal(sheet.rows[0][12],'SubscriptionStatus');assert.equal(sheet.rows[1][12],'active');assert.equal(sheet.rows[1][13],confirmedAt,'migration uses original confirmation date');
 console.log('Newsletter checks passed: human/action/consent gates, literal email, pending/deduplication, HMAC, one-use confirmation, expiry, unsubscribe and retention.');

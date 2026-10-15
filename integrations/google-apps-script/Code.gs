@@ -30,6 +30,7 @@ function doPost(e) {
   const p = (e && e.parameter) || {};
   if (['newsletter-confirm', 'newsletter-unsubscribe', 'newsletter-cleanup'].indexOf(p.Action) !== -1) return newsletterAction_(p);
   if (p.Kind === 'newsletter') return newsletterSignup_(p);
+  if (p.Kind === 'newsletter-unsubscribe-request') return newsletterUnsubscribeRequest_(p);
   const origin = String(p.Origin || '');
   const id = String(p.SubmissionId || '');
   const name = String(p.Name || '').trim();

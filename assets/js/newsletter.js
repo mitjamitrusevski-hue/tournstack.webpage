@@ -2,6 +2,7 @@
   'use strict';
   const form = document.querySelector('#newsletter-signup');
   if (!form) return;
+  const unsubscribe = form.elements.namedItem('Kind')?.value === 'newsletter-unsubscribe-request';
   const button = form.querySelector('button[type="submit"]');
   const email = form.elements.namedItem('Email');
   const status = document.querySelector('#newsletter-status');
@@ -49,13 +50,13 @@
       event.preventDefault(); if (!pending) status.textContent = 'Enter your email and complete the human check.'; return;
     }
     pending = window.crypto.randomUUID();
-    try { window.plausible?.('Newsletter Signup Requested'); } catch (_) { /* Keep signup independent of analytics. */ }
+    if (!unsubscribe) try { window.plausible?.('Newsletter Signup Requested'); } catch (_) { /* Keep signup independent of analytics. */ }
     form.elements.namedItem('SubmissionId').value = pending;
     form.elements.namedItem('Origin').value = window.location.origin;
     form.elements.namedItem('SourcePath').value = window.location.pathname;
     button.disabled = true;
     form.setAttribute('aria-busy', 'true');
-    status.textContent = 'Sending your confirmation link…';
+    status.textContent = unsubscribe ? 'Requesting your unsubscribe link…' : 'Sending your confirmation link…';
     timer = window.setTimeout(() => { pending = null; reset(); status.textContent = 'We couldn’t confirm the request. Please check your email or try again.'; }, 45000);
   });
   window.addEventListener('message', event => {
@@ -64,7 +65,7 @@
     const receipt = event.data;
     if (!google || !pending || receipt?.type !== 'tournstack-newsletter-result' || receipt.submissionId !== pending || typeof receipt.ok !== 'boolean') return;
     window.clearTimeout(timer); pending = null; reset();
-    if (receipt.ok) { form.reset(); status.textContent = 'Check your inbox for signup details. Already joined? You’re all set.'; }
-    else status.textContent = 'We couldn’t send your confirmation link. Please try again.';
+    if (receipt.ok) { form.reset(); status.textContent = unsubscribe ? 'If this address is on our list, we’ll email an unsubscribe link. Check your spam folder too. If you recently requested one, use that email.' : 'Check your inbox for signup details. Already joined? You’re all set.'; }
+    else status.textContent = unsubscribe ? 'We couldn’t send your unsubscribe link. Please try again or email info@tournstack.com.' : 'We couldn’t send your confirmation link. Please try again.';
   });
 })();

@@ -137,3 +137,14 @@ test('already-subscribed notice has its own job kind, correct branding and a cle
     assert.throws(()=>validateNewsletter({...notice,MessageKind:'unknown'}),e=>e.status===400);
   }finally{db.close()}
 });
+
+test('unsubscribe service email is validated, queued separately and includes the private action link',()=>{
+  const {store,db}=queue();
+  try {
+    const message=validateNewsletter({SubmissionId:c.SubmissionId,Email:c.Email,MessageKind:'unsubscribe-link',UnsubscribeURL:'https://tournstack-mailbox.tournstack.workers.dev/newsletter/unsubscribe?token='+'a'.repeat(128)});
+    store.enqueueNewsletter(message,'unsubscribe');assert.equal(store.claim().kind,'newsletter-unsubscribe-link');
+    const raw=makeMIME('newsletter-unsubscribe-link',message).raw;assert(raw.includes('Subject: Unsubscribe from TournStack news'));
+    assert.throws(()=>validateNewsletter({...message,UnsubscribeURL:'https://attacker.example/unsubscribe'}),e=>e.status===400);
+    assert.throws(()=>validateNewsletter({...message,VerificationURL:message.UnsubscribeURL}),e=>e.status===400);
+  } finally {db.close();}
+});
