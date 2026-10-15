@@ -194,10 +194,10 @@
     },
     {
       "source": "assets/js/advertising.js",
-      "url": "/assets/versioned/js/advertising.b32ab64d5eab2623.js",
-      "sha256": "b32ab64d5eab2623c9535ffc0615f68aaa005118f1459552b2f054e3482d6032",
-      "source_sha256": "b32ab64d5eab2623c9535ffc0615f68aaa005118f1459552b2f054e3482d6032",
-      "size_bytes": 8397
+      "url": "/assets/versioned/js/advertising.6597a05e4c7c8afc.js",
+      "sha256": "6597a05e4c7c8afccb10193135212131711b421e3a1166f89a231df4f0457a70",
+      "source_sha256": "6597a05e4c7c8afccb10193135212131711b421e3a1166f89a231df4f0457a70",
+      "size_bytes": 8607
     },
     {
       "source": "assets/js/contact-config.js",

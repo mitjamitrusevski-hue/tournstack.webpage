@@ -2,11 +2,39 @@
 
 ## Current state — 2026-10-15
 
-**Latest verified state (supersedes the chronological screenshots below):** Necessary `cookieyes-consent` and Advertisement `_fbp` entries are published. The Necessary description is corrected. `_fbp` uses `.tournstack.com`, 3 months and `connect.facebook.net`. The actual hosted Advertisement switch is visible and initially Off. Real Save My Preferences / Reject All / Accept All passed isolated Meta lifecycle checks at desktop and mobile widths, with all collectors blocked. Both production tags remain disabled; the existing inactive-advertising banner is still accurate. Consent renewal has not been executed. Meta legal review now includes owner-supplied Business Tools Terms and Controller Addendum; transfer wording and final coordinated notices remain pending. See [current legal evidence and activation gates](integrations/advertising.md).
+### Current release: Meta-only wording and privacy links verified; renewal follows deployment
+
+The owner published all three final dashboard texts below. Public readback on 2026-10-15 at 13:47:31Z verified the banner, preference overview and Advertisement description; Advertisement was off and no vendor loaded. The matching website release enables only Meta behind a new-notice consent marker and publishes the full privacy notice. LinkedIn remains disabled. Both clickable privacy links were verified at 14:04:08Z. The following fields record the published configuration:
+
+1. **Cookie Banner → Content → Cookie Notice:** replace the body with the final banner text below. Keep the privacy link to `https://tournstack.com/privacy.html`.
+2. **Cookie Banner → Content → Preference Centre → Privacy overview:** use the overview below. Publish the banner changes.
+3. **Cookie Manager → Advertisement → pencil → Description:** use the final category text below, Save draft and Publish changes. Leave Load cookies prior to consent Off and Hide category from banner Off.
+
+**After the website deployment is verified:** Advanced Settings → Consent settings → Renew user consents → Renew now. Renewal has not yet been confirmed. Old consent alone does not satisfy the website marker gate. A separate bounded owner-authorised live check is still needed to establish receipt in Meta.
+
+Final Cookie Notice body:
+
+> We use necessary storage to remember your choices and cookie-free analytics to understand site use. With your permission, we use Meta Pixel to measure our advertising. Meta may also use visit data to personalise ads and improve its products. You can accept, reject or customise optional cookies and change your choice at any time.
+
+Final Preference Centre privacy overview:
+
+> Necessary storage remembers your privacy choices. The Advertisement category controls Meta Pixel; it is optional and off until you choose it. Plausible provides separate cookie-free analytics. You can reject optional advertising or change your choice at any time through Cookie settings. Read our Privacy Policy for details.
+
+Link “Privacy Policy” in both fields to `https://tournstack.com/privacy.html`, or retain a clear clickable URL.
+
+Final Advertisement category description:
+
+> If you allow this category, Meta Pixel sends technical visit information to Meta to help us measure advertising. Meta may connect it with information it already holds and use it for personalised ads, content and product improvement. We do not send newsletter email addresses or inquiry text to Meta. You can turn this category off at any time through Cookie settings.
+
+The previously published `_fbp` entry remains Advertisement / `.tournstack.com` / 3 months / `connect.facebook.net`. Do not add unobserved `_fbc` or LinkedIn cookies. The Necessary entry is unchanged. This sequence completes the notice; it does not create conversions, audiences or campaigns.
+
+### Published baseline and earlier verification
+
+**Current inventory:** Necessary `cookieyes-consent` and Advertisement `_fbp` are published. `_fbp` uses `.tournstack.com`, 3 months and `connect.facebook.net`. Advertisement is initially Off. Actual hosted CMP and captured Meta library checks cover grant, withdrawal and regrant with collectors blocked. Final wording above supersedes the earlier inactive-advertising text. See [evidence and remaining gates](integrations/advertising.md).
 
 The sections below retain the sequence of owner screenshots and verification; references to drafts, missing toggles or pending save-button checks describe those earlier stages.
 
-Hosted CookieYes is installed. Advertising code is **prepared but disabled**; Meta/LinkedIn libraries are not enabled. The [advertising runbook](integrations/advertising.md) owns IDs, routes, consent/withdrawal contracts, tests and activation gates. All three production switches remain false.
+Historical preparation baseline: hosted CookieYes was installed while advertising code was prepared but disabled. The [advertising runbook](integrations/advertising.md) owns IDs, routes, consent/withdrawal contracts, tests and activation gates. All three switches were false at that stage; the current release enables only Meta.
 
 Owner screenshots confirm Free, GDPR, Worldwide, active banner, 201/5,000 pageviews, and an Advertisement category alongside Necessary/Functional/Analytics/Performance. Each category shows zero scanned cookies; the scan is dated 2026-10-04 and does not establish current behavior.
 

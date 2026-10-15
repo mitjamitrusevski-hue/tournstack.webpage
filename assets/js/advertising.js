@@ -6,8 +6,8 @@
   'use strict';
   const config = Object.freeze({
     noticeVersion: 'advertising-2026-10-15-v1',
-    noticePublished: false,
-    metaEnabled: false,
+    noticePublished: true,
+    metaEnabled: true,
     linkedInEnabled: false,
     metaPixelId: '1637153127858631',
     linkedInPartnerId: '11117593'
@@ -45,12 +45,20 @@
     } catch (_) { return null; }
   };
   const readMarker = () => {
-    try { return JSON.parse(localStorage.getItem(markerKey) || 'null'); } catch (_) { return null; }
+    try {
+      const marker = JSON.parse(localStorage.getItem(markerKey) || 'null');
+      if (marker && (!Number.isFinite(marker.expires) || marker.expires <= Date.now())) {
+        localStorage.removeItem(markerKey);
+        return null;
+      }
+      return marker;
+    } catch (_) { return null; }
   };
   const forgetMarker = () => { try { localStorage.removeItem(markerKey); } catch (_) { /* Fail closed. */ } };
   const currentChoice = () => {
+    const marker = readMarker();
     if (!config.noticePublished || privateSignal() || !permittedPage()) return false;
-    const consent = readConsent(), marker = readMarker();
+    const consent = readConsent();
     return !!(consent && marker && marker.version === config.noticeVersion &&
       marker.consentID === consent.consentID && Number.isFinite(marker.expires) &&
       marker.expires > Date.now() && marker.expires <= Date.now() + lifetime);

@@ -31,7 +31,7 @@ function fixture(options = {}) {
   if(options.returning !== false)storage.set('tournstack-advertising-choice',JSON.stringify(marker));
   if(options.otherOwner)context.fbq = (...args)=>calls.push(args);
   let code = source;
-  if(!options.production)code=code.replace('noticePublished: false','noticePublished: true').replace('metaEnabled: false','metaEnabled: true').replace('linkedInEnabled: false','linkedInEnabled: true');
+  if(!options.production)code=code.replace(/noticePublished: (true|false)/,'noticePublished: '+(options.noticePublished !== false)).replace(/metaEnabled: (true|false)/,'metaEnabled: '+(options.metaEnabled !== false)).replace(/linkedInEnabled: (true|false)/,'linkedInEnabled: true');
   vm.runInNewContext(code, context);
   const emit = (name,event={}) => (listeners.get(name)||[]).forEach(fn=>fn(event));
   const update = async (value, detail) => {
@@ -46,8 +46,26 @@ function fixture(options = {}) {
   };
 }
 
-test('production switches deny all vendor loads even with current affirmative consent',()=>{
-  const f=fixture({production:true,form:false});assert.equal(f.scripts.length,0);
+test('production enables only Meta with a valid current choice, even on a form-free page',()=>{
+  const f=fixture({production:true,form:false});assert.equal(f.scripts.length,1);f.ready();
+  assert(f.scripts[0].src.includes('connect.facebook.net'));
+  assert.deepEqual(f.calls.filter(c=>c[0]==='trackSingle'),[['trackSingle','1637153127858631','PageView']]);
+});
+test('production fresh visits and old choices do not load a vendor',()=>{
+  for(const consent of [null,{isUserActionCompleted:true,categories:{advertisement:true},consentID:'synthetic-choice'}]) {
+    assert.equal(fixture({production:true,returning:false,consent,form:false}).scripts.length,0);
+  }
+});
+test('notice rollback blocks both vendors and Meta switch blocks Meta',()=>{
+  assert.equal(fixture({noticePublished:false,form:false}).scripts.length,0);
+  assert.equal(fixture({metaEnabled:false}).scripts.length,0);
+});
+test('expired consent marker is removed on the next check, including excluded pages',()=>{
+  for(const url of ['https://tournstack.com/','https://tournstack.com/privacy.html']) {
+    const f=fixture({url,marker:{expires:Date.now()-1}});
+    assert.equal(f.scripts.length,0);
+    assert.equal(f.storage.has('tournstack-advertising-choice'),false);
+  }
 });
 for(const [label,options] of Object.entries({
   fresh:{returning:false,consent:null}, oldChoice:{returning:false}, oldNotice:{marker:{version:'old'}},

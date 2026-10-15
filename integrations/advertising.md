@@ -1,6 +1,6 @@
 # Advertising integration and activation gates
 
-Updated 2026-10-15. **Prepared, disabled; not a completed advertising launch.** The owner authorised two consent-gated website tags. No campaigns, spend, audience uploads, lead conversions, CAPI, GTM or GA4 are included.
+Updated 2026-10-15. **Meta enabled behind current-notice consent; LinkedIn disabled. Renewal and platform receipt remain pending.** The owner authorised two consent-gated website tags. No campaigns, spend, audience uploads, lead conversions, CAPI, GTM or GA4 are included.
 
 ## Single owner and switches
 
@@ -10,10 +10,10 @@ Updated 2026-10-15. **Prepared, disabled; not a completed advertising launch.** 
 |---|---|
 | Meta Pixel | `1637153127858631` |
 | LinkedIn partner | `11117593` |
-| Candidate notice version | `advertising-2026-10-15-v1` |
-| `noticePublished` / `metaEnabled` / `linkedInEnabled` | **All false** |
+| Notice version | `advertising-2026-10-15-v1` |
+| `noticePublished` / `metaEnabled` / `linkedInEnabled` | **true / true / false** |
 
-The public policy and existing CookieYes banner correctly describe both tools as inactive. Tests enable candidate code only through isolated in-memory substitutions. Production flags must stay false until the gates below are verified.
+The public policy and published CookieYes wording describe optional Meta measurement and Meta’s additional uses. Published text was read back at 13:47:31Z and both clickable privacy links at 14:04:08Z on 2026-10-15, with Advertisement initially off and no vendor requests. Current consent plus the new-notice marker is mandatory. LinkedIn remains disabled. The historical evidence below records preparation; the current state in this section takes precedence.
 
 ## Eligible contexts and data boundaries
 
@@ -69,7 +69,7 @@ The official Understanding Website Actions guide checked on 2026-10-15 describes
 ## Activation prerequisites
 
 1. Meta's requested automatic-collection switches are confirmed Off in owner screenshots; LinkedIn enhanced conversion tracking is Off per owner confirmation and screenshot. Website Actions shows no recorded actions and no visible disable control; resolve actual automatic collection before LinkedIn activation. Verify absence of duplicate installation through a CMP/tag manager.
-2. The owner confirmed **Mitja Mitruševski personally, operating from Slovenia**, with no registered company yet. The supplied Meta terms establish its EU entity, purpose-specific roles, joint-controller allocation and maximum Event Data retention, as recorded below. International-transfer evidence and LinkedIn-specific terms remain outstanding. Do not call every service a processor. Keep account documents private.
+2. The owner confirmed **Mitja Mitruševski personally, operating from Slovenia**, with no registered company yet. Supplied Meta terms and Privacy Policy transfer panels establish the EU entity, purpose-specific roles, joint-controller allocation, maximum Event Data retention and provider-stated transfer mechanisms. Keep their scope qualifications in the notice. LinkedIn-specific review remains outstanding. Do not call every service a processor.
 3. Finalise public purposes, recipient links, actual automatic collection, retention distinctions and rights/withdrawal text. No placeholders or unsupported no-form-data assurances.
 4. Necessary and `_fbp` inventory are published and the Free plan's renewal control is located. Finalise CookieYes wording, keep advertising initially off, preserve reject/preferences/revisit, then publish and renew in coordination with the new notice; no trial/upgrade.
 5. Intercept actual SDK traffic with synthetic form values, preventing production-account events. Verify URLs/referrers, automatic collection, withdrawal/regrant, cookies and no-JS. Record observed inventory instead of copying a vendor's full cookie table.
@@ -134,9 +134,15 @@ The owner supplied the text of Meta Business Tools Terms, effective 3 November 2
 - The Controller Addendum allocates the website's transparency duties to the operator and rights handling for data stored by Meta to Meta Ireland. Requests about joint processing received by the operator must be forwarded promptly, within seven calendar days. It does not authorise the operator to answer on Meta's behalf.
 - Meta may correlate Event Data with its users and use it for ads, personalised features/content, security, research and product improvement. Disabling advanced matching does not prevent all provider-side account correlation. Future notices must explain these uses; do not describe all processing as anonymous or solely our measurement.
 - The supplied documents list different historical street addresses for the same EU entity. Public copy should use its verified legal name and link to the current provider notice rather than inventing a reconciled address.
-- International-transfer safeguards remain unverified. The owner has been asked for the relevant Privacy Policy section; do not claim signed SCCs, EU-only processing or universal adequacy coverage.
+- The owner subsequently supplied the Privacy Policy's transfer section and the expanded “Mechanisms we use for global data transfers” text and screenshot. It states that Meta Ireland data may be processed globally, including the US, and describes adequacy decisions where applicable, EU–US/Swiss–US DPF reliance for covered transfers to certified Meta Platforms, Inc., and SCCs or applicable derogations in other circumstances. The notice attributes those mechanisms to Meta and preserves their destination/service qualifications; it does not claim this operator signed separate SCCs, universal DPF coverage or EU-only processing.
 
-Sources: [Business Tools Terms](https://www.facebook.com/legal/terms/businesstools), [Controller Addendum](https://www.facebook.com/legal/controller_addendum), supplied by the owner in this conversation. The Privacy Policy and applicable transfer wording remain a separate gate.
+Sources: [Business Tools Terms](https://www.facebook.com/legal/terms/businesstools), [Controller Addendum](https://www.facebook.com/legal/controller_addendum), and the international-transfer panels of [Meta Privacy Policy](https://www.facebook.com/privacy/policy/), supplied by the owner in this conversation. A current automated DPF registry read returned a JavaScript shell, not independently verified certification details. Meta's [September 2023 statement](https://about.fb.com/news/2023/05/our-response-to-the-decision-on-facebooks-eu-us-data-transfers/) identifies Business Tools among its DPF uses; this is historical corroboration, not a current registry audit. No further owner legal screenshot is required for the qualified policy wording now drafted.
+
+### Meta activation — published CMP wording verified
+
+The owner published the final Cookie Notice, Preference Centre overview and Advertisement category description. Public readback on 2026-10-15 at 13:47:31Z verified all three texts and Advertisement off by default. This release publishes the matching privacy notice and enables only Meta, using notice version `advertising-2026-10-15-v1`. Supported renewal follows the verified website deployment. Existing consent alone remains insufficient. Platform receipt is not established by intercepted tests.
+
+The marker now removes expired entries on the next check, including excluded pages; the 180-day validity is not a claim that localStorage deletes itself while the browser is closed. Consent unit suite: 40 PASS, including the added expiry cleanup check. No advertising event was delivered during preparation.
 
 ### Rollback procedure
 
