@@ -2,7 +2,9 @@
 
 A lightweight, static pre-launch website for TournStack. The repository root is the GitHub Pages publish directory; `CNAME` points to `tournstack.com`.
 
-## Versioned assets and Cloudflare cache preparation — 2026-10-15
+## Website optimization and Cloudflare developer documentation — 2026-10-15
+
+Start with the [developer runbook](integrations/cloudflare-cache/RUNBOOK.md): current architecture, exact deployed rules, asset build/deployment commands, DNS/TLS sequence, verification, known limits and rollback. Cloudflare proxy/cache activation was verified on 2026-10-15. Historical preparation notes describe the earlier state and must not be interpreted as current deployment status.
 
 Edit original assets, run `node scripts/version-assets.cjs`, then `node scripts/version-assets.cjs --check`. Commit original source, generated HTML, assets/asset-manifest.json and new assets/versioned files together. Keep historical versioned files intact. The build validates immutable hashes and references before publishing. [Cloudflare setup](integrations/cloudflare-cache/SETUP.md) owns DNS, cache rules, response headers and rollback. Preparing/publishing asset URLs does not activate Cloudflare: cache headers remain GitHub-controlled until DNS and zone rules are separately configured and verified. Original image/logo/font/script URLs remain available, including older email links and the stable author portrait source URL.
 

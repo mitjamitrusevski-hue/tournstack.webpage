@@ -23,7 +23,7 @@
           "mode": "override_origin",
           "default": 2592000,
           "status_code_ttl": [
-            { "status_code_range": { "from": 300, "to": 599 }, "value": -1 }
+            { "status_code_range": { "from": 300 }, "value": -1 }
           ]
         }
       },
