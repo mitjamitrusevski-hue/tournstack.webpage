@@ -1,6 +1,20 @@
 # Advertising integration and activation gates
 
-Updated 2026-10-15. **Meta enabled behind current-notice consent; LinkedIn disabled. Renewal and platform receipt remain pending.** The owner authorised two consent-gated website tags. No campaigns, spend, audience uploads, lead conversions, CAPI, GTM or GA4 are included.
+Updated 2026-10-15. **Current source enables Meta and normal LinkedIn behind renewed v2 consent.** The preceding `2d2aa71` release was Meta-only; its renewal, processed browser PageViews and withdrawal check are owner-confirmed complete. The matching CookieYes wording and four LinkedIn entries were published by the owner. Deployment, v2 renewal and Campaign Manager receipt status belong in Operations/Releases/2026-10-15_TournStack_LinkedIn-Activation.md. No campaigns, spend, audience uploads, lead conversions, CAPI, GTM or GA4 are included.
+
+## LinkedIn lifecycle and verification
+
+Owner reconfirmed partner **11117593** and accepted the normal tag plus a warned reload on withdrawal. This supersedes the earlier form-page refusal and unselected image-only proposal. Full SDK tests (Chrome 1440/390, real hosted CMP, actual captured libraries with collectors blocked) passed: default denial, genuine grant, one SDK, decoded automatic PAGE_VISIT/CLICK payloads, unsent-text warning cancel/continue, withdrawal reload, regrant, and another-tab withdrawal. No synthetic address/hash or matching value appeared in inspected payloads. The tag can automatically capture button/form activity; do not describe it as PageView-only or infer a disabled feature from an empty Website Actions list.
+
+On withdrawal, a document-only CSP stops new network egress during retirement, except CookieYes logging; it disappears on reload. Meta is revoked, accessible known ad cookies are removed and the local marker is deleted. The code does not use undocumented LinkedIn teardown commands or patch browser networking APIs. A blocked Meta SDK only revokes Meta, avoiding a reload loop. On ordinary preferences opening with unsent text, cancel leaves text and choice intact. After an accepted warning, withdrawal reloads. An unwarned cross-tab withdrawal leaves text in the DOM to copy while the retired page's networking is stopped; an explicit reload restores the page with advertising off. No form values are saved to new storage. Do not send forms from a retired page.
+
+The single separately authorised live visit at 15:45:09–15:45:20 UTC reached partner 11117593 and received a 204 Website Actions response. Observed `.linkedin.com` cookies: `bcookie` ~365 days, `li_gc` ~180 days, `lidc` ~1 day, `__cf_bm` ~30 minutes. Server cookies differ from first-party app cookies and cannot be deleted by this website. This did not verify Campaign Manager receipt or all browser/account states. Public collector response redirects were not fully recorded by the first harness; report only observed responses/cookies, not a complete redirect trace. No extra live visit has been run.
+
+Published owner fields and coordinated activation sequence: [CookieYes setup](../CONSENT_SETUP.md). New notice **advertising-2026-10-15-v2** replaces v1; an earlier Meta-only choice is rejected. Perform the documented renewal after deployment.
+
+Current checks: **43** isolated advertising contracts plus **29** receiver gate tests; intercepted existing-form/browser regression PASS. Run `node integrations/advertising/linkedin-browser.cjs` with `TS_PLAYWRIGHT` and `TS_ADVERTISING_FIXTURES` pointing to the privately captured SDKs. This test permits public CookieYes CDN GETs only; all ad collectors, consent logs and backend submissions are intercepted. Fixture files: `linkedin-current-sdk.js`, `alignment-meta-fbevents.js`, `alignment-meta-config.js`. Raw SDKs are not committed. LinkedIn SHA256: `6969c6e5ca8f76fcdcaf88c0d7f5139aceccc8bd5c6b0b30f145c8c817254c8a`. Set `TS_CMP_TEST_WIDTH=390` for mobile. Exact evidence and legal sources are in Operations/Audits/2026-10-15_LinkedIn_Normal-Tag_Verification.md.
+
+The sections below preserve the Meta release and earlier preparation history; the current status above supersedes their pending/limitation statements.
 
 ## Single owner and switches
 
@@ -10,10 +24,10 @@ Updated 2026-10-15. **Meta enabled behind current-notice consent; LinkedIn disab
 |---|---|
 | Meta Pixel | `1637153127858631` |
 | LinkedIn partner | `11117593` |
-| Notice version | `advertising-2026-10-15-v1` |
-| `noticePublished` / `metaEnabled` / `linkedInEnabled` | **true / true / false** |
+| Notice version | `advertising-2026-10-15-v2` |
+| `noticePublished` / `metaEnabled` / `linkedInEnabled` | **true / true / true** |
 
-The public policy and published CookieYes wording describe optional Meta measurement and Meta’s additional uses. Published text was read back at 13:47:31Z and both clickable privacy links at 14:04:08Z on 2026-10-15, with Advertisement initially off and no vendor requests. Current consent plus the new-notice marker is mandatory. LinkedIn remains disabled. The historical evidence below records preparation; the current state in this section takes precedence.
+The policy and CookieYes wording describe optional Meta and LinkedIn measurement, LinkedIn automatic Website Actions and additional provider uses. Current consent plus the v2 marker is mandatory. LinkedIn has a single loading owner, despite the CookieYes blocking rule for snap.licdn.com. Regenerate versioned assets after a source flag change. Roll back either tag by setting its enabled switch false and redeploying; preserve backend protections and consent records.
 
 ## Eligible contexts and data boundaries
 
@@ -21,13 +35,13 @@ Only HTTPS apex and `www.tournstack.com` may qualify. Candidate paths are `/`, `
 
 All query strings currently suppress advertising, including UTMs. Incoming links and attribution remain unchanged. A future campaign allowlist must register understood non-personal values; arbitrary UTM text is not assumed safe. Fragments must identify an existing element. Same-host referrers must be eligible, query-free and fragment-free. External referrers must contain only an HTTPS origin and `/`. Missing referrers are accepted. DNT `1` and GPC `true` suppress advertising.
 
-The module never reads form values, email hashes, receipt IDs or newsletter state. That source property does not prove what an actual vendor library automatically reads; payload inspection remains an activation gate.
+The module checks unsent text locally for the reload warning; it never stores or transmits it. No email hashes, receipt IDs or newsletter state are supplied to advertising vendors. Actual SDK payload inspection remains necessary after vendor/account changes.
 
 ## Consent contract
 
 Use hosted CookieYes `getCkyConsent()`: completed action, nonempty consent ID, and `categories.advertisement === true`. Also require `tournstack-advertising-choice` in localStorage with matching consent ID/current notice version and a valid expiry, maximum 180 days. This is a project limit, not a vendor lifetime. With `noticePublished:false`, no new marker is written and no vendor is loaded.
 
-The marker requires a trusted accept/save click followed promptly by a valid CMP update. Initial updates, old consent and programmatic clicks cannot renew it. Use supported CookieYes renewal when the new notice is published; the marker supplements that process. Real save-button/event timing passed at 1440/390 px with the published CMP, as recorded below. The owner located Renew now under Advanced Settings → Consent settings on Free; it has not been executed.
+The marker requires a trusted accept/save click followed promptly by a valid CMP update. Initial updates, old consent and programmatic clicks cannot renew it. Use supported CookieYes renewal when the new notice is published; the marker supplements that process. Real save-button/event timing passed at 1440/390 px with the published CMP, as recorded below. The owner located Renew now under Advanced Settings → Consent settings on Free. Earlier Meta-only renewal is complete; repeat renewal for v2 after deployment.
 
 Listen for `cookieyes_banner_load`, `cookieyes_banner_loaded` and `cookieyes_consent_update`, plus an immediate state read for returning visitors. Actual hosted inspection observed an initial update before any user action. Missing/malformed/unreadable state fails closed; denial removes the marker. Storage/pageshow/hash/visibility events recheck the gate.
 
@@ -50,13 +64,9 @@ Withdrawal closes the local event gate synchronously, calls `fbq('consent','revo
 
 Screenshots identify dataset 1637153127858631. They verify account controls only, not consent, withdrawal or actual transmitted data.
 
-## LinkedIn limitation
+## LinkedIn bootstrap and account
 
-Base library: `https://snap.licdn.com/li.lms-analytics/insight.min.js`. Official Website Actions documentation describes automatic page/button/form activity; the public library also contains dwell behavior. No enhanced matching, email hashes, `setUserData` or conversion ID is added.
-
-No documented general `lintrk('consent','revoke')` API was established. Removing an executed script is not teardown. The candidate refuses a document with a form, input, textarea or editable field. **Every current eligible page has a newsletter form: LinkedIn is blocked on all of them even if its switch is changed.** Do not remove the newsletter to accommodate it.
-
-The form-free candidate preserves denial and reloads once on withdrawal. It has simulated coverage only. Before activation on current pages, establish a supported stop/reload method that preserves unsent input without storing private fields, and restrict/verify Website Actions and matching. Do not claim PageView-only behavior.
+Base library: `https://snap.licdn.com/li.lms-analytics/insight.min.js`. One partner array and standard `lintrk` queue load the normal library after the common consent gate. Website Actions can automatically collect page/button/form activity; the library also contains dwell behavior. No enhanced matching, email hashes, `setUserData` or conversion ID is added. There is no assumed general revoke API: withdrawal uses the tested document retirement/reload behavior above. Newsletter forms remain available.
 
 Owner screenshots show selected company ad account **TournStack Ad Manger**, ID **560071493**, Company TournStack, and its actual partner ID **11117593**. This supersedes the brief's supplied **11116129**, whose account association was not verified. The code and test expectation were corrected before activation. Tracking settings remain unconfirmed. Current navigation: Measure → Signals manager → Insight Tag; the installation section's “I will use a tag manager” option reveals the partner ID without requiring a tag manager.
 
@@ -66,10 +76,10 @@ Manage Insight Tag → Settings initially showed **Enable enhanced conversion tr
 
 The official Understanding Website Actions guide checked on 2026-10-15 describes automatic page visits, button clicks and form submissions, and gives Data → Website actions as navigation. A subsequent owner screenshot confirms this account uses **Measure → Website actions**. With **All website actions** selected, account 560071493 shows **No website actions found** and no visible collection-disable control. The Website actions in use tab was not inspected. An empty activity list does not establish disabled collection, and no global opt-out has been verified. Dashboard inspection is complete for the controls shown; actual collection and withdrawal remain implementation activation gates. No action, conversion or audience was created.
 
-## Activation prerequisites
+## Historical activation checklist (see current lifecycle above)
 
 1. Meta's requested automatic-collection switches are confirmed Off in owner screenshots; LinkedIn enhanced conversion tracking is Off per owner confirmation and screenshot. Website Actions shows no recorded actions and no visible disable control; resolve actual automatic collection before LinkedIn activation. Verify absence of duplicate installation through a CMP/tag manager.
-2. The owner confirmed **Mitja Mitruševski personally, operating from Slovenia**, with no registered company yet. Supplied Meta terms and Privacy Policy transfer panels establish the EU entity, purpose-specific roles, joint-controller allocation, maximum Event Data retention and provider-stated transfer mechanisms. Keep their scope qualifications in the notice. LinkedIn-specific review remains outstanding. Do not call every service a processor.
+2. The owner confirmed **Mitja Mitruševski personally, operating from Slovenia**, with no registered company yet. Supplied Meta terms and Privacy Policy transfer panels establish the EU entity, purpose-specific roles, joint-controller allocation, maximum Event Data retention and provider-stated transfer mechanisms. Keep their scope qualifications in the notice. LinkedIn-specific review was subsequently completed in the normal-tag audit. Do not call every service a processor.
 3. Finalise public purposes, recipient links, actual automatic collection, retention distinctions and rights/withdrawal text. No placeholders or unsupported no-form-data assurances.
 4. Necessary and `_fbp` inventory are published and the Free plan's renewal control is located. Finalise CookieYes wording, keep advertising initially off, preserve reject/preferences/revisit, then publish and renew in coordination with the new notice; no trial/upgrade.
 5. Intercept actual SDK traffic with synthetic form values, preventing production-account events. Verify URLs/referrers, automatic collection, withdrawal/regrant, cookies and no-JS. Record observed inventory instead of copying a vendor's full cookie table.

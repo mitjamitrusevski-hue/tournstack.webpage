@@ -96,10 +96,10 @@
     },
     {
       "source": "assets/css/styles.css",
-      "url": "/assets/versioned/css/styles.c2e2970a22b8f811.css",
-      "sha256": "c2e2970a22b8f811dd5c1f964adf9e6e587d664fc54d8b2bda173a56ecc19641",
-      "source_sha256": "44bac95479d921c56d69b61ecfdb0549a0df29989fab2daf8cf9c7974f0ed40a",
-      "size_bytes": 40639
+      "url": "/assets/versioned/css/styles.43f2b230e32d8dca.css",
+      "sha256": "43f2b230e32d8dca6ab0a2ce86a9e0462805b6d5b13832800be62f69b12bbd46",
+      "source_sha256": "2b18e54b07e6a0e5ab8bf82454eed0bcb877ee0d356a05fb8c29f76ec9c65916",
+      "size_bytes": 41383
     },
     {
       "source": "assets/fonts/Montserrat-Latin.woff",
@@ -194,10 +194,10 @@
     },
     {
       "source": "assets/js/advertising.js",
-      "url": "/assets/versioned/js/advertising.6597a05e4c7c8afc.js",
-      "sha256": "6597a05e4c7c8afccb10193135212131711b421e3a1166f89a231df4f0457a70",
-      "source_sha256": "6597a05e4c7c8afccb10193135212131711b421e3a1166f89a231df4f0457a70",
-      "size_bytes": 8607
+      "url": "/assets/versioned/js/advertising.2ca967e428120cbb.js",
+      "sha256": "2ca967e428120cbb96adf710906640a2cc8e7d5467fb89a2f770c03111e0425d",
+      "source_sha256": "2ca967e428120cbb96adf710906640a2cc8e7d5467fb89a2f770c03111e0425d",
+      "size_bytes": 12368
     },
     {
       "source": "assets/js/contact-config.js",

@@ -18,7 +18,7 @@ const result={at:new Date().toISOString(),environment:'Chrome; all requests inte
     if(blockedStorage)Object.defineProperty(window,'sessionStorage',{get(){throw Error('synthetic storage failure');}});
     window.__consent={isUserActionCompleted:true,categories:{advertisement:!!returning},consentID:'synthetic-choice'};
     window.getCkyConsent=()=>window.__consent;
-    if(returning)localStorage.setItem('tournstack-advertising-choice',JSON.stringify({version:'advertising-2026-10-15-v1',consentID:'synthetic-choice',expires:Date.now()+60000}));
+    if(returning)localStorage.setItem('tournstack-advertising-choice',JSON.stringify({version:'advertising-2026-10-15-v2',consentID:'synthetic-choice',expires:Date.now()+60000}));
    },options);
    await context.route('**/*',async route=>{
     const request=route.request(),url=new URL(request.url());
@@ -26,7 +26,7 @@ const result={at:new Date().toISOString(),environment:'Chrome; all requests inte
      const file=path.resolve(root,'.'+(url.pathname==='/'?'/index.html':url.pathname));
      if(!file.startsWith(root+path.sep)||!fs.existsSync(file))return route.fulfill({status:404,body:'Missing test file'});
      let body=fs.readFileSync(file);
-     if(options.enableCandidates&&/advertising\.[a-f0-9]+\.js$/.test(file))body=Buffer.from(body.toString().replace('noticePublished: false','noticePublished: true').replace('metaEnabled: false','metaEnabled: true').replace('linkedInEnabled: false','linkedInEnabled: true'));
+     if(/advertising\.[a-f0-9]+\.js$/.test(file))body=Buffer.from(body.toString().replace(/linkedInEnabled: (true|false)/,'linkedInEnabled: '+!!options.enableCandidates));
      return route.fulfill({contentType:mime[path.extname(file)]||'application/octet-stream',body});
     }
     requests.push({host:url.hostname,path:url.pathname,method:request.method()});
@@ -43,7 +43,7 @@ const result={at:new Date().toISOString(),environment:'Chrome; all requests inte
    return {context,requests,page:await context.newPage(),mode:value=>{receiptMode=value;}};
   }
   for(const width of [1440,390]) {
-   const f=await setup({width,enableCandidates:true});const {page}=f;
+   const f=await setup({width,enableCandidates:false});const {page}=f;
    await page.goto('https://tournstack.com/');
    assert(!f.requests.some(r=>/facebook|licdn/.test(r.host)));
    await page.evaluate(()=>{
@@ -67,7 +67,7 @@ const result={at:new Date().toISOString(),environment:'Chrome; all requests inte
    assert(!JSON.stringify(await page.evaluate(()=>window.__calls)).includes('synthetic-private'));
    await page.evaluate(()=>document.dispatchEvent(new CustomEvent('cookieyes_consent_update',{detail:{accepted:['advertisement'],rejected:[]}})));
    assert.equal(await page.evaluate(()=>window.__calls.filter(c=>c[0]==='trackSingle').length),2);
-   result.checks.push({width,check:'denied/grant/withdraw/regrant; one mock Meta loader; unchanged typed newsletter value; LinkedIn blocked; no values in loader arguments',status:'PASS'});
+   result.checks.push({width,check:'Meta-only fixture: denied/grant/withdraw/regrant; one mock loader; unchanged typed newsletter value; no values in loader arguments (full LinkedIn lifecycle covered separately)',status:'PASS'});
    await f.context.close();
   }
   for(const route of ['/contact.html','/privacy.html','/inquiry-received.html','/unsubscribe.html','/?token=synthetic-private']) {

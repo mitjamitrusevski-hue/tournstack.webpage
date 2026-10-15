@@ -256,6 +256,12 @@ button:focus-visible{outline:3px solid var(--action);outline-offset:4px}
 .receipt-dialog h2{font-size:28px;line-height:1.25;margin:0 0 18px}
 .receipt-dialog p{margin:0 0 18px;line-height:1.65}
 .receipt-dialog button{min-width:100px}
+.advertising-reload-dialog{border:1px solid #CBD5E1;border-radius:16px;padding:24px;background:#F8FAFC;color:#0F172A;width:calc(100% - 40px);max-width:480px;box-sizing:border-box}
+.advertising-reload-dialog::backdrop{background:rgb(15 23 42 / .65)}
+.advertising-reload-dialog p{line-height:1.6;margin:0 0 16px}
+.advertising-reload-dialog button{display:block;margin-top:12px;padding:12px;border:2px solid #0F172A;border-radius:6px;background:#F8FAFC;color:#0F172A;cursor:pointer}
+.advertising-reload-dialog button:last-child{background:#0F172A;color:#F8FAFC}
+.advertising-reload-notice{position:fixed;inset:8px 8px auto;z-index:2147483647;padding:12px;background:#F8FAFC;color:#0F172A;border:2px solid #0F172A;border-radius:6px;cursor:pointer}
 @media(max-width:760px){.newsletter-signup{max-width:360px}.receipt-dialog{padding:24px}.receipt-dialog h2{font-size:24px}}
 
 /* Keep the standard 300 x 65 human check below the newsletter email field. */

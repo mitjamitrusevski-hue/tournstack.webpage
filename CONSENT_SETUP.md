@@ -2,7 +2,48 @@
 
 ## Current state — 2026-10-15
 
-### Current release: Meta-only wording and privacy links verified; renewal follows deployment
+### Meta and LinkedIn release: published configuration and renewal
+
+The owner published the three texts and four LinkedIn entries below. Readback on 2026-10-15 verified the text, lifetimes, `.linkedin.com` domains, `snap.licdn.com` Advertisement rule, default denial and no vendor loading before choice. Source uses partner `11117593` and notice `advertising-2026-10-15-v2` with both tags enabled behind consent. An earlier Meta-only v1 marker cannot enable the expanded scope. Publish the HTML policy and loader together; exact deployment/renewal status is kept in Operations/Releases/2026-10-15_TournStack_LinkedIn-Activation.md. The owner accepted the unsent-text warning and withdrawal reload.
+
+Meta's earlier renewal, processed browser PageViews and withdrawal/no-new-events check are owner-confirmed complete; historical pending statements below are superseded.
+
+#### Cookie Notice
+
+> We use necessary storage to remember your choices and cookie-free analytics to understand site use. With your permission, Meta Pixel and LinkedIn Insight Tag measure visits, interactions and advertising performance. These providers may also use visit data for their own advertising and product purposes. You can accept, reject or customise optional cookies and change your choice at any time.
+
+#### Preference Centre: Privacy overview
+
+> Necessary storage remembers your privacy choices. Advertisement controls Meta Pixel and LinkedIn Insight Tag and is off until you choose it. LinkedIn also records page visits and button/form activity. Plausible provides separate cookie-free analytics. You can reject advertising or change your choice through Cookie settings. Turning advertising off may reload the page; finish or copy unsent text first. Read our Privacy Policy for details.
+
+Make “Privacy Policy” a clickable link to `https://tournstack.com/privacy.html`. Keep the banner's policy URL field set to the same address; the display label alone is not the destination.
+
+#### Cookie Manager: Advertisement description
+
+> If you allow this category, Meta Pixel and LinkedIn Insight Tag send technical visit information to their providers to measure advertising. LinkedIn also automatically records visits and button/form activity, including public page titles and button labels. The providers may connect visit information with information they already hold and use it for their own advertising and product purposes. We do not send form-field email addresses, inquiry text or newsletter records to these tools. You can turn this category off at any time through Cookie settings.
+
+#### Cookie Manager: four additional Advertisement entries
+
+For all four: **domain `.linkedin.com`**, **Script URL Pattern `snap.licdn.com`**. Keep `_fbp` and its `connect.facebook.net` rule unchanged. Keep “Load cookies prior to consent” Off. These are cookies of the optional LinkedIn service, including its own security/preferences; do not move them into this site's always-active Necessary category.
+
+| Cookie ID | Duration | Description |
+|---|---|---|
+| `bcookie` | 1 year | Used by LinkedIn to recognise browsers for diagnostics and abuse prevention when its optional Insight Tag loads. |
+| `li_gc` | 180 days | Stores LinkedIn guest cookie preferences when its optional Insight Tag loads. This is separate from your TournStack consent choice. |
+| `lidc` | 1 day | Helps LinkedIn select a data centre when its optional Insight Tag loads. |
+| `__cf_bm` | 30 minutes | Cloudflare bot detection used by LinkedIn's service when its optional Insight Tag loads. |
+
+Observed in the single owner-authorised isolated live visit on 2026-10-15, 15:45:09–15:45:20 UTC. No form text or actions, emails, conversions or campaigns. Cookie names/domains/expiry were recorded, values excluded. No LinkedIn first-party cookie or additional local-storage item was observed in that context; do not invent inventory from a generic list. This is a bounded observation, not an exhaustive inventory for every signed-in/browser state. Purposes cross-checked against [LinkedIn's cookie table](https://www.linkedin.com/legal/l/cookie-table).
+
+#### Coordinated activation sequence
+
+1. Owner saves/publishes the three texts and four cookie entries above. Existing Free plan, GDPR/Worldwide, equal reject/preferences, off defaults and revisit stay in place. **Leave CookieYes's generic reload-on-consent-action setting Off**: the website handles only the necessary LinkedIn withdrawal reload.
+2. Read the public CMP configuration back. Test it with both tags and actual libraries, all collectors blocked; confirm the new LinkedIn script pattern does not cause a second loader or prevent a consented load.
+3. Enable `linkedInEnabled` for notice v2, regenerate immutable assets, run gates, commit/push/deploy the matching HTML and policy. Verify served source and archive according to the release procedure.
+4. After deployment verification, owner uses Advanced Settings → Consent settings → Renew user consents → Renew now. The v2 marker already rejects old v1 consent; renewal makes the fresh choice visible to returning visitors.
+5. Owner checks Campaign Manager receipt. A successful HTTP response alone does not establish reporting status. No automatic conversion suggestions or audiences are approved.
+
+### Historical Meta release: wording and privacy links verified; renewal subsequently completed
 
 The owner published all three final dashboard texts below. Public readback on 2026-10-15 at 13:47:31Z verified the banner, preference overview and Advertisement description; Advertisement was off and no vendor loaded. The matching website release enables only Meta behind a new-notice consent marker and publishes the full privacy notice. LinkedIn remains disabled. Both clickable privacy links were verified at 14:04:08Z. The following fields record the published configuration:
 

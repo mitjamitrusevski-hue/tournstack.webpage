@@ -6,7 +6,7 @@ const vm = require('node:vm');
 const source = fs.readFileSync(require('node:path').join(__dirname, '../../assets/js/advertising.js'), 'utf8');
 
 function fixture(options = {}) {
-  const listeners = new Map(), scripts = [], calls = [], deletions = [];
+  const listeners = new Map(), scripts = [], elements = [], calls = [], deletions = [];
   const storage = new Map();
   const url = new URL(options.url || 'https://tournstack.com/');
   let consent = options.consent === undefined ? {isUserActionCompleted:true, categories:{advertisement:true}, consentID:'synthetic-choice'} : options.consent;
@@ -18,7 +18,8 @@ function fixture(options = {}) {
     set cookie(value) { deletions.push(value); },
     getElementById: id => id === 'features' ? {} : null,
     querySelector: selector => selector.startsWith('form,') ? (options.form === false ? null : {}) : null,
-    createElement: () => ({}), head:{append: script => scripts.push(script)}
+    querySelectorAll: () => [],
+    createElement: tag => ({tag}), head:{append: element => {elements.push(element);if(element.tag==='script')scripts.push(element);}}
   };
   const context = {
     document, location:{href:url.href,hostname:url.hostname,pathname:url.pathname,reload:()=>reloads++},
@@ -27,11 +28,11 @@ function fixture(options = {}) {
     getCkyConsent:()=>{if(options.cmpThrows)throw Error('CMP unavailable');return consent;}, addEventListener
   };
   context.window = context;
-  const marker = {version:'advertising-2026-10-15-v1',consentID:'synthetic-choice',expires:Date.now()+60000,...options.marker};
+  const marker = {version:'advertising-2026-10-15-v2',consentID:'synthetic-choice',expires:Date.now()+60000,...options.marker};
   if(options.returning !== false)storage.set('tournstack-advertising-choice',JSON.stringify(marker));
   if(options.otherOwner)context.fbq = (...args)=>calls.push(args);
   let code = source;
-  if(!options.production)code=code.replace(/noticePublished: (true|false)/,'noticePublished: '+(options.noticePublished !== false)).replace(/metaEnabled: (true|false)/,'metaEnabled: '+(options.metaEnabled !== false)).replace(/linkedInEnabled: (true|false)/,'linkedInEnabled: true');
+  if(!options.production)code=code.replace(/noticePublished: (true|false)/,'noticePublished: '+(options.noticePublished !== false)).replace(/metaEnabled: (true|false)/,'metaEnabled: '+(options.metaEnabled !== false)).replace(/linkedInEnabled: (true|false)/,'linkedInEnabled: '+(options.linkedin === true));
   vm.runInNewContext(code, context);
   const emit = (name,event={}) => (listeners.get(name)||[]).forEach(fn=>fn(event));
   const update = async (value, detail) => {
@@ -39,16 +40,18 @@ function fixture(options = {}) {
     emit('cookieyes_consent_update',{detail:detail || {accepted:value?.categories?.advertisement?['necessary','advertisement']:['necessary'],rejected:value?.categories?.advertisement?[]:['advertisement']}});
     await new Promise(resolve=>setImmediate(resolve));
   };
-  return {scripts,calls,deletions,storage,context,emit,update,
+  return {scripts,elements,calls,deletions,storage,context,emit,update,
     consent:()=>consent,reloads:()=>reloads,
     click:(trusted=true)=>emit('click',{isTrusted:trusted,target:{closest:()=>({})}}),
     ready:()=>{const script=scripts.find(s=>s.src.includes('facebook'));if(script){context.fbq.callMethod=(...args)=>calls.push(args);script.onload();}}
   };
 }
 
-test('production enables only Meta with a valid current choice, even on a form-free page',()=>{
-  const f=fixture({production:true,form:false});assert.equal(f.scripts.length,1);f.ready();
+test('production enables both vendors once with a valid current choice',()=>{
+  const f=fixture({production:true});assert.equal(f.scripts.length,2);f.ready();
   assert(f.scripts[0].src.includes('connect.facebook.net'));
+  assert(f.scripts[1].src.includes('snap.licdn.com'));
+  assert.equal(f.context._linkedin_partner_id,'11117593');
   assert.deepEqual(f.calls.filter(c=>c[0]==='trackSingle'),[['trackSingle','1637153127858631','PageView']]);
 });
 test('production fresh visits and old choices do not load a vendor',()=>{
@@ -114,9 +117,33 @@ test('malformed notification revokes a running tag and removes the marker',async
   assert.equal(f.calls.at(-1)[1],'revoke');
 });
 test('another Meta owner is never initialized by this loader',()=>assert.equal(fixture({otherOwner:true}).scripts.length,0));
-test('LinkedIn refuses pages with forms; form-free candidate reloads after withdrawal',async()=>{
-  assert(!fixture().scripts.some(s=>s.src.includes('licdn')));
-  const f=fixture({form:false});assert.equal(f.scripts.filter(s=>s.src.includes('licdn')).length,1);
+test('normal LinkedIn bootstrap loads once on a newsletter page and retires on withdrawal',async()=>{
+  const f=fixture({linkedin:true});
+  assert.equal(f.scripts.filter(s=>s.src.includes('licdn')).length,1);
   assert.equal(f.context._linkedin_partner_id,'11117593');
-  await f.update({...f.consent(),categories:{advertisement:false}});f.emit('pageshow');assert.equal(f.reloads(),1);
+  assert.deepEqual(Array.from(f.context._linkedin_data_partner_ids),['11117593']);
+  assert.equal(f.context.lintrk.q.length,0);
+  f.emit('pageshow');assert.equal(f.scripts.length,2);
+  await f.update({...f.consent(),categories:{advertisement:false}});f.emit('pageshow');
+  assert.equal(f.reloads(),1);assert.equal(f.storage.size,0);
+  assert(f.elements.some(e=>e.httpEquiv==='Content-Security-Policy'&&e.content.includes("img-src 'none'")));
+  f.ready();assert.equal(f.calls.filter(c=>c[0]==='trackSingle').length,0);
+});
+
+test('blocked Meta does not trigger LinkedIn reload loops',()=>{
+  const f=fixture({linkedin:true});f.scripts.find(s=>s.src.includes('facebook')).onerror();
+  assert.equal(f.reloads(),0);assert.equal(f.storage.size,1);
+});
+
+test('withdrawn LinkedIn document cannot resume while waiting for navigation',async()=>{
+  const f=fixture({linkedin:true}),allowed=f.consent();
+  await f.update({...allowed,categories:{advertisement:false}});
+  f.click();await f.update(allowed);f.ready();
+  assert.equal(f.reloads(),1);
+  assert.equal(f.calls.filter(c=>c[0]==='trackSingle').length,0);
+  assert.equal(f.scripts.length,2);
+});
+
+test('earlier Meta-only notice cannot enable the expanded LinkedIn scope',()=>{
+  assert.equal(fixture({linkedin:true,marker:{version:'advertising-2026-10-15-v1'}}).scripts.length,0);
 });

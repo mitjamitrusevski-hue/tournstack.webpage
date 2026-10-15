@@ -2,7 +2,15 @@
 
 A lightweight, static pre-launch website for TournStack. The repository root is the GitHub Pages publish directory; `CNAME` points to `tournstack.com`.
 
-## Messaging and technical alignment — current source, 2026-10-15
+## Meta and LinkedIn consent release - 2026-10-15
+
+This source enables Meta Pixel `1637153127858631` and the normal LinkedIn Insight Tag `11117593` only after a completed Advertisement choice and a matching `advertising-2026-10-15-v2` marker. Meta-only v1 choices do not enable this expanded scope. The owner reconfirmed the LinkedIn ID and accepted a warned reload on withdrawal. Unwarned cross-tab withdrawal stops advertising requests immediately and keeps unsent text available to copy before reloading; no field contents are persisted.
+
+The matching privacy HTML describes both providers, automatic LinkedIn Website Actions, observed cookies, roles, transfers and retention. [CookieYes setup](CONSENT_SETUP.md) records the published text/inventory and post-deployment renewal step. [Advertising maintenance](integrations/advertising.md) owns routes, runtime behavior and rollback. The preceding live source was Meta-only `2d2aa71`; exact deployment/archive and renewal/receipt status for this release are recorded in `Operations/Releases/2026-10-15_TournStack_LinkedIn-Activation.md` outside this repo.
+
+72 contract/receiver tests pass (43 advertising + 29 receiver). Actual hosted CMP plus captured SDK desktop/mobile checks passed with collectors blocked, including warning cancellation, withdrawal reload, cross-tab text preservation and no synthetic form value/hash in inspected ad payloads. The separately authorised single live visit reached partner 11117593, received a successful Website Actions response and observed four LinkedIn-domain cookies. Campaign Manager receipt is a separate owner check. No backend change, production contact, newsletter submission or email was made. Earlier Meta renewal/receipt/withdrawal are owner-confirmed complete. Historical pending/disabled statements below describe earlier releases only.
+
+## Historical messaging and Meta-only release, 2026-10-15
 
 This revision clarifies Overview/Vision copy, six FAQ answers and their JSON-LD, the development/pilot context and contact-ready wording. It preserves the layout, artwork, Montserrat, 31 questions, 15 registered targets and six indexable URLs. Lisbon's 80+ players / 100+ guests are the owner's first-hand account in the canonical media README, not an independently audited attendance count. The public event link corroborates the event/date, not every software-use claim.
 
