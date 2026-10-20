@@ -4,14 +4,17 @@
  const ENABLED=true;
  if(!ENABLED||location.protocol!=='https:'||!['tournstack.com','www.tournstack.com'].includes(location.hostname))return;
  const origin='https://tournstack-public-chat.tournstack.workers.dev';
- const frame=document.createElement('iframe');frame.id='niko-chat-frame';frame.title='Coach Niko, TournStack AI assistant';frame.src=origin+'/';frame.referrerPolicy='strict-origin';frame.setAttribute('allow','clipboard-write');frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads');frame.setAttribute('aria-label','Coach Niko chat');document.body.append(frame);
+ const PANEL_KEY='tournstack-niko-panel-v1';
  let open=false;
+ try{open=sessionStorage.getItem(PANEL_KEY)==='true';}catch{}
+ const frame=document.createElement('iframe');frame.id='niko-chat-frame';frame.title='Coach Niko, TournStack AI assistant';frame.src=origin+'/';frame.referrerPolicy='strict-origin';frame.setAttribute('allow','clipboard-write');frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads');frame.setAttribute('aria-label','Coach Niko chat');
+ frame.classList.toggle('is-open',open);position();document.body.append(frame);
  const post=type=>frame.contentWindow?.postMessage({channel:'tournstack-niko-v1',type},origin);
  const names={open:'Chatbot Opened',start:'Chatbot Conversation Started',failure:'Chatbot Answer Failed',contact:'Chatbot Contact Clicked',link:'Chatbot Link Clicked',rating:'Chatbot Rating Submitted',feedback:'Chatbot Feedback Submitted',download:'Chatbot Downloaded'};
  window.addEventListener('message',event=>{
   if(event.source!==frame.contentWindow||event.origin!==origin||event.data?.channel!=='tournstack-niko-v1')return;
   const data=event.data;
-  if(data.type==='state'&&typeof data.open==='boolean'){open=data.open;frame.classList.toggle('is-open',open);position();return;}
+  if(data.type==='state'&&typeof data.open==='boolean'){open=data.open;try{sessionStorage.setItem(PANEL_KEY,String(open));}catch{}frame.classList.toggle('is-open',open);position();return;}
   if(data.type!=='analytics'||!Object.hasOwn(names,data.kind))return;
   const props={},values=data.props||{};
   if(data.kind==='rating'){if(!Number.isInteger(values.stars)||values.stars<1||values.stars>5)return;props.stars=values.stars;}

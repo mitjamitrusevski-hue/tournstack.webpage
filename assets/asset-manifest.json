@@ -236,10 +236,10 @@
     },
     {
       "source": "assets/js/chatbot.js",
-      "url": "/assets/versioned/js/chatbot.965db131f74aa0f5.js",
-      "sha256": "965db131f74aa0f5498db0244510ec44283f2bcadaacee9196a4913183c44b25",
-      "source_sha256": "965db131f74aa0f5498db0244510ec44283f2bcadaacee9196a4913183c44b25",
-      "size_bytes": 3481
+      "url": "/assets/versioned/js/chatbot.9da85bd3a9436b54.js",
+      "sha256": "9da85bd3a9436b5434bc9c9b93b195f4bf68506dc9384e416d4e252246ce9e8d",
+      "source_sha256": "9da85bd3a9436b5434bc9c9b93b195f4bf68506dc9384e416d4e252246ce9e8d",
+      "size_bytes": 3699
     },
     {
       "source": "assets/js/contact-config.js",
