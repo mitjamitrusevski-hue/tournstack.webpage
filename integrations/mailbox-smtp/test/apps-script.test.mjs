@@ -6,12 +6,13 @@ import vm from 'node:vm';
 test('Apps Script saves before authenticated relay request and preserves contact after relay failure',() => {
   const rows=[['Timestamp','Name','Email','Inquiry']],requests=[],events=[],cache=new Map();
   let fail=false,locked=false;
+  const properties=new Map(Object.entries({TURNSTILE_SECRET:'test-secret',MAIL_RELAY_URL:'https://relay.example.com/contact-email',MAIL_RELAY_TOKEN:'a'.repeat(64)}));
   const sheet={getLastRow:()=>rows.length,getMaxRows:()=>1000,setFrozenRows(){},getRange(row,col,count=1,width=1){return {
     getValues:()=>[rows[row-1].slice(col-1,col-1+width)],setValues(v){rows[row-1]=v[0];events.push('save');return this;},
     setNumberFormat(){return this;},setFontFamily(){return this;},setFontColor(){return this;},setBackground(){return this;},setFontWeight(){return this;},setWrap(){return this;}
   };}};
   const ctx={console:{error(){}},SpreadsheetApp:{openById:id=>{assert.equal(id,'1QxdXhDRPlZpUEjz28vgcRnAW17QeCl-7jqnIb8Aa8gM');return {getSheetByName:()=>sheet,setSpreadsheetTimeZone(){}};},flush(){}},
-    PropertiesService:{getScriptProperties:()=>({getProperty:k=>({TURNSTILE_SECRET:'test-secret',MAIL_RELAY_URL:'https://relay.example.com/contact-email',MAIL_RELAY_TOKEN:'a'.repeat(64)})[k]})},
+    PropertiesService:{getScriptProperties:()=>({getProperty:k=>properties.get(k),setProperty:(k,v)=>properties.set(k,v)})},
     UrlFetchApp:{fetch(url,options){
       if(url==='https://challenges.cloudflare.com/turnstile/v0/siteverify'){
         assert.equal(options.payload.response,'test-token');events.push('verify');

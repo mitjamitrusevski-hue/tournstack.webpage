@@ -1,0 +1,4 @@
+#niko-chat-frame{position:fixed;right:16px;bottom:16px;width:88px;height:88px;border:0;background:transparent;z-index:900;transition:bottom .3s ease;overflow:hidden;color-scheme:normal}
+#niko-chat-frame.is-open{width:min(420px,calc(100vw - 24px));border-radius:20px;box-shadow:0 16px 60px #0004}
+@media(max-width:480px){#niko-chat-frame{right:12px}}
+@media(prefers-reduced-motion:reduce){#niko-chat-frame{transition:none}}

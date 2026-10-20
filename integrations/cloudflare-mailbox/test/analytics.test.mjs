@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHmac } from 'node:crypto';
-import { newsletterPublic } from '../newsletter.mjs';
+import { newsletterPublic, newsletterBackend } from '../newsletter.mjs';
 
 test('confirmation analytics follows a new saved confirmation, never link views, reused tokens or unsubscribe', async () => {
   const env={MAIL_RELAY_TOKEN:'a'.repeat(64),NEWSLETTER_BACKEND_URL:'https://script.google.com/macros/s/test/exec'};
+  env.CONTACT_QUEUE={idFromName:v=>v,get:()=>({publicNewsletterAction:async(action,token)=>{const result=await newsletterBackend(env,action,token);return {...result,newlyConfirmed:action==='newsletter-confirm'&&result.ok};}})};
   const makeToken=purpose=>'b'.repeat(64)+createHmac('sha256',env.MAIL_RELAY_TOKEN).update(purpose+':'+'b'.repeat(64)).digest('hex');
   const original=globalThis.fetch,events=[];let saved=true,failAnalytics=false;
   globalThis.fetch=async (url,options)=>{

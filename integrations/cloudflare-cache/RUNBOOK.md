@@ -1,4 +1,72 @@
+---
+project: TournStack
+doc_type: Website delivery and browser security runbook
+date: "2026-10-15"
+date_basis: Preserved NamingAudit identity creation-date baseline
+updated: "2026-10-20"
+version: "1.1.0"
+version_scope: Local security preparation and documentation; not a deployed release
+status: Existing cache configuration deployed; security changes prepared locally only
+language: en
+timezone: Europe/Ljubljana
+owner_role: Website and public assistant maintainer
+---
+
 # Website optimization: developer runbook
+
+## Security preparation - 2026-10-20
+
+The owner authorised local website security fixes, explicitly excluding deployment and public chatbot activation. The publish boundary, pinned CI actions and response-header additions described here are prepared source only. Existing live cache settings below retain their recorded deployment status. No Cloudflare rule, GitHub setting, website release, credential, consent, retention period or service plan was changed by this work.
+
+### Public artifact boundary
+
+The Pages workflow now calls `node scripts/public-artifact.cjs _site`. It requires a fresh output directory and selects only tracked regular files from an explicit public allowlist:
+
+- Eight registered HTML pages plus `sitemap.xml`, `robots.txt`, `CNAME` and `.nojekyll`.
+- Approved file types in the flat `assets/brand`, `images`, `fonts`, `css` and `js` directories, their correctly named historical content-hashed counterparts under `assets/versioned`, and `assets/fonts/OFL.txt`.
+- Operational guides, integration/backend source, tests, scripts, configuration, credentials, dotfiles and the asset-manifest metadata are excluded. The manifest remains a source/build input.
+
+The build rejects symlinks/non-regular public entries, absent required pages and local HTML/CSS resource references that would be missing from the artifact. A new public page/directory/type requires a deliberate allowlist edit and test. Existing stable logo, author portrait and email image URLs, font licensing and historical versioned assets remain available. The owner must still review anything committed inside public asset directories; the extension filter is not a secret detector.
+
+CI continues to run the immutable-asset and consent/receiver checks, then checks the publication boundary and the prepared header policy. The five official GitHub Actions are pinned to full commit SHAs resolved from the existing v4/v5 major tags through `api.github.com/repos/actions/.../git/ref/tags/...` on 2026-10-20. Review upstream changes before updating pins. Job permissions, deployment branch/environment and scheduling are unchanged. A push can deploy under the existing workflow, so do not push these changes until a release is explicitly authorised.
+
+### Effective headers for GitHub Pages behind Cloudflare
+
+This site is hosted by GitHub Pages behind the Cloudflare proxy. A Cloudflare Pages `_headers` file would not configure this origin. `response-header-rules.json` contains two added **Response Header Transform Rules** for HTTPS on exactly `tournstack.com` and `www.tournstack.com`; no demo, indexer or workers.dev host is included. Preparing the JSON does not change live headers. Preserve existing rules and merge the two reviewed refs during a separately authorised configuration change; never replace the whole zone ruleset blindly.
+
+The baseline rule proposes:
+
+- Enforced CSP blocking object embeds, foreign base URLs, embedding this website in frames, and form destinations outside this website and Google Apps Script transport.
+- `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff` and `Referrer-Policy: strict-origin-when-cross-origin`.
+- A Permissions Policy disabling camera, microphone, geolocation, USB and payments. Clipboard access is not disabled because Niko has copy controls.
+- Initial HSTS `max-age=86400`, deliberately without `includeSubDomains` or `preload`; the other subdomains were not reviewed for those commitments. A later extension needs its own review.
+
+The second rule sets **Content-Security-Policy-Report-Only**, with reviewed first-party/provider origins and SHA-256 hashes for the existing inline executable bootstrap. It restricts script sources without `unsafe-inline`/`unsafe-eval`, allows existing styles, Google nested receipt frames, Turnstile and the future cross-origin Niko iframe. It has no reporting endpoint and adds no reporting data collection. Browsers can show violations locally. This strict policy is an observation candidate, not an enforced protection and not proof that every current/future vendor behavior is compatible. The separate enforced baseline remains active if these prepared rules are later applied.
+
+Run `node integrations/cloudflare-cache/security-policy.cjs --check` before release. If reviewed inline executable code changes, inspect the change, run `--write` to regenerate local hashes/rules, and review the diff. JSON-LD is not executable and does not create a script permission. The generator preserves unrelated transform rules and makes no API calls. Avoid HTML/JavaScript rewriting or minification at the edge: CSP hashes describe the reviewed executable bytes after browser newline normalization.
+
+**Strict enforcement gate:** after separately authorised header deployment, inspect real desktop/mobile browser violations with the actual hosted CookieYes (including regional endpoints), Plausible, granted/withdrawn Meta and LinkedIn scripts, real Turnstile, nested Apps Script contact/newsletter receipts and Niko iframe/download/copy flows. Any form submission or event delivery needs its own existing task authority. Review each required destination; never silence failures using broad `https:`/`*`/`unsafe-eval` allowances. Only after that evidence and owner release approval should the strict candidate replace the baseline `content-security-policy`; remove the redundant observation header at that point. Mocked-provider tests do not satisfy this gate.
+
+For rollback, disable/remove only the added security refs or restore their previously recorded values, preserving cache rules. HSTS persists in a visitor's browser for its advertised lifetime; removing the header alone does not immediately clear it. A deliberate `max-age=0` response over HTTPS can retire it. Do not add subdomain/preload flags as a shortcut.
+
+### Local verification and remaining boundary
+
+```sh
+node scripts/version-assets.cjs --check
+node --test scripts/public-artifact.test.cjs integrations/cloudflare-cache/security-policy.test.cjs
+node integrations/cloudflare-cache/security-policy.cjs --check
+node scripts/public-artifact.cjs --check
+node scripts/public-artifact.cjs <new-private-output-directory>
+# Set TS_PLAYWRIGHT to an existing Playwright module if it is not installed here:
+node integrations/cloudflare-cache/security-browser.cjs
+```
+
+The private test stage included the existing pending website/chatbot assets without changing the canonical Git index. Verification produced 97 public files, 39 current asset entries, eight passing deterministic checks and five Chrome scenarios at 1440/390 pixels. All browser HTTP(S) requests were intercepted: mocked consented providers, Turnstile, contact/newsletter responses through a nested Google frame, future Niko frame, and blocked hostile framing/offsite forms/unapproved inline script. No real forms, emails, advertising events or chatbot model calls were sent. These checks verify the policy mechanisms and intended integration shapes; real vendor and account configuration verification remains a separate release gate.
+
+Form receipt handlers already require a Google HTTPS origin, matching unpredictable pending UUID, expected receipt type and boolean result. They remain unchanged: Apps Script returns receipts from a nested Google frame, so binding `event.source` to the direct transport iframe would reject valid receipts. The nested-frame fixture reproduces that distinction. A stronger source protocol would require paired transport/backend design and real Apps Script browser verification; no unsupported equality check was added.
+
+References: [Cloudflare response-header transforms](https://developers.cloudflare.com/rules/transform/response-header-modification/), [Turnstile CSP requirements](https://developers.cloudflare.com/turnstile/reference/content-security-policy/), [GitHub secure use of Actions](https://docs.github.com/en/actions/reference/security/secure-use).
+
 
 Updated 2026-10-15. This document owns the deployed website cache configuration and publishing procedure. It supersedes the preparation-only state described in historical release records. The owner applied Cloudflare settings manually; GitHub Actions publishes website source independently.
 
@@ -49,7 +117,7 @@ node scripts/version-assets.cjs --check
 
 Commit canonical edits, generated HTML, `assets/asset-manifest.json` and new `assets/versioned/` files together. Push main, wait for **Validate and deploy website** to succeed, then inspect served URLs/headers. Settings > Pages > Source must remain **GitHub Actions**, as verified by API after the owner's manual change. The initial settings API write returned 404; it did not change source mode.
 
-The generator writes SHA-256-derived URLs and a manifest containing source, source hash, served-byte hash and size. Fonts/images are versioned before CSS; CSS dependency URLs are rewritten before CSS hashing. Text assets use canonical LF; `.gitattributes` preserves generated bytes on Windows/Linux. Tests cover stale references, dependency invalidation, unchanged URL stability, historical retention and tamper detection. The workflow validates before publishing and excludes desktop.ini/.github from the served artifact.
+The generator writes SHA-256-derived URLs and a manifest containing source, source hash, served-byte hash and size. Fonts/images are versioned before CSS; CSS dependency URLs are rewritten before CSS hashing. Text assets use canonical LF; `.gitattributes` preserves generated bytes on Windows/Linux. Tests cover stale references, dependency invalidation, unchanged URL stability, historical retention and tamper detection. The prepared workflow validates before publishing and uses the explicit public artifact boundary documented above; the previously deployed workflow excluded only desktop.ini/.github.
 
 Never edit generated files or overwrite different bytes at an existing hashed URL. Retain older hashed assets because cached HTML/shared previews can still reference them. Corrected bytes require a new hash and updated references. Routine new hashed URLs do not require an edge purge. Original URLs remain available with short freshness, including the stable author portrait and PNG referenced by previously sent emails. Initial generation created 32 assets used by eight pages.
 

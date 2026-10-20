@@ -2,6 +2,40 @@
 const CONTACTS_SHEET_ID = '1QxdXhDRPlZpUEjz28vgcRnAW17QeCl-7jqnIb8Aa8gM';
 const CONTACTS_TAB = 'WEB Contacts';
 const ALLOWED_ORIGINS = ['https://tournstack.com', 'https://www.tournstack.com'];
+const FORM_ALLOWANCE = Object.freeze({verificationPerMinute:120, verificationPerDay:3000, verifiedIntakesPerDay:200});
+
+// Numeric, fixed-size shared state only. A forged Origin or changing IP cannot
+// bypass these bounds. Anonymous invocations still consume Apps Script quota.
+function claimFormAllowance_(stage) {
+  if (stage !== 'verification' && stage !== 'intake') return false;
+  let lock;
+  try {
+    lock = LockService.getScriptLock();
+    lock.waitLock(1000);
+    const props = PropertiesService.getScriptProperties();
+    const raw = props.getProperty('PUBLIC_FORM_ALLOWANCE_V1');
+    const now = Date.now(), minute = Math.floor(now / 60000), day = Math.floor(now / 86400000);
+    let state = raw ? JSON.parse(raw) : {v:1, minute:minute, day:day, minuteAttempts:0, dayAttempts:0, intakes:0};
+    if (state.v !== 1 || !['minute','day','minuteAttempts','dayAttempts','intakes'].every(k => Number.isSafeInteger(state[k]) && state[k] >= 0) ||
+        state.minuteAttempts > FORM_ALLOWANCE.verificationPerMinute || state.dayAttempts > FORM_ALLOWANCE.verificationPerDay ||
+        state.intakes > FORM_ALLOWANCE.verifiedIntakesPerDay || state.minute > minute || state.day > day) return false;
+    if (state.day !== day) state = {v:1, minute:minute, day:day, minuteAttempts:0, dayAttempts:0, intakes:0};
+    if (state.minute !== minute) { state.minute = minute; state.minuteAttempts = 0; }
+    if (stage === 'verification') {
+      if (state.minuteAttempts >= FORM_ALLOWANCE.verificationPerMinute || state.dayAttempts >= FORM_ALLOWANCE.verificationPerDay ||
+          state.intakes >= FORM_ALLOWANCE.verifiedIntakesPerDay) return false;
+      state.minuteAttempts++; state.dayAttempts++;
+    } else {
+      if (state.intakes >= FORM_ALLOWANCE.verifiedIntakesPerDay) return false;
+      state.intakes++;
+    }
+    props.setProperty('PUBLIC_FORM_ALLOWANCE_V1', JSON.stringify(state));
+    return true;
+  } catch (_) {
+    console.error('Public form allowance unavailable.');
+    return false;
+  } finally { if (lock && lock.hasLock()) lock.releaseLock(); }
+}
 
 function setupContacts() {
   const book = SpreadsheetApp.openById(CONTACTS_SHEET_ID);
@@ -27,6 +61,12 @@ function doGet() {
 }
 
 function doPost(e) {
+  // Google parses the web-app event before invoking this function. Reject its
+  // reported oversized body before dispatch, field processing or external I/O.
+  if ([e && e.contentLength, e && e.postData && e.postData.length].some(n =>
+      n !== undefined && n !== null && (!Number.isSafeInteger(Number(n)) || Number(n) < 0 || Number(n) > 65536))) {
+    return receipt_('', '', false);
+  }
   const p = (e && e.parameter) || {};
   if (['newsletter-confirm', 'newsletter-unsubscribe', 'newsletter-cleanup'].indexOf(p.Action) !== -1) return newsletterAction_(p);
   if (p.Kind === 'newsletter') return newsletterSignup_(p);
@@ -86,10 +126,10 @@ function doPost(e) {
 }
 
 function verifyTurnstile_(token, origin, expectedAction) {
-  const secret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
-  if (typeof secret !== 'string' || !secret ||
-      typeof token !== 'string' || token.length < 1 || token.length > 2048) return false;
+  if (typeof token !== 'string' || token.length < 1 || token.length > 2048) return false;
   try {
+    const secret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
+    if (typeof secret !== 'string' || !secret || !claimFormAllowance_('verification')) return false;
     const response = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'post',
       contentType: 'application/x-www-form-urlencoded',
@@ -99,8 +139,9 @@ function verifyTurnstile_(token, origin, expectedAction) {
     });
     if (response.getResponseCode() !== 200) return false;
     const result = JSON.parse(response.getContentText());
-    return result.success === true && result.action === (expectedAction || 'contact') &&
+    const verified = result.success === true && result.action === (expectedAction || 'contact') &&
       result.hostname === origin.replace(/^https:\/\//, '');
+    return verified && claimFormAllowance_('intake');
   } catch (error) {
     console.error('Turnstile verification failed.');
     return false;
@@ -146,7 +187,8 @@ function sheetText_(value) {
 
 function receipt_(origin, id, ok) {
   const target = ALLOWED_ORIGINS.indexOf(origin) !== -1 ? origin : ALLOWED_ORIGINS[0];
-  const result = JSON.stringify({type: 'tournstack-contact-result', submissionId: id, ok: ok})
+  const safeId = typeof id === 'string' && /^[a-zA-Z0-9-]{16,80}$/.test(id) ? id : '';
+  const result = JSON.stringify({type: 'tournstack-contact-result', submissionId: safeId, ok: ok})
     .replace(/</g, '\\u003c');
   // The framed receipt contains no submitted details or sheet contents.
   return HtmlService.createHtmlOutput(

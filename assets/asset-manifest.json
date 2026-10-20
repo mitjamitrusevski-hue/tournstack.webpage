@@ -95,6 +95,13 @@
       "size_bytes": 466
     },
     {
+      "source": "assets/css/chatbot.css",
+      "url": "/assets/versioned/css/chatbot.91ce94c9f29ad188.css",
+      "sha256": "91ce94c9f29ad1884714e006f43b311b1a00f511770fa559e6fe077e650369a7",
+      "source_sha256": "91ce94c9f29ad1884714e006f43b311b1a00f511770fa559e6fe077e650369a7",
+      "size_bytes": 423
+    },
+    {
       "source": "assets/css/styles.css",
       "url": "/assets/versioned/css/styles.43f2b230e32d8dca.css",
       "sha256": "43f2b230e32d8dca6ab0a2ce86a9e0462805b6d5b13832800be62f69b12bbd46",
@@ -226,6 +233,13 @@
       "sha256": "2ca967e428120cbb96adf710906640a2cc8e7d5467fb89a2f770c03111e0425d",
       "source_sha256": "2ca967e428120cbb96adf710906640a2cc8e7d5467fb89a2f770c03111e0425d",
       "size_bytes": 12368
+    },
+    {
+      "source": "assets/js/chatbot.js",
+      "url": "/assets/versioned/js/chatbot.965db131f74aa0f5.js",
+      "sha256": "965db131f74aa0f5498db0244510ec44283f2bcadaacee9196a4913183c44b25",
+      "source_sha256": "965db131f74aa0f5498db0244510ec44283f2bcadaacee9196a4913183c44b25",
+      "size_bytes": 3481
     },
     {
       "source": "assets/js/contact-config.js",

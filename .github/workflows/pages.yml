@@ -14,24 +14,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-10-20
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, verified 2026-10-20
         with:
-          node-version: '22'
+          node-version: '24'
       - name: Verify immutable assets and HTML references
         run: |
           node scripts/test-version-assets.cjs
           node scripts/version-assets.cjs --check
       - name: Verify consent and receiver failure gates without network
         run: |
-          node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/verification-failures.test.cjs integrations/google-apps-script/turnstile-gate.test.cjs integrations/google-apps-script/newsletter.test.cjs
-      - name: Prepare committed public source
+          node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/*.test.cjs integrations/cloudflare-mailbox/test/*.test.mjs
+      - name: Verify public artifact boundary and prepared browser headers
         run: |
-          mkdir _site
-          git ls-files -z | rsync -a --from0 --files-from=- --exclude='.github/' --exclude='desktop.ini' ./ _site/
-      - uses: actions/configure-pages@v5
+          node --test scripts/public-artifact.test.cjs integrations/cloudflare-cache/security-policy.test.cjs
+          node integrations/cloudflare-cache/security-policy.cjs --check
+      - name: Prepare allowlisted public artifact
+        run: node scripts/public-artifact.cjs _site
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5, verified 2026-10-20
         if: github.event_name != 'pull_request'
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4, verified 2026-10-20
         if: github.event_name != 'pull_request'
         with:
           path: _site
@@ -48,4 +50,4 @@ jobs:
     steps:
       - name: Deploy verified source
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4, verified 2026-10-20

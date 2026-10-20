@@ -43,7 +43,8 @@ function newsletterToken_(purpose, secret) {
 
 function newsletterReceipt_(origin, id, ok) {
   const target = ALLOWED_ORIGINS.indexOf(origin) !== -1 ? origin : ALLOWED_ORIGINS[0];
-  const data = JSON.stringify({type:'tournstack-newsletter-result', submissionId:id, ok:ok}).replace(/</g, '\\u003c');
+  const safeId = typeof id === 'string' && /^[a-zA-Z0-9-]{16,80}$/.test(id) ? id : '';
+  const data = JSON.stringify({type:'tournstack-newsletter-result', submissionId:safeId, ok:ok}).replace(/</g, '\\u003c');
   return HtmlService.createHtmlOutput('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>TournStack newsletter request</title></head><body><p>' + (ok ? 'Please check your inbox for signup details. If you already joined, you’re all set.' : 'We could not confirm your request. Please try again.') + '</p><script>window.top.postMessage(' + data + ',' + JSON.stringify(target) + ');</script></body></html>').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
@@ -119,6 +120,25 @@ function cleanupNewsletter_(sheet) {
   }
 }
 
+function writeNewsletterTransition_(sheet, index, row) {
+  // Commit status, dates and one-use token changes together. Do not rewrite A:
+  // its rich-text email may legitimately start with a formula character.
+  const values = [row.slice(1, NEWSLETTER_HEADERS.length)];
+  const range = sheet.getRange(index + 2, 2, 1, NEWSLETTER_HEADERS.length - 1);
+  try {
+    range.setValues(values);
+    SpreadsheetApp.flush();
+  } catch (error) {
+    // A service error can arrive after the write committed. Reconcile the exact
+    // intended row under the existing ScriptLock before reporting a retry.
+    if (JSON.stringify(range.getValues()) !== JSON.stringify(values)) throw error;
+  }
+  try {
+    sheet.getRange(index + 2, 4).setNumberFormat('yyyy-mm-dd hh:mm:ss');
+    sheet.getRange(index + 2, 14).setNumberFormat('yyyy-mm-dd hh:mm:ss');
+  } catch (_) { console.error('Newsletter status saved; date formatting failed.'); }
+}
+
 function newsletterAction_(p) {
   const json = value => ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
   const action = String(p.Action || ''), token = String(p.Token || ''), timestamp = String(p.Timestamp || ''), signature = String(p.Signature || '');
@@ -138,20 +158,21 @@ function newsletterAction_(p) {
     if (index === -1) return json({ok:false});
     const row = rows[index];
     if (action === 'newsletter-unsubscribe') {
-      sheet.getRange(index + 2, 2).setValue('unsubscribed');
-      if (row[12] !== 'inactive') sheet.getRange(index + 2, 13, 1, 2).setValues([['inactive', new Date()]]);
-      sheet.getRange(index + 2, 14).setNumberFormat('yyyy-mm-dd hh:mm:ss');
-      sheet.getRange(index + 2, 7, 1, 2).clearContent();
+      const next = row.slice();
+      next[1] = 'unsubscribed';
+      if (row[12] !== 'inactive') { next[12] = 'inactive'; next[13] = new Date(); }
+      next[6] = ''; next[7] = '';
+      writeNewsletterTransition_(sheet, index, next);
       return json({ok:true});
     }
     if (row[1] !== 'pending' || new Date(row[7]).getTime() < Date.now()) return json({ok:false});
-    sheet.getRange(index + 2, 2).setValue('confirmed');
-    sheet.getRange(index + 2, 4).setValue(new Date()).setNumberFormat('yyyy-mm-dd hh:mm:ss');
-    sheet.getRange(index + 2, 13, 1, 2).setValues([['active', new Date()]]);
-    sheet.getRange(index + 2, 14).setNumberFormat('yyyy-mm-dd hh:mm:ss');
-    sheet.getRange(index + 2, 7, 1, 2).clearContent();
+    const next = row.slice(), confirmedAt = new Date();
+    next[1] = 'confirmed'; next[3] = confirmedAt;
+    next[12] = 'active'; next[13] = confirmedAt;
+    next[6] = ''; next[7] = '';
+    writeNewsletterTransition_(sheet, index, next);
     return json({ok:true});
-  } catch (_) {console.error('Newsletter status update failed.'); return json({ok:false});}
+  } catch (_) {console.error('Newsletter status update failed.'); return json({ok:false,retryable:true});}
   finally {if (lock.hasLock()) lock.releaseLock();}
 }
 

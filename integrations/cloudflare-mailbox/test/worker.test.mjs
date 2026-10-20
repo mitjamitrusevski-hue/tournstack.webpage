@@ -5,7 +5,7 @@ import { makeMIME } from '../mime.mjs';
 import { mailboxSMTP } from '../smtp.mjs';
 import { queueStore, validateContact, retention } from '../queue.mjs';
 import { handleRequest } from '../http.mjs';
-import { validateNewsletter, newsletterPublic } from '../newsletter.mjs';
+import { validateNewsletter, newsletterPublic, newsletterBackend } from '../newsletter.mjs';
 import { createHmac } from 'node:crypto';
 
 const c={SubmissionId:'aaaaaaaa-bbbb-cccc-dddd-000000000001',Name:'Jane <Player>',Email:'player@example.com',Inquiry:'Please help with a league.'};
@@ -106,6 +106,7 @@ test('newsletter queue keeps verification separate, bounded and deduplicated',()
 test('newsletter GET never subscribes; forged and cross-origin POSTs do not reach the backend',async()=>{
   const secret='s'.repeat(64),random='a'.repeat(64),token=random+createHmac('sha256',secret).update('confirm:'+random).digest('hex');
   const env={MAIL_RELAY_TOKEN:secret,NEWSLETTER_BACKEND_URL:'https://script.google.com/macros/s/test/exec'};
+  env.CONTACT_QUEUE={idFromName:v=>v,get:()=>({publicNewsletterAction:async(action,value)=>({...await newsletterBackend(env,action,value),newlyConfirmed:true})})};
   const original=globalThis.fetch;let calls=0;
   globalThis.fetch=async(url,options)=>{calls++;assert.equal(url,env.NEWSLETTER_BACKEND_URL);const p=options.body;assert.equal(p.get('Action'),'newsletter-confirm');assert.equal(p.get('Token'),token);assert.equal(p.get('Signature'),createHmac('sha256',secret).update([p.get('Action'),token,p.get('Timestamp')].join('\n')).digest('hex'));return Response.json({ok:true});};
   try{

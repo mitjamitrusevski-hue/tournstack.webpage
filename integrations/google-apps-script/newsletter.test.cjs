@@ -1,5 +1,6 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto');
 const secret='test-relay-'.repeat(8),sheets=new Map(),queued=[];
+const properties=new Map(Object.entries({TURNSTILE_SECRET:'test-turnstile',MAIL_RELAY_TOKEN:secret,MAIL_RELAY_URL:'https://tournstack-mailbox.tournstack.workers.dev/contact-email'}));
 class Sheet {
   constructor(){this.rows=[];}
   getLastRow(){return this.rows.length;} getMaxRows(){return 1000;}
@@ -18,7 +19,7 @@ class Sheet {
 let verification={success:true,action:'newsletter',hostname:'tournstack.com'};
 const context={console:{error(){}},Date,
   SpreadsheetApp:{openById:()=>({getSheetByName:name=>sheets.get(name),insertSheet:name=>{const s=new Sheet();sheets.set(name,s);return s;}}),flush(){},newRichTextValue:()=>({setText(text){this.text=text;return this;},build(){return {text:this.text};}})},
-  PropertiesService:{getScriptProperties:()=>({getProperty:name=>({TURNSTILE_SECRET:'test-turnstile',MAIL_RELAY_TOKEN:secret,MAIL_RELAY_URL:'https://tournstack-mailbox.tournstack.workers.dev/contact-email'})[name]})},
+  PropertiesService:{getScriptProperties:()=>({getProperty:name=>properties.get(name),setProperty:(name,value)=>properties.set(name,value)})},
   LockService:{getScriptLock:()=>({waitLock(){},hasLock:()=>true,releaseLock(){}})},
   Utilities:{DigestAlgorithm:{SHA_256:'sha256'},Charset:{UTF_8:'utf8'},getUuid:()=>crypto.randomUUID(),computeDigest:(alg,value)=>[...crypto.createHash('sha256').update(value).digest()],computeHmacSha256Signature:(value,key)=>[...crypto.createHmac('sha256',key).update(value).digest()]},
   UrlFetchApp:{fetch:(url,options)=>{
@@ -76,3 +77,7 @@ context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});sheet.ro
 context.doPost({parameter:action('newsletter-cleanup','')});assert.equal(sheet.rows.length,1);
 context.doPost({parameter:{...input,SubmissionId:crypto.randomUUID()}});sheet.rows[0]=sheet.rows[0].slice(0,12);sheet.rows[1]=sheet.rows[1].slice(0,12);sheet.rows[1][1]='confirmed';sheet.rows[1][3]=new Date();const confirmedAt=sheet.rows[1][3];context.newsletterSheet_();assert.equal(sheet.rows[0][12],'SubscriptionStatus');assert.equal(sheet.rows[1][12],'active');assert.equal(sheet.rows[1][13],confirmedAt,'migration uses original confirmation date');
 console.log('Newsletter checks passed: human/action/consent gates, literal email, pending/deduplication, HMAC, one-use confirmation, expiry, unsubscribe and retention.');
+const openBook=context.SpreadsheetApp.openById;
+context.SpreadsheetApp.openById=()=>{throw Error('Local unavailable fixture');};
+assert.equal(context.doPost({parameter:action('newsletter-confirm',token)}).retryable,true,'storage failures must not be cached as terminal invalid links');
+context.SpreadsheetApp.openById=openBook;

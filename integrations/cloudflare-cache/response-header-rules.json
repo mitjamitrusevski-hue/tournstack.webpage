@@ -8,7 +8,14 @@
       "description": "Long browser freshness only for successful hashed asset responses",
       "expression": "(http.host in {\"tournstack.com\" \"www.tournstack.com\"} and http.request.method in {\"GET\" \"HEAD\"} and starts_with(http.request.uri.path, \"/assets/versioned/\") and http.response.code eq 200)",
       "action": "rewrite",
-      "action_parameters": { "headers": { "cache-control": { "operation": "set", "value": "public, max-age=31536000, immutable" } } },
+      "action_parameters": {
+        "headers": {
+          "cache-control": {
+            "operation": "set",
+            "value": "public, max-age=31536000, immutable"
+          }
+        }
+      },
       "enabled": true
     },
     {
@@ -16,7 +23,64 @@
       "description": "Never retain missing, redirected or failed versioned asset responses",
       "expression": "(http.host in {\"tournstack.com\" \"www.tournstack.com\"} and starts_with(http.request.uri.path, \"/assets/versioned/\") and http.response.code ne 200)",
       "action": "rewrite",
-      "action_parameters": { "headers": { "cache-control": { "operation": "set", "value": "no-store" } } },
+      "action_parameters": {
+        "headers": {
+          "cache-control": {
+            "operation": "set",
+            "value": "no-store"
+          }
+        }
+      },
+      "enabled": true
+    },
+    {
+      "ref": "tournstack_browser_security_baseline",
+      "description": "Website browser protections; local prepared configuration, activate separately after review",
+      "expression": "(http.host in {\"tournstack.com\" \"www.tournstack.com\"} and ssl)",
+      "action": "rewrite",
+      "action_parameters": {
+        "headers": {
+          "content-security-policy": {
+            "operation": "set",
+            "value": "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://script.google.com https://script.googleusercontent.com https://*.googleusercontent.com"
+          },
+          "strict-transport-security": {
+            "operation": "set",
+            "value": "max-age=86400"
+          },
+          "x-content-type-options": {
+            "operation": "set",
+            "value": "nosniff"
+          },
+          "x-frame-options": {
+            "operation": "set",
+            "value": "DENY"
+          },
+          "referrer-policy": {
+            "operation": "set",
+            "value": "strict-origin-when-cross-origin"
+          },
+          "permissions-policy": {
+            "operation": "set",
+            "value": "camera=(), microphone=(), geolocation=(), usb=(), payment=()"
+          }
+        }
+      },
+      "enabled": true
+    },
+    {
+      "ref": "tournstack_strict_csp_observation",
+      "description": "Strict CSP candidate, observation only until real vendor and nested form checks pass",
+      "expression": "(http.host in {\"tournstack.com\" \"www.tournstack.com\"} and ssl and (http.request.uri.path eq \"/\" or ends_with(http.request.uri.path, \".html\")))",
+      "action": "rewrite",
+      "action_parameters": {
+        "headers": {
+          "content-security-policy-report-only": {
+            "operation": "set",
+            "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'sha256-Ebt84R/xi8miDnxS/0/bkTjVgDRKQpWS1eI09TLbNkg=' 'sha256-XVj80uUSzt3JWa6FTzTaafmEiRYXOb5edzL/N5F/s6U=' https://cdn-cookieyes.com https://plausible.io https://challenges.cloudflare.com https://connect.facebook.net https://snap.licdn.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://cdn-cookieyes.com; font-src 'self'; img-src 'self' data: https://cdn-cookieyes.com https://www.facebook.com https://www.linkedin.com https://px.ads.linkedin.com https://px4.ads.linkedin.com https://p.adsymptotic.com; connect-src 'self' https://plausible.io https://*.cookieyes.com https://cdn-cookieyes.com https://www.facebook.com https://www.linkedin.com https://px.ads.linkedin.com https://px4.ads.linkedin.com https://challenges.cloudflare.com; frame-src https://script.google.com https://script.googleusercontent.com https://*.googleusercontent.com https://challenges.cloudflare.com https://www.facebook.com https://www.linkedin.com https://tournstack-public-chat.tournstack.workers.dev; form-action 'self' https://script.google.com https://script.googleusercontent.com https://*.googleusercontent.com; worker-src 'none'"
+          }
+        }
+      },
       "enabled": true
     }
   ]

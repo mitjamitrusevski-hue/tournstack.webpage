@@ -1,4 +1,24 @@
+---
+project: TournStack
+doc_type: Website mail Worker operations
+date: "2026-10-03"
+date_basis: Preserved NamingAudit identity creation-date baseline
+updated: "2026-10-20"
+version: "0.1.0"
+version_scope: Document metadata and local security preparation; not a software release
+status: Existing service deployed; security candidate prepared locally only
+language: en
+timezone: Europe/Ljubljana
+owner_role: Website and public assistant maintainer
+---
+
 # TournStack — Cloudflare Free + mailbox.org
+
+## Local security candidate - 2026-10-20
+
+The owner authorised security fixes without deployment. Current source adds bounded newsletter-action replay controls through the existing ContactMailQueue Durable Object; Apps Script now bounds public verification/intake work. Read [Forms abuse controls](../google-apps-script/2026-10-20_TournStack_Forms-Abuse-Controls.md) and the [combined security record](../../../../Operations/Audits/2026-10-20_TournStack_Website-and-Niko_Security-Hardening.md) before a later coordinated release. Credentials, mailbox caps, retention, consent and alarms are unchanged.
+
+Wrangler is now pinned to **4.151.2** in package.json/package-lock.json, removing the audited sharp/miniflare development-tool dependency advisory. Use Node24 and the lockfile. This is a toolchain correction, not evidence of a compromised deployed Worker. The canonical generated `deploy/` pair must be rebuilt from this source using the existing packaging workflow; the combined security record identifies the verified candidate build. The separate `Website/CloudflareMailWorker` copy remains the older deployed recovery version and must not be selected as the new security candidate. Do not deploy either version until the combined release is authorised.
 
 ## Current status
 
@@ -41,8 +61,8 @@ Install **Node.js 24 LTS** if it is not already available. Open a terminal in th
 Run:
 
 ```bash
-npx --yes wrangler@4.147.0 login
-npx --yes wrangler@4.147.0 deploy
+npx --yes wrangler@4.151.2 login
+npx --yes wrangler@4.151.2 deploy
 ```
 
 For a fresh or recovery deployment, the first command opens a browser for Cloudflare authorization. Use the account registered as **mitja@tournstack.com**. The second deploys the configured Worker and its SQLite Durable Object. The deployed URL is **https://tournstack-mailbox.tournstack.workers.dev**; verify the command output when redeploying.
@@ -69,7 +89,7 @@ Generate the separate relay token with a password manager, or locally with:
 node -e "process.stdout.write(require('node:crypto').randomBytes(32).toString('hex'))"
 ```
 
-Keep that output private: the same value is entered in Cloudflare and Apps Script. It is not your mailbox password. The CLI alternative is `npx --yes wrangler@4.147.0 secret put SECRET_NAME` for each secret; its prompts keep secret values out of shell command history.
+Keep that output private: the same value is entered in Cloudflare and Apps Script. It is not your mailbox password. The CLI alternative is `npx --yes wrangler@4.151.2 secret put SECRET_NAME` for each secret; its prompts keep secret values out of shell command history.
 
 ## 4. Update Apps Script
 

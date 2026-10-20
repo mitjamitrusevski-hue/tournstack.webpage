@@ -18,7 +18,7 @@ export function validateNewsletter(value){
 }
 
 async function validPublicToken(token,purpose,secret){
-  if(!/^[a-f0-9]{128}$/.test(token) || !secret || secret.length<32)return false;
+  if(typeof token!=='string'||token.length!==128||!/^[a-f0-9]{128}$/.test(token) || !secret || secret.length<32)return false;
   const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);
   const bytes=new Uint8Array(await crypto.subtle.sign('HMAC',key,new TextEncoder().encode(purpose+':'+token.slice(0,64))));
   const actual=Uint8Array.from(token.slice(64).match(/../g),hex=>parseInt(hex,16));
@@ -37,9 +37,9 @@ export async function newsletterBackend(env,action,token=''){
   const result=await r.json();if(typeof result.ok!=='boolean')throw Error('Newsletter backend response invalid.');return result;
 }
 
-function page(title,text,{token='',action='',button=''}={}){
+function page(title,text,{token='',action='',button='',status=200,retryAfter}={}){
   const form=token?`<form method="post" action="${action}"><input type="hidden" name="token" value="${token}"><button type="submit">${button}</button></form>`:'';
-  return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>${title} — TournStack</title><style>body{margin:0;background:#EEF2F7;color:#0F172A;font:17px/1.65 Arial,sans-serif}main{max-width:560px;margin:8vh auto;padding:32px;background:#F8FAFC;border-radius:16px}h1{font-size:28px;line-height:1.25}button{font:inherit;background:#1855CC;color:#F8FAFC;border:0;border-radius:8px;padding:14px 20px;cursor:pointer}a{color:#1855CC}button:focus-visible,a:focus-visible{outline:3px solid #1855CC;outline-offset:4px}@media(max-width:620px){main{margin:24px 16px;padding:24px}}</style></head><body><main><p><strong>TournStack</strong></p><h1>${title}</h1><p>${text}</p>${form}<p><a href="https://tournstack.com/">Back to TournStack</a> · <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></main></body></html>`,{headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Robots-Tag':'noindex, nofollow','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"}});
+  return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>${title} — TournStack</title><style>body{margin:0;background:#EEF2F7;color:#0F172A;font:17px/1.65 Arial,sans-serif}main{max-width:560px;margin:8vh auto;padding:32px;background:#F8FAFC;border-radius:16px}h1{font-size:28px;line-height:1.25}button{font:inherit;background:#1855CC;color:#F8FAFC;border:0;border-radius:8px;padding:14px 20px;cursor:pointer}a{color:#1855CC}button:focus-visible,a:focus-visible{outline:3px solid #1855CC;outline-offset:4px}@media(max-width:620px){main{margin:24px 16px;padding:24px}}</style></head><body><main><p><strong>TournStack</strong></p><h1>${title}</h1><p>${text}</p>${form}<p><a href="https://tournstack.com/">Back to TournStack</a> · <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></main></body></html>`,{status,headers:{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Robots-Tag':'noindex, nofollow',...(retryAfter?{'Retry-After':String(retryAfter)}:{}),'Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"}});
 }
 
 // A confirmation is recorded only after the backend's one-use state transition.
@@ -78,12 +78,26 @@ export async function newsletterPublic(request,env,ctx){
   const token=new URLSearchParams(raw).get('token')||'';
   if(!await validPublicToken(token,confirm?'confirm':'unsubscribe',env.MAIL_RELAY_TOKEN))return page('This link is incomplete or invalid.','Please use the full link in your email.');
   try{
-    const result=await newsletterBackend(env,confirm?'newsletter-confirm':'newsletter-unsubscribe',token);
+    if(!env.CONTACT_QUEUE)throw Error('Newsletter guard unavailable.');
+    const queue=env.CONTACT_QUEUE.get(env.CONTACT_QUEUE.idFromName('tournstack-contact-mail-v1'));
+    const result=await queue.publicNewsletterAction(confirm?'newsletter-confirm':'newsletter-unsubscribe',token);
+    if(result?.error){
+      const limited=result.status===429;
+      const retryAfter=Number.isSafeInteger(result.retryAfter)&&result.retryAfter>0&&result.retryAfter<=86400?result.retryAfter:60;
+      const wait=retryAfter>60?'The service has reached its daily request allowance. Please use the same link after the next midnight UTC, or email info@tournstack.com.':'This link has received several requests. Please wait one minute, then use the same link again.';
+      return page(limited?'Please try again later.':'Please try again shortly.',limited?wait:'We could not check that update. Please use the same link again shortly, or email info@tournstack.com.',{status:limited?429:503,retryAfter:limited?retryAfter:undefined});
+    }
+    if(typeof result?.ok!=='boolean')throw Error('Newsletter guard response invalid.');
     if(!result.ok)return page('This link has expired or was already used.','You can request a fresh signup link from the TournStack website.');
-    if(confirm){
+    if(confirm&&result.newlyConfirmed===true){
       const recording=recordConfirmation(request);
       if(ctx?.waitUntil)ctx.waitUntil(recording);else await recording;
     }
+    if(confirm&&result.newlyConfirmed!==true){
+      // A cached/concurrent receipt proves a past confirmation, not the current
+      // subscription state: the visitor may since have unsubscribed.
+      return page('Confirmation already processed.','This confirmation was completed earlier. It does not change a later unsubscribe request. To subscribe again, use the newsletter form on the TournStack website.');
+    }
     return page(confirm?'You’re on the list.':'You’re unsubscribed.',confirm?'Thanks for joining us. We’ll email you when our newsletter is ready.':'Your newsletter subscription is inactive. You won’t receive our newsletter.');
-  }catch{return page('Please try again shortly.','We couldn’t confirm that update. Please try this link again or email info@tournstack.com.');}
+  }catch{return page('Please try again shortly.','We couldn’t confirm that update. Please try this link again or email info@tournstack.com.',{status:503});}
 }

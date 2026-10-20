@@ -112,7 +112,7 @@ function validateNewsletter(value) {
 }
 __name(validateNewsletter, "validateNewsletter");
 async function validPublicToken(token, purpose, secret) {
-  if (!/^[a-f0-9]{128}$/.test(token) || !secret || secret.length < 32) return false;
+  if (typeof token !== "string" || token.length !== 128 || !/^[a-f0-9]{128}$/.test(token) || !secret || secret.length < 32) return false;
   const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   const bytes = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(purpose + ":" + token.slice(0, 64))));
   const actual = Uint8Array.from(token.slice(64).match(/../g), (hex) => parseInt(hex, 16));
@@ -134,9 +134,9 @@ async function newsletterBackend(env, action, token = "") {
   return result;
 }
 __name(newsletterBackend, "newsletterBackend");
-function page(title, text, { token = "", action = "", button = "" } = {}) {
+function page(title, text, { token = "", action = "", button = "", status = 200, retryAfter } = {}) {
   const form = token ? `<form method="post" action="${action}"><input type="hidden" name="token" value="${token}"><button type="submit">${button}</button></form>` : "";
-  return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>${title} \u2014 TournStack</title><style>body{margin:0;background:#EEF2F7;color:#0F172A;font:17px/1.65 Arial,sans-serif}main{max-width:560px;margin:8vh auto;padding:32px;background:#F8FAFC;border-radius:16px}h1{font-size:28px;line-height:1.25}button{font:inherit;background:#1855CC;color:#F8FAFC;border:0;border-radius:8px;padding:14px 20px;cursor:pointer}a{color:#1855CC}button:focus-visible,a:focus-visible{outline:3px solid #1855CC;outline-offset:4px}@media(max-width:620px){main{margin:24px 16px;padding:24px}}</style></head><body><main><p><strong>TournStack</strong></p><h1>${title}</h1><p>${text}</p>${form}<p><a href="https://tournstack.com/">Back to TournStack</a> \xB7 <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></main></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Robots-Tag": "noindex, nofollow", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'" } });
+  return new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>${title} \u2014 TournStack</title><style>body{margin:0;background:#EEF2F7;color:#0F172A;font:17px/1.65 Arial,sans-serif}main{max-width:560px;margin:8vh auto;padding:32px;background:#F8FAFC;border-radius:16px}h1{font-size:28px;line-height:1.25}button{font:inherit;background:#1855CC;color:#F8FAFC;border:0;border-radius:8px;padding:14px 20px;cursor:pointer}a{color:#1855CC}button:focus-visible,a:focus-visible{outline:3px solid #1855CC;outline-offset:4px}@media(max-width:620px){main{margin:24px 16px;padding:24px}}</style></head><body><main><p><strong>TournStack</strong></p><h1>${title}</h1><p>${text}</p>${form}<p><a href="https://tournstack.com/">Back to TournStack</a> \xB7 <a href="https://tournstack.com/privacy.html#newsletter">Privacy</a></p></main></body></html>`, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Robots-Tag": "noindex, nofollow", ...retryAfter ? { "Retry-After": String(retryAfter) } : {}, "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'" } });
 }
 __name(page, "page");
 async function recordConfirmation(request) {
@@ -186,16 +186,28 @@ async function newsletterPublic(request, env, ctx) {
   const token = new URLSearchParams(raw).get("token") || "";
   if (!await validPublicToken(token, confirm ? "confirm" : "unsubscribe", env.MAIL_RELAY_TOKEN)) return page("This link is incomplete or invalid.", "Please use the full link in your email.");
   try {
-    const result = await newsletterBackend(env, confirm ? "newsletter-confirm" : "newsletter-unsubscribe", token);
+    if (!env.CONTACT_QUEUE) throw Error("Newsletter guard unavailable.");
+    const queue = env.CONTACT_QUEUE.get(env.CONTACT_QUEUE.idFromName("tournstack-contact-mail-v1"));
+    const result = await queue.publicNewsletterAction(confirm ? "newsletter-confirm" : "newsletter-unsubscribe", token);
+    if (result?.error) {
+      const limited2 = result.status === 429;
+      const retryAfter = Number.isSafeInteger(result.retryAfter) && result.retryAfter > 0 && result.retryAfter <= 86400 ? result.retryAfter : 60;
+      const wait = retryAfter > 60 ? "The service has reached its daily request allowance. Please use the same link after the next midnight UTC, or email info@tournstack.com." : "This link has received several requests. Please wait one minute, then use the same link again.";
+      return page(limited2 ? "Please try again later." : "Please try again shortly.", limited2 ? wait : "We could not check that update. Please use the same link again shortly, or email info@tournstack.com.", { status: limited2 ? 429 : 503, retryAfter: limited2 ? retryAfter : void 0 });
+    }
+    if (typeof result?.ok !== "boolean") throw Error("Newsletter guard response invalid.");
     if (!result.ok) return page("This link has expired or was already used.", "You can request a fresh signup link from the TournStack website.");
-    if (confirm) {
+    if (confirm && result.newlyConfirmed === true) {
       const recording = recordConfirmation(request);
       if (ctx?.waitUntil) ctx.waitUntil(recording);
       else await recording;
     }
+    if (confirm && result.newlyConfirmed !== true) {
+      return page("Confirmation already processed.", "This confirmation was completed earlier. It does not change a later unsubscribe request. To subscribe again, use the newsletter form on the TournStack website.");
+    }
     return page(confirm ? "You\u2019re on the list." : "You\u2019re unsubscribed.", confirm ? "Thanks for joining us. We\u2019ll email you when our newsletter is ready." : "Your newsletter subscription is inactive. You won\u2019t receive our newsletter.");
   } catch {
-    return page("Please try again shortly.", "We couldn\u2019t confirm that update. Please try this link again or email info@tournstack.com.");
+    return page("Please try again shortly.", "We couldn\u2019t confirm that update. Please try this link again or email info@tournstack.com.", { status: 503 });
   }
 }
 __name(newsletterPublic, "newsletterPublic");
@@ -482,6 +494,87 @@ async function mailboxSMTP(connect2, credentials, message = null, timeoutMs = 2e
 }
 __name(mailboxSMTP, "mailboxSMTP");
 
+// newsletter-guard.mjs
+var NEWSLETTER_ACTION_LIMITS = Object.freeze({ perPurposePerMinute: 60, perPurposePerDay: 1e3, perTokenPerMinute: 5, maxEntries: 256, confirmationCacheMs: 6e4 });
+var KEY = "newsletter-public-allowance-v1";
+var limited = /* @__PURE__ */ __name((retryAfter = 60) => Object.assign(new Error("Newsletter action temporarily limited."), { status: 429, retryAfter }), "limited");
+var unavailable = /* @__PURE__ */ __name(() => Object.assign(new Error("Newsletter action unavailable."), { status: 503 }), "unavailable");
+var integer = /* @__PURE__ */ __name((v) => Number.isSafeInteger(v) && v >= 0, "integer");
+function currentState(value, time) {
+  const minute = Math.floor(time / 6e4), day = Math.floor(time / 864e5), s = value ?? { v: 1, minute, day, confirm: 0, unsubscribe: 0, confirmDay: 0, unsubscribeDay: 0, tokens: {} };
+  if (s.v !== 1 || !integer(s.minute) || s.minute > minute || !integer(s.day) || s.day > day || !integer(s.confirm) || !integer(s.unsubscribe) || !integer(s.confirmDay) || !integer(s.unsubscribeDay) || s.confirmDay > 1e3 || s.unsubscribeDay > 1e3 || s.confirm > 60 || s.unsubscribe > 60 || !s.tokens || typeof s.tokens !== "object" || Array.isArray(s.tokens) || Object.keys(s.tokens).length > NEWSLETTER_ACTION_LIMITS.maxEntries) throw unavailable();
+  for (const [key, t] of Object.entries(s.tokens)) {
+    if (!/^(confirm|unsubscribe):[a-f0-9]{64}$/.test(key) || !t || !integer(t.minute) || t.minute > minute || !integer(t.attempts) || t.attempts > 5 || !integer(t.until) || typeof t.ok !== "boolean") throw unavailable();
+    if (t.minute < minute && t.until <= time) delete s.tokens[key];
+  }
+  if (s.minute !== minute) {
+    s.minute = minute;
+    s.confirm = 0;
+    s.unsubscribe = 0;
+  }
+  if (s.day !== day) {
+    s.day = day;
+    s.confirmDay = 0;
+    s.unsubscribeDay = 0;
+  }
+  return s;
+}
+__name(currentState, "currentState");
+function createNewsletterActionGuard({ storage, backend, now = Date.now }) {
+  let queue = Promise.resolve();
+  const pending = /* @__PURE__ */ new Map();
+  const serial = /* @__PURE__ */ __name((fn) => {
+    const task = queue.then(fn);
+    queue = task.catch(() => {
+    });
+    return task;
+  }, "serial");
+  return /* @__PURE__ */ __name(async function act(action, token) {
+    const purpose = action === "newsletter-confirm" ? "confirm" : action === "newsletter-unsubscribe" ? "unsubscribe" : null;
+    if (!purpose || typeof token !== "string" || token.length !== 128 || !/^[a-f0-9]{128}$/.test(token)) throw unavailable();
+    const digest = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(token)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+    const key = purpose + ":" + digest;
+    if (pending.has(key)) {
+      const result = await pending.get(key);
+      return { ...result, newlyConfirmed: false };
+    }
+    if (pending.size >= NEWSLETTER_ACTION_LIMITS.maxEntries) throw limited();
+    const task = (async () => {
+      const admission = await serial(async () => {
+        const time = now(), s = currentState(await storage.get(KEY), time), minute = Math.floor(time / 6e4);
+        const prior = s.tokens[key];
+        if (purpose === "confirm" && prior?.until > time) return { cached: true, ok: prior.ok };
+        if (s[purpose + "Day"] >= NEWSLETTER_ACTION_LIMITS.perPurposePerDay) throw limited(Math.ceil(((Math.floor(time / 864e5) + 1) * 864e5 - time) / 1e3));
+        if (s[purpose] >= NEWSLETTER_ACTION_LIMITS.perPurposePerMinute || prior?.minute === minute && prior.attempts >= NEWSLETTER_ACTION_LIMITS.perTokenPerMinute || !prior && Object.keys(s.tokens).length >= NEWSLETTER_ACTION_LIMITS.maxEntries) throw limited();
+        s[purpose]++;
+        s[purpose + "Day"]++;
+        s.tokens[key] = { minute, attempts: prior?.minute === minute ? prior.attempts + 1 : 1, until: 0, ok: false };
+        await storage.put(KEY, s);
+        return { cached: false };
+      });
+      if (admission.cached) return { ok: admission.ok, newlyConfirmed: false };
+      const result = await backend(action, token);
+      if (typeof result?.ok !== "boolean" || result.retryable === true) throw unavailable();
+      if (purpose === "confirm") await serial(async () => {
+        const time = now(), s = currentState(await storage.get(KEY), time);
+        if (!s.tokens[key] && Object.keys(s.tokens).length >= NEWSLETTER_ACTION_LIMITS.maxEntries) return;
+        s.tokens[key] ??= { minute: Math.floor(time / 6e4), attempts: 0, until: 0, ok: false };
+        s.tokens[key].until = time + NEWSLETTER_ACTION_LIMITS.confirmationCacheMs;
+        s.tokens[key].ok = result.ok;
+        await storage.put(KEY, s);
+      });
+      return { ok: result.ok, newlyConfirmed: purpose === "confirm" && result.ok };
+    })();
+    pending.set(key, task);
+    try {
+      return await task;
+    } finally {
+      pending.delete(key);
+    }
+  }, "act");
+}
+__name(createNewsletterActionGuard, "createNewsletterActionGuard");
+
 // worker.mjs
 var worker_default = { fetch: handleRequest };
 var ContactMailQueue = class extends DurableObject {
@@ -499,6 +592,14 @@ var ContactMailQueue = class extends DurableObject {
       maxContacts: cap(env.MAX_CONTACTS_PER_DAY, 100),
       maxConfirmations: cap(env.MAX_CONFIRMATIONS_PER_ADDRESS_PER_DAY, 3)
     });
+    this.newsletterAction = createNewsletterActionGuard({ storage: ctx.storage, backend: /* @__PURE__ */ __name((action, token) => newsletterBackend(env, action, token), "backend") });
+  }
+  async publicNewsletterAction(action, token) {
+    try {
+      return await this.newsletterAction(action, token);
+    } catch (e) {
+      return { error: true, status: e.status === 429 ? 429 : 503, retryAfter: e.status === 429 ? e.retryAfter : void 0 };
+    }
   }
   async enqueue(value) {
     try {

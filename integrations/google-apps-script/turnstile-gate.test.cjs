@@ -7,9 +7,10 @@ const source = fs.readFileSync(path.join(__dirname, 'Code.gs'), 'utf8');
 let verificationResult = { success: true, action: 'contact', hostname: 'tournstack.com' };
 let fetches = 0;
 let sheetAccesses = 0;
+const properties = new Map([['TURNSTILE_SECRET','test-secret']]);
 const context = {
   console: { error() {} },
-  PropertiesService: { getScriptProperties: () => ({ getProperty: () => 'test-secret' }) },
+  PropertiesService: { getScriptProperties: () => ({ getProperty: k => properties.get(k), setProperty: (k,v) => properties.set(k,v) }) },
   UrlFetchApp: { fetch: (url, options) => {
     fetches++;
     assert.equal(url, 'https://challenges.cloudflare.com/turnstile/v0/siteverify');

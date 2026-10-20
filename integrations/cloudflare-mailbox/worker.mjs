@@ -5,6 +5,7 @@ import { queueStore, validateContact } from './queue.mjs';
 import { makeMIME } from './mime.mjs';
 import { mailboxSMTP } from './smtp.mjs';
 import { validateNewsletter, newsletterBackend } from './newsletter.mjs';
+import { createNewsletterActionGuard } from './newsletter-guard.mjs';
 
 export default {fetch:handleRequest};
 export class ContactMailQueue extends DurableObject {
@@ -14,6 +15,11 @@ export class ContactMailQueue extends DurableObject {
     this.queue=queueStore(ctx.storage.sql,fn=>ctx.storage.transactionSync(fn),{
       maxContacts:cap(env.MAX_CONTACTS_PER_DAY,100),maxConfirmations:cap(env.MAX_CONFIRMATIONS_PER_ADDRESS_PER_DAY,3)
     });
+    this.newsletterAction=createNewsletterActionGuard({storage:ctx.storage,backend:(action,token)=>newsletterBackend(env,action,token)});
+  }
+  async publicNewsletterAction(action,token){
+    try{return await this.newsletterAction(action,token);}
+    catch(e){return {error:true,status:e.status===429?429:503,retryAfter:e.status===429?e.retryAfter:undefined};}
   }
   async enqueue(value){
     try {
