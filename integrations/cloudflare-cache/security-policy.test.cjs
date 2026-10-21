@@ -51,19 +51,19 @@ test('inline hashes normalize browser newlines, detect code changes and ignore J
 });
 
 // Exercise both launch states using an in-memory copy of the actual loader.
-function loaderFixture({enabled = true, protocol = 'https:', hostname = 'tournstack.com'} = {}) {
+function loaderFixture({enabled = true, protocol = 'https:', hostname = 'tournstack.com', readyState = 'complete', returningOpen = false, blockedStorage = false} = {}) {
   const vm = require('node:vm');
   const source = fs.readFileSync(path.join(root, 'assets/js/chatbot.js'), 'utf8');
   assert.match(source, /const ENABLED=(?:true|false);/, 'Loader must retain an explicit launch control');
-  const frames = [], listeners = {}, events = [], posts = [];
+  const frames = [], listeners = {}, events = [], posts = [], timers = new Map();let timerId=0;
   const frame = {style: {}, contentWindow: {postMessage: (...args) => posts.push(args)}, attributes: {},
     setAttribute(name, value) { this.attributes[name] = value; }, classList: {toggle(name, value) { frame[name] = value; }}};
-  const document = {createElement(tag) { assert.equal(tag, 'iframe'); return frame; }, body: {append(value) { frames.push(value); }},
+  const document = {readyState,createElement(tag) { assert.equal(tag, 'iframe'); return frame; }, body: {append(value) { frames.push(value); }},
     getElementById() { return null; }, addEventListener() {}};
   const window = {addEventListener(name, fn) { listeners[name] = fn; }, plausible: (...args) => events.push(args)};
   vm.runInNewContext(source.replace(/const ENABLED=(?:true|false);/, 'const ENABLED=' + enabled + ';'),
-    {document, window, location: {protocol, hostname, origin: protocol + '//' + hostname, pathname: '/'}, innerHeight: 900});
-  return {frames, frame, listeners, events, posts};
+    {document, window, sessionStorage:{getItem(){if(blockedStorage)throw Error('blocked');return String(returningOpen);},setItem(){}},setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},location: {protocol, hostname, origin: protocol + '//' + hostname, pathname: '/'}, innerHeight: 900});
+  return {frames, frame, listeners, events, posts,timers};
 }
 
 test('Niko respects the disabled launch control and only embeds on the approved HTTPS website', () => {
@@ -94,4 +94,16 @@ test('iframe messages still require both the exact source window and exact origi
   assert.equal(events.length, 1);
   assert.equal(events[0][0], 'Chatbot Rating Submitted');
   assert.equal(JSON.stringify(events[0][1]), JSON.stringify({props: {stars: 5}, url: 'https://tournstack.com/'}));
+});
+
+
+test('closed Niko waits for the main page load and cancels its fallback',()=>{
+ const f=loaderFixture({readyState:'interactive'});assert.equal(f.frames.length,1);assert.equal(f.frame.src,undefined);assert.equal(f.timers.size,1);
+ f.listeners.load();assert.equal(f.frame.src,'https://tournstack-public-chat.tournstack.workers.dev/');assert.equal(f.timers.size,0);
+});
+test('returning open Niko restores immediately even while the main page is loading',()=>{
+ const f=loaderFixture({readyState:'interactive',returningOpen:true});assert.equal(f.frame.src,'https://tournstack-public-chat.tournstack.workers.dev/');assert.equal(f.frame['is-open'],true);assert.equal(f.timers.size,0);
+});
+test('closed Niko has a bounded load fallback, including storage-blocked browsers',()=>{
+ for(const blockedStorage of [false,true]){const f=loaderFixture({readyState:'interactive',blockedStorage});const timer=[...f.timers.values()][0];assert.equal(timer.ms,3000);timer.fn();assert.equal(f.frame.src,'https://tournstack-public-chat.tournstack.workers.dev/');assert.equal(f.timers.size,0);}
 });
