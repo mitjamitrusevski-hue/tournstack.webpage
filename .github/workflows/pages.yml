@@ -21,6 +21,7 @@ jobs:
       - name: Verify immutable assets and HTML references
         run: |
           node scripts/test-version-assets.cjs
+          node --test scripts/performance-contract.test.cjs
           node scripts/version-assets.cjs --check
       - name: Verify consent and receiver failure gates without network
         run: |

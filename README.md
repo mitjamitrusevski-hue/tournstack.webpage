@@ -1,6 +1,64 @@
+---
+project: TournStack
+doc_type: Website maintenance and release guide
+date: "2026-10-03"
+date_basis: Preserved NamingAudit identity baseline
+updated: "2026-10-21"
+version: "1.0.2"
+version_scope: Operational documentation revision; not a software release
+status: Maintained website guide; public Niko live and navigation accepted
+language: en
+timezone: Europe/Ljubljana
+owner_role: Website and public assistant maintainer
+---
+
 # TournStack website — maintenance and release guide
 
-A lightweight, static pre-launch website for TournStack. The repository root is the GitHub Pages publish directory; `CNAME` points to `tournstack.com`.
+## Performance maintenance - 2026-10-21
+
+The [performance release record](../../Operations/Releases/2026-10-21_TournStack_Website-Performance_Implementation-and-Verification.md) records the reviewed repair and its actual deployment/readback. The [cache and performance runbook](integrations/cloudflare-cache/RUNBOOK.md#performance-maintenance-and-regression-safeguards---2026-10-21) owns the reusable commands and limits.
+
+The mobile hero retains 420/600/900-pixel AVIF candidates, WebP fallback, correct density selection and eager high-priority discovery. The 21 October AVIF derivatives preserve the approved composition at about half the previous transfer size; previous image URLs remain available. Do not force a high-density browser to use a low-resolution source solely to silence a size estimate.
+
+The immutable asset generator bundles `assets/css/chatbot.css` into the compiled main stylesheet. Maintain the small frame stylesheet as its source; do not reintroduce a separate blocking link in the six chat-enabled pages. Its bytes participate in the main stylesheet hash, and the generator regression tests verify dependency invalidation. Both CSS sources remain editable, and historical hashed files stay immutable.
+
+The six pages preconnect only to the required CookieYes CDN and Niko origin. A previously open panel loads immediately with its remembered size. A closed widget begins loading after the main page load, or after a three-second fallback if the page remains loading. This reduces competition with the hero, fonts and layout; it does not change chat consent, authenticated recovery, or deletion. Preserve both branches and the existing navigation regressions. CookieYes remains in its documented synchronous head position; the initial main CSS remains intentionally blocking. Their remaining audit entries are not a promise that every warning can safely be eliminated.
+
+The Pages build checks `scripts/performance-contract.test.cjs` as well as existing immutable-asset, consent/receiver and publication checks. The contract checks one blocking CSS bundle, the two connection hints, preserved CMP ordering, mobile source/fallback/high-priority markup and reviewed AVIF byte budgets. A new design can revise budgets deliberately after visual and viewport/density review; passing a file-size check does not establish an unchanged Lighthouse score.
+
+## Current operational checkpoint - 2026-10-20
+
+[Current operations](../../Operations/2026-10-19_TournStack_Website-and-Niko_Current-Operations.md) owns the cross-service state map. The [20 October release record](../../Operations/Releases/2026-10-20_TournStack_Website-and-Niko_Public-Release.md) records current website commit `5716f3abf903f12c909faf89f345c0e6215b8db8`, successful Pages run `39455081152` and public readback at 16:11:39 UTC. The live loader is enabled. Niko's separate Worker version `38881f7c-1412-427c-9c45-b455672372f9` was verified at 16:31:33 UTC with public answering enabled and the unchanged 30-topic snapshot.
+
+The owner accepted the light head silhouette in the header, the approved LightBG full-body welcome artwork, short `Copied` feedback, rating/comment saving, export/deletion and same-tab navigation/refresh continuity. Contact thank-you and both emails are confirmed. Newsletter lifecycle and actual provider/dashboard observations remain open. A brief frame reload/restoration pause during full-page navigation is expected; uninterrupted frame execution is not implemented.
+
+Canonical Git HEAD remains `0390b367c24733c0308d29559ee0ecc7c07a03c4`, with unrelated work preserved. Release commits came from the reviewed private checkout; do not force-push or reset this canonical working tree. The latest source ZIP is locally verified, with its Drive identity still unconfirmed. These maintained guide edits are documentation work, not a new website/Worker deployment.
+
+This is a lightweight static pre-launch product website hosted on GitHub Pages behind Cloudflare. The production workflow publishes an explicit public artifact; it does not expose the entire repository. `CNAME` points to `tournstack.com`. Historical checkpoints below retain their original scope.
+
+## Niko chat integration and navigation
+
+`assets/js/chatbot.js` creates the isolated Worker iframe and verifies the origin, source window and channel of incoming messages. The parent website's session-storage key `tournstack-niko-panel-v1` holds only the open/closed preference. Apply the remembered class and size before attaching the iframe; otherwise an open panel briefly appears minimized on every new page.
+
+The separate Worker owns the signed session token, drafts, authenticated transcript restore, feedback and deletion. See [Niko production maintenance](../../PublicChatbot/Production/README.md). Never put those tokens, drafts or transcripts into the parent website's storage or analytics. Preserve the iframe sandbox and clipboard permission, the postMessage checks, and consent/provider isolation.
+
+| Visitor action | Intended behavior |
+|---|---|
+| Follow a website page link in the same tab | Preserve the chat session and panel preference; the newly loaded frame restores messages. |
+| Ctrl+F5 or normal reload in that tab | Reload page assets while preserving the tab's valid chat session. |
+| Start a separate incognito session | Start with a fresh chat. |
+| Use Niko's restart arrow | Start a new conversation and clear the old session token/drafts from that tab; this does not delete the previously saved chat. |
+| Use Delete saved chat and confirm | Delete the active raw conversation and end that session; exported or weekly review copies have separate deletion handling. |
+
+The Worker uses an early external bootstrap, a neutral restoration status and non-animated reconstruction of saved messages to avoid launcher/welcome/answer flashes. This does not turn the static website into a single-page application. Do not add a persistent navigation router without reviewing form initialization, history, consent and advertising exclusions for Contact/Privacy.
+
+For an authorized loader change, run the established `scripts/version-assets.cjs` generator, preserve historical hashed files, and check all six page references and `assets/asset-manifest.json`. Use `scripts/test-version-assets.cjs`, the public-artifact/security checks and the production navigation browser test before publication. A plain local HTTP preview intentionally does not enable this production-host-only loader. The production runbook describes the intercepted offline fixture.
+
+After deployment, verify the exact live loader bytes and immutable cache header, the page references and enforced/report-only header values. Test an open and minimized chat across FAQ and Contact on desktop and mobile; verify drafts, saved messages, feedback, restart/delete and temporary restore failure. Keep the original header head silhouette and approved LightBG welcome image; do not replace the header with the full-body illustration or redraw brand masters.
+
+## Tracking installation and maintenance entry point
+
+Use [Tracking setup](integrations/tracking-setup.md) for the complete CookieYes/Meta/LinkedIn installation procedure, [Consent setup](CONSENT_SETUP.md) for exact dashboard settings, account IDs, published text and inventory, and [Advertising maintenance](integrations/advertising.md) for runtime gates, tests and rollback. Marketing guides explain reusable policy; current configuration, completion state and execution evidence belong here and in WebPublishing/Operations. This documentation consolidation changes no production behaviour.
 
 ## Mobile hero delivery — 2026-10-15
 
@@ -56,7 +114,7 @@ Edit original assets, run `node scripts/version-assets.cjs`, then `node scripts/
 - `author-mitja-mitrusevski.html`: substantive, indexable author profile linked from every footer and listed in the sitemap.
 - `inquiry-received.html`: guarded, noindex contact-success route with an accessible thank-you dialog; omitted from the sitemap. It counts a saved inquiry only after consuming a fresh one-use browser receipt, then returns to Contact when OK/Escape is used.
 
-### Public page register — source updated 2026-10-14
+### Public page register — source updated 2026-10-15
 
 The table describes the current source. The 2026-10-14 audience revision follows the Wizard-first release and section-anchor release; its dated Audience-Anchors-and-Turnstile record under `Marketing/WebPublishing/Operations/Releases` holds the exact commit, Pages workflow and live verification evidence. A source edit alone is not a published release. All six routes are intended to remain indexable, their canonicals point to the URLs shown below, and each belongs in `sitemap.xml`. The connected graphs use Mitja Mitruševski (`https://tournstack.com/#mitja-mitrusevski`) as the current first-party author and TournStack (`https://tournstack.com/#organization`) as publisher.
 
@@ -156,9 +214,9 @@ The four product pages include a JSON-LD graph connecting the organization, webs
 
 ## Privacy and consent setup
 
-`privacy.html` identifies Mitja Mitruševski as the current controller and `info@tournstack.com` as the contact point. It describes current providers, cookie-free Plausible analytics, the contact receipt and consent-gated Meta advertising. The invitation now uses only page memory. Inquiry rows and correspondence have a 24-month limit after the last exchange; owner review/deletion remains manual. That period does not override the separately stated newsletter retention. The Cloudflare email queue has its own 30-day purge. The owner confirmed personal operation from Slovenia on 2026-10-15; owner-supplied Meta terms and policy panels support the qualified provider-role and transfer wording.
+`privacy.html` identifies Mitja Mitruševski as the current controller and `info@tournstack.com` as the contact point. It describes current providers, cookie-free Plausible analytics, the contact receipt and consent-gated Meta and normal LinkedIn advertising, including automatic LinkedIn Website Actions. The invitation uses only page memory. Inquiry rows and correspondence have a 24-month limit after the last exchange; owner review/deletion remains manual. That period does not override the separately stated newsletter retention. The Cloudflare email queue has its own 30-day purge. The owner confirmed personal operation from Slovenia on 2026-10-15; recorded provider terms/panels support the qualified role, transfer and retention wording.
 
-Hosted CookieYes remains installed with footer revisit controls. The shared loader enables only Meta after current advertising consent. Owner screenshots confirm Free and an Advertisement category; supported renewal and actual platform receipt remain pending. See [CONSENT_SETUP.md](CONSENT_SETUP.md) for observed banner wording and the coordinated activation sequence.
+Hosted CookieYes remains installed with footer revisit controls. The shared loader enables Meta and LinkedIn only after the completed Advertisement choice and matching v2 notice marker. Owner renewal is confirmed; Meta processed browser events and LinkedIn Active status were supplied by the owner. Both policy links were verified publicly. See [CONSENT_SETUP.md](CONSENT_SETUP.md) for the current configuration and evidence limits; superseded Meta-only sections elsewhere in this README are historical.
 
 Keep JSON-LD descriptions and FAQ answers synchronized with the HTML when editing. Do not add invented prices, reviews, released-platform support or download links. Structured data helps machines interpret content; it does not guarantee indexing or AI citations. See `2026-10-02_TournStack_Website_Structured-Data.md` for sources and maintenance details.
 

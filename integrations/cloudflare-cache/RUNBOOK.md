@@ -3,10 +3,10 @@ project: TournStack
 doc_type: Website delivery and browser security runbook
 date: "2026-10-15"
 date_basis: Preserved NamingAudit identity creation-date baseline
-updated: "2026-10-20"
-version: "1.1.0"
-version_scope: Local security preparation and documentation; not a deployed release
-status: Existing cache configuration deployed; security changes prepared locally only
+updated: "2026-10-21"
+version: "1.3.0"
+version_scope: Deployed security and maintenance documentation; not a new software release
+status: Cache and baseline security deployed; strict CSP remains report-only
 language: en
 timezone: Europe/Ljubljana
 owner_role: Website and public assistant maintainer
@@ -14,9 +14,47 @@ owner_role: Website and public assistant maintainer
 
 # Website optimization: developer runbook
 
-## Security preparation - 2026-10-20
+## Performance maintenance and regression safeguards - 2026-10-21
 
-The owner authorised local website security fixes, explicitly excluding deployment and public chatbot activation. The publish boundary, pinned CI actions and response-header additions described here are prepared source only. Existing live cache settings below retain their recorded deployment status. No Cloudflare rule, GitHub setting, website release, credential, consent, retention period or service plan was changed by this work.
+The owner supplied a new mobile Lighthouse report after Niko launch. Its selected 900 x 1200 AVIF was the same 79,582-byte derivative documented on 15 October. At 412 CSS pixels, a DPR 1 browser selects 420 pixels; higher-density browsers can correctly select 900. Responsive markup and immutable caching had not disappeared. The earlier CookieYes render-blocking review explicitly left supported consent ordering intact. Keep those completed changes and limitations distinct from the new repair.
+
+### Maintained delivery contract
+
+- New 420 x 560, 600 x 800 and 900 x 1200 AVIF derivatives are 13,230, 21,669 and 40,269 bytes. Their source is the approved 900-pixel WebP, resized with Lanczos and encoded with Pillow AVIF quality 35, speed 6. Original artwork, WebP fallback, desktop candidates, captions, dimensions and high priority are preserved. All prior source/hashed image files remain untouched. Lossy derivatives are visually reviewed delivery copies, not pixel-identical masters.
+- The main compiled CSS includes the canonical `assets/css/chatbot.css` bytes. Edit that small file for parent-frame styling, then run the existing generator. Its change must invalidate the main hash, while older URLs remain available. Do not restore a separate blocking chatbot stylesheet link. Main layout CSS is still needed for first paint.
+- Preconnect hints target `https://cdn-cookieyes.com` and `https://tournstack-public-chat.tournstack.workers.dev` in the six chat-enabled pages. These are measured loading dependencies, not permission to preconnect advertising hosts before a choice. Avoid duplicating hints or adding every third party.
+- Previously open Niko panels load immediately and retain their initial full size. Closed panels load after the main window load, with a 3,000ms fallback for slow or stalled page resources. Keep the parent's panel preference and the child's capability/transcript boundaries intact. Do not trade away same-tab continuity to improve a fresh-visit test.
+- Keep the supported CookieYes head ordering, the enforced baseline and report-only CSP distinction, and the existing server-side validation. No async/defer CMP experiment or header relaxation is part of this repair. The remaining main-CSS/CMP render-blocking diagnostics are documented constraints, not failed promises to remove every blocking request.
+
+### Reusable verification
+
+From the website source directory:
+
+```powershell
+node scripts/test-version-assets.cjs
+node scripts/version-assets.cjs --check
+node --test scripts/performance-contract.test.cjs scripts/public-artifact.test.cjs integrations/cloudflare-cache/security-policy.test.cjs
+node integrations/cloudflare-cache/security-policy.cjs --check
+# Set TS_PLAYWRIGHT to an existing Playwright installation and TS_NIKO_RICH
+# to the maintained Production/web/preview-rich.js when using an isolated checkout.
+node integrations/cloudflare-cache/security-browser.cjs
+```
+
+The performance contract is included in the Pages build. It checks the actual generated bundle and HTML, the two required hints, unchanged CMP ordering, AVIF widths/fallback/priority and initial byte budgets of 14,000 / 23,000 / 42,000 bytes. Reject accidental regressions; a justified new design can update the limits only with reviewed image-quality and representative density evidence. Keep the generator's historical-asset integrity check. The security browser harness expects the current short `Copied` status and separately verifies the clipboard value and manual failure fallback.
+
+For a loader or session-related change, run the owning Niko `navigation-browser.mjs` with `TS_WEBSITE_ROOT` pointing at the intended website source; unset it to use the canonical source. Its actual isolated iframe checks cover initial size, delayed restore, open/closed continuity, drafts, feedback, download, reset and erasure. The 21 October correction additionally rejects the browser's blocked-autofocus error and checks Cancel receives focus when the deletion dialog is deliberately opened. The Niko adapter must not add HTML `autofocus` while constructing a hidden dialog: retain explicit focus after user activation instead. Production owns that adapter and its separate Worker deployment.
+
+For performance evidence retain the complete Lighthouse JSON/HTML, Lighthouse/Chrome versions, tested URL/commit, mobile/desktop preset, viewport and DPR, throttling, storage/consent state and actual image URL. Compare like conditions; a single local score, estimated saving or passed byte budget does not guarantee PageSpeed's score. Check transferred bytes, request count, selected image, console errors, initial closed loading and restoration of a previously open chat. Distinguish deliberate diagnostic request blocks from real browser errors. The [21 October release record](../../../../Operations/Releases/2026-10-21_TournStack_Website-Performance_Implementation-and-Verification.md) owns actual tests and measurements; older audit files remain dated evidence.
+
+Primary references rechecked 2026-10-21: [Chrome image delivery](https://developer.chrome.com/docs/performance/insights/image-delivery), [render blocking](https://developer.chrome.com/docs/performance/insights/render-blocking), [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/), [CookieYes installation](https://www.cookieyes.com/documentation/add-cookie-banner-to-website/) and [optimization exclusions](https://www.cookieyes.com/documentation/exclude-cookieyes-script-from-wp-rocket-plugin/). The latter is WordPress-specific supporting evidence, not a new static-site installation method.
+
+## Current security and publication state - 2026-10-20
+
+The owner subsequently authorised the coordinated website/Niko release and applied the two security response-header rules in the Cloudflare dashboard. Public readback verified the enforced baseline and separate report-only policy at 13:41:29 UTC; the latest six-page readback verified all seven expected headers at 16:11:39 UTC. Website commit `5716f3abf903f12c909faf89f345c0e6215b8db8` is deployed through GitHub Pages. The public artifact allowlist and pinned Actions are live. This document update changes no runtime, rules, credentials, permissions, retention or service plan.
+
+The [coordinated release record](../../../../Operations/Releases/2026-10-20_TournStack_Website-and-Niko_Public-Release.md) owns commit/version history, source archives and acceptance evidence; [current operations](../../../../Operations/2026-10-19_TournStack_Website-and-Niko_Current-Operations.md) owns remaining checks. Actual website iframe use, Copy, source display, feedback, download, deletion and same-tab restoration are owner-confirmed. Contact success and both inbox deliveries are confirmed. The newsletter lifecycle and complete real-provider compatibility review remain pending. Strict CSP has **not** been promoted to enforcement.
+
+The initial local-only authorisation and preparation tests below are historical scope. Later deployment authorisation superseded that hold for the recorded release; future runtime or configuration changes still require their own applicable approval.
 
 ### Public artifact boundary
 
@@ -28,28 +66,28 @@ The Pages workflow now calls `node scripts/public-artifact.cjs _site`. It requir
 
 The build rejects symlinks/non-regular public entries, absent required pages and local HTML/CSS resource references that would be missing from the artifact. A new public page/directory/type requires a deliberate allowlist edit and test. Existing stable logo, author portrait and email image URLs, font licensing and historical versioned assets remain available. The owner must still review anything committed inside public asset directories; the extension filter is not a secret detector.
 
-CI continues to run the immutable-asset and consent/receiver checks, then checks the publication boundary and the prepared header policy. The five official GitHub Actions are pinned to full commit SHAs resolved from the existing v4/v5 major tags through `api.github.com/repos/actions/.../git/ref/tags/...` on 2026-10-20. Review upstream changes before updating pins. Job permissions, deployment branch/environment and scheduling are unchanged. A push can deploy under the existing workflow, so do not push these changes until a release is explicitly authorised.
+CI continues to run the immutable-asset and consent/receiver checks, then checks the publication boundary and maintained header policy. The five official GitHub Actions are pinned to full commit SHAs resolved from the existing v4/v5 major tags through `api.github.com/repos/actions/.../git/ref/tags/...` on 2026-10-20. Review upstream changes before updating pins. Job permissions, deployment branch/environment and scheduling are unchanged. A push can deploy under the existing workflow, so future source changes must retain the explicit release-authorisation gate.
 
 ### Effective headers for GitHub Pages behind Cloudflare
 
-This site is hosted by GitHub Pages behind the Cloudflare proxy. A Cloudflare Pages `_headers` file would not configure this origin. `response-header-rules.json` contains two added **Response Header Transform Rules** for HTTPS on exactly `tournstack.com` and `www.tournstack.com`; no demo, indexer or workers.dev host is included. Preparing the JSON does not change live headers. Preserve existing rules and merge the two reviewed refs during a separately authorised configuration change; never replace the whole zone ruleset blindly.
+This site is hosted by GitHub Pages behind the Cloudflare proxy. A Cloudflare Pages `_headers` file would not configure this origin. `response-header-rules.json` contains two added **Response Header Transform Rules** for HTTPS on exactly `tournstack.com` and `www.tournstack.com`; no demo, indexer or workers.dev host is included. The owner applied those rules manually; JSON edits alone do not update them. Preserve the four existing response-header rules and their order during any authorised maintenance change; never replace the whole zone ruleset blindly.
 
-The baseline rule proposes:
+The deployed baseline rule enforces:
 
 - Enforced CSP blocking object embeds, foreign base URLs, embedding this website in frames, and form destinations outside this website and Google Apps Script transport.
 - `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff` and `Referrer-Policy: strict-origin-when-cross-origin`.
 - A Permissions Policy disabling camera, microphone, geolocation, USB and payments. Clipboard access is not disabled because Niko has copy controls.
 - Initial HSTS `max-age=86400`, deliberately without `includeSubDomains` or `preload`; the other subdomains were not reviewed for those commitments. A later extension needs its own review.
 
-The second rule sets **Content-Security-Policy-Report-Only**, with reviewed first-party/provider origins and SHA-256 hashes for the existing inline executable bootstrap. It restricts script sources without `unsafe-inline`/`unsafe-eval`, allows existing styles, Google nested receipt frames, Turnstile and the future cross-origin Niko iframe. It has no reporting endpoint and adds no reporting data collection. Browsers can show violations locally. This strict policy is an observation candidate, not an enforced protection and not proof that every current/future vendor behavior is compatible. The separate enforced baseline remains active if these prepared rules are later applied.
+The second rule sets **Content-Security-Policy-Report-Only**, with reviewed first-party/provider origins and SHA-256 hashes for the existing inline executable bootstrap. It restricts script sources without `unsafe-inline`/`unsafe-eval`, allows existing styles, Google nested receipt frames, Turnstile and the live cross-origin Niko iframe. It has no reporting endpoint and adds no reporting data collection. Browsers can show violations locally. This strict policy is an observation candidate, not an enforced protection and not proof that every current/future vendor behavior is compatible. The separate baseline is enforced alongside this report-only policy.
 
 Run `node integrations/cloudflare-cache/security-policy.cjs --check` before release. If reviewed inline executable code changes, inspect the change, run `--write` to regenerate local hashes/rules, and review the diff. JSON-LD is not executable and does not create a script permission. The generator preserves unrelated transform rules and makes no API calls. Avoid HTML/JavaScript rewriting or minification at the edge: CSP hashes describe the reviewed executable bytes after browser newline normalization.
 
-**Strict enforcement gate:** after separately authorised header deployment, inspect real desktop/mobile browser violations with the actual hosted CookieYes (including regional endpoints), Plausible, granted/withdrawn Meta and LinkedIn scripts, real Turnstile, nested Apps Script contact/newsletter receipts and Niko iframe/download/copy flows. Any form submission or event delivery needs its own existing task authority. Review each required destination; never silence failures using broad `https:`/`*`/`unsafe-eval` allowances. Only after that evidence and owner release approval should the strict candidate replace the baseline `content-security-policy`; remove the redundant observation header at that point. Mocked-provider tests do not satisfy this gate.
+**Strict enforcement gate:** with the baseline and report-only headers deployed, inspect real desktop/mobile browser violations with the actual hosted CookieYes (including regional endpoints), Plausible, granted/withdrawn Meta and LinkedIn scripts, real Turnstile, nested Apps Script contact/newsletter receipts and Niko iframe/download/copy flows. Any form submission or event delivery needs its own existing task authority. Review each required destination; never silence failures using broad `https:`/`*`/`unsafe-eval` allowances. Only after that evidence and owner release approval should the strict candidate replace the baseline `content-security-policy`; remove the redundant observation header at that point. Mocked-provider tests do not satisfy this gate.
 
 For rollback, disable/remove only the added security refs or restore their previously recorded values, preserving cache rules. HSTS persists in a visitor's browser for its advertised lifetime; removing the header alone does not immediately clear it. A deliberate `max-age=0` response over HTTPS can retire it. Do not add subdomain/preload flags as a shortcut.
 
-### Local verification and remaining boundary
+### Verification commands and historical preparation evidence
 
 ```sh
 node scripts/version-assets.cjs --check
@@ -61,7 +99,7 @@ node scripts/public-artifact.cjs <new-private-output-directory>
 node integrations/cloudflare-cache/security-browser.cjs
 ```
 
-The private test stage included the existing pending website/chatbot assets without changing the canonical Git index. Verification produced 97 public files, 39 current asset entries, eight passing deterministic checks and five Chrome scenarios at 1440/390 pixels. All browser HTTP(S) requests were intercepted: mocked consented providers, Turnstile, contact/newsletter responses through a nested Google frame, future Niko frame, and blocked hostile framing/offsite forms/unapproved inline script. No real forms, emails, advertising events or chatbot model calls were sent. These checks verify the policy mechanisms and intended integration shapes; real vendor and account configuration verification remains a separate release gate.
+The initial private preparation stage included the then-pending website/chatbot assets without changing the canonical Git index. That historical verification produced 97 public files, 39 current asset entries, eight passing deterministic checks and five Chrome scenarios at 1440/390 pixels. All browser HTTP(S) requests were intercepted: mocked consented providers, Turnstile, contact/newsletter responses through a nested Google frame, future Niko frame, and blocked hostile framing/offsite forms/unapproved inline script. No real forms, emails, advertising events or chatbot model calls were sent by those mocked preparation tests. They verify policy mechanisms and intended integration shapes; the owner-led contact and Niko checks recorded above are separate evidence. Complete real-provider compatibility remains a release gate.
 
 Form receipt handlers already require a Google HTTPS origin, matching unpredictable pending UUID, expected receipt type and boolean result. They remain unchanged: Apps Script returns receipts from a nested Google frame, so binding `event.source` to the direct transport iframe would reject valid receipts. The nested-frame fixture reproduces that distinction. A stronger source protocol would require paired transport/backend design and real Apps Script browser verification; no unsupported equality check was added.
 
@@ -117,7 +155,7 @@ node scripts/version-assets.cjs --check
 
 Commit canonical edits, generated HTML, `assets/asset-manifest.json` and new `assets/versioned/` files together. Push main, wait for **Validate and deploy website** to succeed, then inspect served URLs/headers. Settings > Pages > Source must remain **GitHub Actions**, as verified by API after the owner's manual change. The initial settings API write returned 404; it did not change source mode.
 
-The generator writes SHA-256-derived URLs and a manifest containing source, source hash, served-byte hash and size. Fonts/images are versioned before CSS; CSS dependency URLs are rewritten before CSS hashing. Text assets use canonical LF; `.gitattributes` preserves generated bytes on Windows/Linux. Tests cover stale references, dependency invalidation, unchanged URL stability, historical retention and tamper detection. The prepared workflow validates before publishing and uses the explicit public artifact boundary documented above; the previously deployed workflow excluded only desktop.ini/.github.
+The generator writes SHA-256-derived URLs and a manifest containing source, source hash, served-byte hash and size. Fonts/images are versioned before CSS; CSS dependency URLs are rewritten before CSS hashing. Text assets use canonical LF; `.gitattributes` preserves generated bytes on Windows/Linux. Tests cover stale references, dependency invalidation, unchanged URL stability, historical retention and tamper detection. The deployed workflow validates before publishing and uses the explicit public artifact boundary documented above; the pre-security workflow excluded only desktop.ini/.github. The original security release prepared 99 public files; the pinned artifact upload excluded the empty `.nojekyll` marker and uploaded 98, which was verified as expected dotfile filtering. The latest `5716f3a` source check selects 100 public files after retaining the additional historical loader asset. Source selection counts and uploaded artifact member counts are distinct; do not infer one from the other.
 
 Never edit generated files or overwrite different bytes at an existing hashed URL. Retain older hashed assets because cached HTML/shared previews can still reference them. Corrected bytes require a new hash and updated references. Routine new hashed URLs do not require an edge purge. Original URLs remain available with short freshness, including the stable author portrait and PNG referenced by previously sent emails. Initial generation created 32 assets used by eight pages.
 
@@ -163,11 +201,43 @@ Set static `Cache-Control` = `public, max-age=31536000, immutable`.
 (http.host in {"tournstack.com" "www.tournstack.com"} and starts_with(http.request.uri.path, "/assets/versioned/") and http.response.code ne 200)
 ```
 
-Set static `Cache-Control` = `no-store`; placed last.
+Set static `Cache-Control` = `no-store`; second in response-header order, before the two security rules.
 
 The second transform matches every non-200 response, including 206/304; the edge >=300 condition also includes 304. Follow-up on 2026-10-15 at 10:53:36Z tested a real versioned image: conditional ETag GET returned **304, no-store, HIT**, and `Range: bytes=0-99` returned **206, 100 bytes, no-store, HIT**. These conservative headers can reduce browser reuse for conditional/partial responses. No rule was changed in the messaging release; revisit status conditions only with a separate edge/browser regression check. Do not describe this rule as only 4xx/5xx handling.
 
 Edge caching and browser freshness are separate because response-header transforms run after edge-cache decisions. An unconditional one-year Browser TTL override could retain a missing asset; status-scoped headers avoid that.
+
+**3. TournStack - browser security**
+
+```text
+(http.host in {"tournstack.com" "www.tournstack.com"} and ssl)
+```
+
+The rule sets the six baseline headers documented above. Verified values include `strict-transport-security: max-age=86400`, `x-content-type-options: nosniff`, `x-frame-options: DENY`, `referrer-policy: strict-origin-when-cross-origin`, and `permissions-policy: camera=(), microphone=(), geolocation=(), usb=(), payment=()`. The enforced CSP is:
+
+```text
+base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://script.google.com https://script.googleusercontent.com https://*.googleusercontent.com
+```
+
+`frame-ancestors` and `X-Frame-Options` stop other pages embedding this website; they do not stop this website embedding Niko. Niko's separate Worker CSP permits its intended website parents. This rule applies only to HTTPS on apex/www. It does not change other hosts, their TLS policies, or their headers. HSTS remains one day with no subdomain or preload commitment.
+
+**4. TournStack - CSP monitoring**
+
+```text
+(http.host in {"tournstack.com" "www.tournstack.com"} and ssl and (http.request.uri.path eq "/" or ends_with(http.request.uri.path, ".html")))
+```
+
+Set static `content-security-policy-report-only` to the reviewed `response-header-rules.json` candidate, keeping this rule last. It covers `/` and `.html` paths on apex/www HTTPS; asset responses should not acquire this observation header. It contains no `report-uri`, `report-to` or remote collector. Local browser violations are diagnostic only. The owner's dashboard showed all four response-header rules active; template refs remain local identifiers, not verified remote rule IDs.
+
+After an authorised rule edit, use read-only header checks, for example:
+
+```powershell
+curl.exe -sS -D - -o NUL https://tournstack.com/
+curl.exe -sS -D - -o NUL https://tournstack.com/privacy.html
+curl.exe -sS -I https://www.tournstack.com/
+```
+
+Compare the six baseline values and the report-only policy with the reviewed JSON. Check for duplicate/conflicting header fields, canonical www redirect, and preserved immutable/no-store behavior on one existing and one missing versioned asset. Record the time and URLs. Do not submit forms, enable strict CSP, change credentials or broaden the match expression merely to perform these checks.
 
 ### Keep public contact addresses usable without JavaScript
 

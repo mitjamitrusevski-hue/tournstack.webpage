@@ -103,10 +103,10 @@
     },
     {
       "source": "assets/css/styles.css",
-      "url": "/assets/versioned/css/styles.43f2b230e32d8dca.css",
-      "sha256": "43f2b230e32d8dca6ab0a2ce86a9e0462805b6d5b13832800be62f69b12bbd46",
+      "url": "/assets/versioned/css/styles.8660086efff8e22d.css",
+      "sha256": "8660086efff8e22d8e383ea8004d1b71557d8c08ced6b841830f306cb5f6da58",
       "source_sha256": "2b18e54b07e6a0e5ab8bf82454eed0bcb877ee0d356a05fb8c29f76ec9c65916",
-      "size_bytes": 41383
+      "size_bytes": 41845
     },
     {
       "source": "assets/fonts/Montserrat-Latin.woff",
@@ -214,6 +214,27 @@
       "size_bytes": 79582
     },
     {
+      "source": "assets/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_420x560_RGB.avif",
+      "url": "/assets/versioned/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_420x560_RGB.01787a2d256787ea.avif",
+      "sha256": "01787a2d256787ea554ceb95e3d322aec8928eb76cd772fb69f5da69a2ed9cc8",
+      "source_sha256": "01787a2d256787ea554ceb95e3d322aec8928eb76cd772fb69f5da69a2ed9cc8",
+      "size_bytes": 13230
+    },
+    {
+      "source": "assets/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_600x800_RGB.avif",
+      "url": "/assets/versioned/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_600x800_RGB.7abfd699725abee6.avif",
+      "sha256": "7abfd699725abee60fbd0369ddcf176554d311dbe0cc185ec171caa772c10f54",
+      "source_sha256": "7abfd699725abee60fbd0369ddcf176554d311dbe0cc185ec171caa772c10f54",
+      "size_bytes": 21669
+    },
+    {
+      "source": "assets/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.avif",
+      "url": "/assets/versioned/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.a24f174efa8bd6fc.avif",
+      "sha256": "a24f174efa8bd6fccc60a8b64b24db5f5899855273d20ad7d6a74337ac9a5f46",
+      "source_sha256": "a24f174efa8bd6fccc60a8b64b24db5f5899855273d20ad7d6a74337ac9a5f46",
+      "size_bytes": 40269
+    },
+    {
       "source": "assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp",
       "url": "/assets/versioned/images/TS_Hero_Tennis_Lifestyle_RGB.580dd2e17b6837e4.webp",
       "sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",
@@ -236,10 +257,10 @@
     },
     {
       "source": "assets/js/chatbot.js",
-      "url": "/assets/versioned/js/chatbot.9da85bd3a9436b54.js",
-      "sha256": "9da85bd3a9436b5434bc9c9b93b195f4bf68506dc9384e416d4e252246ce9e8d",
-      "source_sha256": "9da85bd3a9436b5434bc9c9b93b195f4bf68506dc9384e416d4e252246ce9e8d",
-      "size_bytes": 3699
+      "url": "/assets/versioned/js/chatbot.ce3cf3ae01a8d0f9.js",
+      "sha256": "ce3cf3ae01a8d0f9ab255fdd6134595359134c43184de85bf058a2191f3d43a7",
+      "source_sha256": "ce3cf3ae01a8d0f9ab255fdd6134595359134c43184de85bf058a2191f3d43a7",
+      "size_bytes": 4142
     },
     {
       "source": "assets/js/contact-config.js",

@@ -7,8 +7,14 @@
  const PANEL_KEY='tournstack-niko-panel-v1';
  let open=false;
  try{open=sessionStorage.getItem(PANEL_KEY)==='true';}catch{}
- const frame=document.createElement('iframe');frame.id='niko-chat-frame';frame.title='Coach Niko, TournStack AI assistant';frame.src=origin+'/';frame.referrerPolicy='strict-origin';frame.setAttribute('allow','clipboard-write');frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads');frame.setAttribute('aria-label','Coach Niko chat');
+ const frame=document.createElement('iframe');frame.id='niko-chat-frame';frame.title='Coach Niko, TournStack AI assistant';frame.referrerPolicy='strict-origin';frame.setAttribute('allow','clipboard-write');frame.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads');frame.setAttribute('aria-label','Coach Niko chat');
+ // Returning open chats restore immediately. A closed widget must not compete
+ // with the first page's hero/CSS/fonts; load it after the page, with a bounded fallback.
+ let started=false,loadTimer;
+ const loadFrame=()=>{if(started)return;started=true;clearTimeout(loadTimer);frame.src=origin+'/';};
+ if(open||document.readyState==='complete')loadFrame();
  frame.classList.toggle('is-open',open);position();document.body.append(frame);
+ if(!started){window.addEventListener('load',loadFrame,{once:true});loadTimer=setTimeout(loadFrame,3000);}
  const post=type=>frame.contentWindow?.postMessage({channel:'tournstack-niko-v1',type},origin);
  const names={open:'Chatbot Opened',start:'Chatbot Conversation Started',failure:'Chatbot Answer Failed',contact:'Chatbot Contact Clicked',link:'Chatbot Link Clicked',rating:'Chatbot Rating Submitted',feedback:'Chatbot Feedback Submitted',download:'Chatbot Downloaded'};
  window.addEventListener('message',event=>{

@@ -13,8 +13,9 @@ const mapping=new Map(),outputs=new Map(),assets=[];
 function compile(file){
  const source=path.relative(root,file).split(path.sep).join('/'),ext=path.extname(file);
  const original=canonical(fs.readFileSync(file),ext);let bytes=original;
+ if(source==='assets/css/styles.css')bytes=Buffer.concat([original,Buffer.from('\n/* Bundled Coach Niko frame shell. */\n'),canonical(fs.readFileSync(path.join(root,'assets/css/chatbot.css')),'.css')]);
  if(ext==='.css'){
-  let css=original.toString('utf8');
+  let css=bytes.toString('utf8');
   for(const [dependency,url] of mapping){
    const from=path.posix.relative(path.posix.dirname(source),dependency);
    const to=path.posix.relative('assets/versioned/css',url.slice(1));
