@@ -228,6 +228,13 @@
       "size_bytes": 21669
     },
     {
+      "source": "assets/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_750x1000_RGB.avif",
+      "url": "/assets/versioned/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_750x1000_RGB.ad61f7b2d3eabfac.avif",
+      "sha256": "ad61f7b2d3eabfac8bb437504a8fb21072e8bc66aa74af2d4081a11dd3cf4e4c",
+      "source_sha256": "ad61f7b2d3eabfac8bb437504a8fb21072e8bc66aa74af2d4081a11dd3cf4e4c",
+      "size_bytes": 29551
+    },
+    {
       "source": "assets/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.avif",
       "url": "/assets/versioned/images/2026-10-21_TS_Hero_Tennis-Lifestyle_Mobile_900x1200_RGB.a24f174efa8bd6fc.avif",
       "sha256": "a24f174efa8bd6fccc60a8b64b24db5f5899855273d20ad7d6a74337ac9a5f46",

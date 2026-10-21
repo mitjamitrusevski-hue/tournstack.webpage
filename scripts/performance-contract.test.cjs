@@ -14,7 +14,7 @@ test('public chat pages use one blocking CSS bundle and bounded required connect
 });
 test('mobile hero retains responsive density, format fallback, eager discovery and reviewed byte budgets',()=>{
  const html=read('index.html'),source=/<source type="image\/avif"[^>]+>/.exec(html)?.[0];assert(source);assert.match(source,/sizes="100vw"/);assert.match(source,/media="\(max-width: 760px\)"/);
- const candidates=[...source.matchAll(/(assets\/versioned\/images\/[^\s,"]+\.avif) (\d+)w/g)];assert.deepEqual(candidates.map(x=>Number(x[2])),[420,600,900]);
- const limits={420:14000,600:23000,900:42000};for(const [,url,width]of candidates)assert(fs.statSync(path.join(root,url)).size<=limits[width],url+' exceeds reviewed delivery budget; review image quality and density before updating this bound');
+ const candidates=[...source.matchAll(/(assets\/versioned\/images\/[^\s,"]+\.avif) (\d+)w/g)];assert.deepEqual(candidates.map(x=>Number(x[2])),[420,600,750,900]);
+ const limits={420:14000,600:23000,750:31000,900:42000};for(const [,url,width]of candidates)assert(fs.statSync(path.join(root,url)).size<=limits[width],url+' exceeds reviewed delivery budget; review image quality and density before updating this bound');
  assert.match(html,/<source type="image\/webp" media="\(max-width: 760px\)"/);const hero=/<img src="[^\"]*TS_Hero_Tennis_Lifestyle_RGB[^>]+>/.exec(html)?.[0];assert(hero);assert.match(hero,/fetchpriority="high"/);assert(!/loading="lazy"/.test(hero));
 });

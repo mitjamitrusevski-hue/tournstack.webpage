@@ -4,7 +4,7 @@ doc_type: Website delivery and browser security runbook
 date: "2026-10-15"
 date_basis: Preserved NamingAudit identity creation-date baseline
 updated: "2026-10-21"
-version: "1.3.0"
+version: "1.3.1"
 version_scope: Deployed security and maintenance documentation; not a new software release
 status: Cache and baseline security deployed; strict CSP remains report-only
 language: en
@@ -20,11 +20,19 @@ The owner supplied a new mobile Lighthouse report after Niko launch. Its selecte
 
 ### Maintained delivery contract
 
-- New 420 x 560, 600 x 800 and 900 x 1200 AVIF derivatives are 13,230, 21,669 and 40,269 bytes. Their source is the approved 900-pixel WebP, resized with Lanczos and encoded with Pillow AVIF quality 35, speed 6. Original artwork, WebP fallback, desktop candidates, captions, dimensions and high priority are preserved. All prior source/hashed image files remain untouched. Lossy derivatives are visually reviewed delivery copies, not pixel-identical masters.
+- New 420 x 560, 600 x 800, 750 x 1000 and 900 x 1200 AVIF derivatives are 13,230, 21,669, 29,551 and 40,269 bytes. Their source is the approved 900-pixel WebP, resized with Lanczos and encoded with Pillow AVIF quality 35, speed 6. Original artwork, WebP fallback, desktop candidates, captions, dimensions and high priority are preserved. All prior source/hashed image files remain untouched. Lossy derivatives are visually reviewed delivery copies, not pixel-identical masters.
 - The main compiled CSS includes the canonical `assets/css/chatbot.css` bytes. Edit that small file for parent-frame styling, then run the existing generator. Its change must invalidate the main hash, while older URLs remain available. Do not restore a separate blocking chatbot stylesheet link. Main layout CSS is still needed for first paint.
 - Preconnect hints target `https://cdn-cookieyes.com` and `https://tournstack-public-chat.tournstack.workers.dev` in the six chat-enabled pages. These are measured loading dependencies, not permission to preconnect advertising hosts before a choice. Avoid duplicating hints or adding every third party.
 - Previously open Niko panels load immediately and retain their initial full size. Closed panels load after the main window load, with a 3,000ms fallback for slow or stalled page resources. Keep the parent's panel preference and the child's capability/transcript boundaries intact. Do not trade away same-tab continuity to improve a fresh-visit test.
 - Keep the supported CookieYes head ordering, the enforced baseline and report-only CSP distinction, and the existing server-side validation. No async/defer CMP experiment or header relaxation is part of this repair. The remaining main-CSS/CMP render-blocking diagnostics are documented constraints, not failed promises to remove every blocking request.
+
+### Actual PageSpeed follow-up
+
+The owner's [21 October Google report](https://pagespeed.web.dev/analysis/https-tournstack-com/6syxfzg4rc?hl=en&form_factor=mobile), fetched at 09:20:56.825 UTC, uses Lighthouse 13.5.0, 412 x 823/DPR 1.75 and CPU slowdown 1.2. Its mobile result is 84/100/100/100 with Agentic Browsing 2/2, FCP 1.955s, LCP 3.988s, TBT 0 and CLS 0; the desktop result is 99/100/100/100. The earlier local 97 used Lighthouse 12.8.2 and CPU slowdown 4: it is not a matching Google test. Do not substitute that score for the supplied PSI result.
+
+The new 750px candidate covers the 721 physical pixels needed at 412 x DPR 1.75, removing unnecessary selection of 900px while preserving higher-density choices. A size estimate can remain because the insight compares CSS dimensions. Check the actual selected URL, transfer and visual quality at DPR 1, 1.5, 1.75, 2 and 2.625, not just the presence of srcset.
+
+Google's observed LCP breakdown identifies the hero and reports about 1,791ms element render delay after a 354ms download; those observed phases are not the simulated 3.988s score timeline. Image savings alone cannot account for the whole delay. The render-blocking insight estimates FCP savings, with zero modeled LCP saving in this report. The Worker's suggested 329ms preconnect saving also has zero overall modeled LCP saving. Lighthouse 13.5's NetworkDependencyTree implementation emits its generic crossorigin warning whenever a hinted origin remains a slow preconnect candidate; this is not a direct attribute-mismatch measurement. Desktop did not flag this same hint. Do not blindly add crossorigin, duplicate hints or relax iframe privacy/security based on the warning. Keep it as an unresolved connection-reuse diagnostic unless a representative trace demonstrates a working improvement. CookieYes ordering and the main stylesheet remain supported first-render constraints.
 
 ### Reusable verification
 
@@ -40,7 +48,7 @@ node integrations/cloudflare-cache/security-policy.cjs --check
 node integrations/cloudflare-cache/security-browser.cjs
 ```
 
-The performance contract is included in the Pages build. It checks the actual generated bundle and HTML, the two required hints, unchanged CMP ordering, AVIF widths/fallback/priority and initial byte budgets of 14,000 / 23,000 / 42,000 bytes. Reject accidental regressions; a justified new design can update the limits only with reviewed image-quality and representative density evidence. Keep the generator's historical-asset integrity check. The security browser harness expects the current short `Copied` status and separately verifies the clipboard value and manual failure fallback.
+The performance contract is included in the Pages build. It checks the actual generated bundle and HTML, the two required hints, unchanged CMP ordering, AVIF widths/fallback/priority and initial byte budgets of 14,000 / 23,000 / 31,000 / 42,000 bytes. Reject accidental regressions; a justified new design can update the limits only with reviewed image-quality and representative density evidence. Keep the generator's historical-asset integrity check. The security browser harness expects the current short `Copied` status and separately verifies the clipboard value and manual failure fallback.
 
 For a loader or session-related change, run the owning Niko `navigation-browser.mjs` with `TS_WEBSITE_ROOT` pointing at the intended website source; unset it to use the canonical source. Its actual isolated iframe checks cover initial size, delayed restore, open/closed continuity, drafts, feedback, download, reset and erasure. The 21 October correction additionally rejects the browser's blocked-autofocus error and checks Cancel receives focus when the deletion dialog is deliberately opened. The Niko adapter must not add HTML `autofocus` while constructing a hidden dialog: retain explicit focus after user activation instead. Production owns that adapter and its separate Worker deployment.
 

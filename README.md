@@ -4,7 +4,7 @@ doc_type: Website maintenance and release guide
 date: "2026-10-03"
 date_basis: Preserved NamingAudit identity baseline
 updated: "2026-10-21"
-version: "1.0.2"
+version: "1.0.3"
 version_scope: Operational documentation revision; not a software release
 status: Maintained website guide; public Niko live and navigation accepted
 language: en
@@ -18,7 +18,9 @@ owner_role: Website and public assistant maintainer
 
 The [performance release record](../../Operations/Releases/2026-10-21_TournStack_Website-Performance_Implementation-and-Verification.md) records the reviewed repair and its actual deployment/readback. The [cache and performance runbook](integrations/cloudflare-cache/RUNBOOK.md#performance-maintenance-and-regression-safeguards---2026-10-21) owns the reusable commands and limits.
 
-The mobile hero retains 420/600/900-pixel AVIF candidates, WebP fallback, correct density selection and eager high-priority discovery. The 21 October AVIF derivatives preserve the approved composition at about half the previous transfer size; previous image URLs remain available. Do not force a high-density browser to use a low-resolution source solely to silence a size estimate.
+The mobile hero retains 420/600/750/900-pixel AVIF candidates, WebP fallback, correct density selection and eager high-priority discovery. The 21 October AVIF derivatives preserve the approved composition at about half the previous transfer size; previous image URLs remain available. Do not force a high-density browser to use a low-resolution source solely to silence a size estimate.
+
+The owner's actual PageSpeed report used Lighthouse 13.5.0 and returned 84/100/100/100 (Agentic Browsing 2/2), not the earlier local Lighthouse 12.8.2 score of 97. Its 412px/DPR 1.75 viewport exposed the jump from 600 to 900 pixels. The added 750 x 1000 candidate is 29,551 bytes rather than 40,269 (26.6% smaller), with the same quality-35 encoding and unchanged 900px option for denser displays. Include DPR 1.75 in future selection checks and retain the actual report/version; image savings alone do not establish a recovered score.
 
 The immutable asset generator bundles `assets/css/chatbot.css` into the compiled main stylesheet. Maintain the small frame stylesheet as its source; do not reintroduce a separate blocking link in the six chat-enabled pages. Its bytes participate in the main stylesheet hash, and the generator regression tests verify dependency invalidation. Both CSS sources remain editable, and historical hashed files stay immutable.
 
