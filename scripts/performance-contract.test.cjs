@@ -5,8 +5,10 @@ const pages=['index.html','vision.html','faq.html','contact.html','privacy.html'
 test('public chat pages use one blocking CSS bundle and bounded required connection hints',()=>{
  for(const name of pages){const html=read(name),links=[...html.matchAll(/<link\b[^>]*>/g)].map(m=>m[0]);
  const styles=links.filter(s=>/rel="stylesheet"/.test(s));assert.equal(styles.length,1,name);assert.match(styles[0],/assets\/versioned\/css\/styles\.[a-f0-9]{16}\.css/);
- const hints=links.filter(s=>/rel="preconnect"/.test(s));assert.equal(hints.length,2,name);
- for(const host of ['https://cdn-cookieyes.com','https://tournstack-public-chat.tournstack.workers.dev'])assert(hints.some(s=>s.includes('href="'+host+'"')),name+' required hint');
+ const hints=links.filter(s=>/rel="preconnect"/.test(s));assert.equal(hints.length,1,name);
+ for(const host of ['https://cdn-cookieyes.com'])assert(hints.some(s=>s.includes('href="'+host+'"')),name+' required hint');
+ assert(!hints.some(s=>s.includes('workers.dev')),'No speculative chat connection on a fresh visit');
+ assert.match(html,/<script[^>]+data-niko-launcher="assets\/versioned\/brand\/TS_Niko_Launcher_Shield_RGB\.[a-f0-9]{16}\.svg"/);
  const cmp=/<script\b[^>]*id="cookieyes"[^>]*>/i.exec(html)?.[0];assert(cmp,name+' hosted CMP');assert(!/\s(?:async|defer)(?:\s|>|=)/.test(cmp),'CMP ordering must not be changed for a score');
  }
  const manifest=JSON.parse(read('assets/asset-manifest.json')),bundle=manifest.assets.find(a=>a.source==='assets/css/styles.css');assert(bundle);

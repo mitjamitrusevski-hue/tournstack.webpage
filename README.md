@@ -4,7 +4,7 @@ doc_type: Website maintenance and release guide
 date: "2026-10-03"
 date_basis: Preserved NamingAudit identity baseline
 updated: "2026-10-21"
-version: "1.0.3"
+version: "1.0.4"
 version_scope: Operational documentation revision; not a software release
 status: Maintained website guide; public Niko live and navigation accepted
 language: en
@@ -24,9 +24,12 @@ The owner's actual PageSpeed report used Lighthouse 13.5.0 and returned 84/100/1
 
 The immutable asset generator bundles `assets/css/chatbot.css` into the compiled main stylesheet. Maintain the small frame stylesheet as its source; do not reintroduce a separate blocking link in the six chat-enabled pages. Its bytes participate in the main stylesheet hash, and the generator regression tests verify dependency invalidation. Both CSS sources remain editable, and historical hashed files stay immutable.
 
-The six pages preconnect only to the required CookieYes CDN and Niko origin. A previously open panel loads immediately with its remembered size. A closed widget begins loading after the main page load, or after a three-second fallback if the page remains loading. This reduces competition with the hero, fonts and layout; it does not change chat consent, authenticated recovery, or deletion. Preserve both branches and the existing navigation regressions. CookieYes remains in its documented synchronous head position; the initial main CSS remains intentionally blocking. Their remaining audit entries are not a promise that every warning can safely be eliminated.
+The six chat pages now show a first-party button using the exact approved Niko shield SVG. A fresh visit creates no Worker iframe or Worker connection hint. Hover or keyboard focus may preconnect; clicking mounts the isolated client immediately and opens it through a source/origin-checked message. The parent button announces loading and offers retry after a 15-second failure. A remembered open panel bypasses all delays and mounts at its final size before child loading, preserving authenticated recovery.
 
-The Pages build checks `scripts/performance-contract.test.cjs` as well as existing immutable-asset, consent/receiver and publication checks. The contract checks one blocking CSS bundle, the two connection hints, preserved CMP ordering, mobile source/fallback/high-priority markup and reviewed AVIF byte budgets. A new design can revise budgets deliberately after visual and viewport/density review; passing a file-size check does not establish an unchanged Lighthouse score.
+Optional automatic preloading requires both 30,000ms cumulative visible, focused tab time and navigation to a different website page. It stays closed and does not choose Start chatting or create a session. Reloads do not count as a page change. Hidden/unfocused time is excluded; back-forward restoration merges newer progress. Only a capped duration, a page-change boolean and the most recent approved pathname are retained in the new functional session-storage record. No queries, transcripts, tokens or timing analytics are added. With blocked storage, the button still works; cross-page timing/restoration cannot be promised.
+
+The immutable asset generator bundles parent-frame and facade CSS into the main stylesheet. CI checks one blocking stylesheet, only the initial CookieYes preconnect, the versioned facade artwork reference, preserved CMP ordering and reviewed image budgets. Loader tests cover click/handshake, time/page gates, visibility/focus, failure/retry, message filtering and immediate restore. The Niko navigation harness checks the real isolated client with synthetic data. CookieYes ordering, initial CSS, security headers, sandbox, clipboard permission and consent are preserved. A passed implementation test does not guarantee a particular Google PageSpeed score.
+
 
 ## Current operational checkpoint - 2026-10-20
 

@@ -1,0 +1,14 @@
+#niko-chat-frame{position:fixed;right:16px;bottom:16px;width:88px;height:88px;border:0;background:transparent;z-index:900;transition:bottom .3s ease;overflow:hidden;color-scheme:normal}
+#niko-chat-frame.is-open{width:min(420px,calc(100vw - 24px));border-radius:20px;box-shadow:0 16px 60px #0004}
+@media(max-width:480px){#niko-chat-frame{right:12px}}
+@media(prefers-reduced-motion:reduce){#niko-chat-frame{transition:none}}
+
+/* Lightweight first-party launcher; the isolated client loads on demand. */
+#niko-chat-launcher{position:fixed;right:20px;bottom:20px;width:72px;height:76px;padding:0;border:0;border-radius:0;background:transparent;z-index:901;cursor:pointer;filter:drop-shadow(0 5px 10px #0F172A30);transition:bottom .3s ease,transform .18s ease;color-scheme:only light}
+#niko-chat-launcher img{display:block;width:72px;height:76px}
+#niko-chat-launcher:hover{transform:translateY(-2px)}
+#niko-chat-launcher:focus-visible{outline:3px solid #6EA0FF;outline-offset:4px;border-radius:10px}
+#niko-chat-launcher[hidden],#niko-chat-frame[hidden]{display:none}
+#niko-launcher-status:not(:empty){position:absolute;right:0;bottom:calc(100% + 8px);width:210px;padding:10px 12px;border-radius:10px;background:#0F172A;color:#F8FAFC;font:500 12px/1.5 Montserrat,sans-serif;text-align:left}
+@media(max-width:480px){#niko-chat-launcher{right:16px}}
+@media(prefers-reduced-motion:reduce){#niko-chat-launcher{transition:none}#niko-chat-launcher:hover{transform:none}}

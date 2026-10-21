@@ -32,6 +32,13 @@
       "size_bytes": 63307
     },
     {
+      "source": "assets/brand/TS_Niko_Launcher_Shield_RGB.svg",
+      "url": "/assets/versioned/brand/TS_Niko_Launcher_Shield_RGB.17d7e90a844d26e4.svg",
+      "sha256": "17d7e90a844d26e4db8e9fa70c12e3f400fbc0c2605f0fb2344bc49be24f76bd",
+      "source_sha256": "17d7e90a844d26e4db8e9fa70c12e3f400fbc0c2605f0fb2344bc49be24f76bd",
+      "size_bytes": 51469
+    },
+    {
       "source": "assets/brand/TS_Primary_H_FullColor_LightBG_RGB.svg",
       "url": "/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
       "sha256": "fa1887797d2619a4111498bc4a9ad6b91b8b4832549ad96bfa9176be8a722bbc",
@@ -96,17 +103,17 @@
     },
     {
       "source": "assets/css/chatbot.css",
-      "url": "/assets/versioned/css/chatbot.91ce94c9f29ad188.css",
-      "sha256": "91ce94c9f29ad1884714e006f43b311b1a00f511770fa559e6fe077e650369a7",
-      "source_sha256": "91ce94c9f29ad1884714e006f43b311b1a00f511770fa559e6fe077e650369a7",
-      "size_bytes": 423
+      "url": "/assets/versioned/css/chatbot.c30dd2b061e70bc2.css",
+      "sha256": "c30dd2b061e70bc2b67eb39f741077f0fc773dc527b9d411dacb50f4492a3f34",
+      "source_sha256": "c30dd2b061e70bc2b67eb39f741077f0fc773dc527b9d411dacb50f4492a3f34",
+      "size_bytes": 1459
     },
     {
       "source": "assets/css/styles.css",
-      "url": "/assets/versioned/css/styles.8660086efff8e22d.css",
-      "sha256": "8660086efff8e22d8e383ea8004d1b71557d8c08ced6b841830f306cb5f6da58",
+      "url": "/assets/versioned/css/styles.ae021606cbcfb410.css",
+      "sha256": "ae021606cbcfb410c1c0a03ec7d356ad2d07f7f9d4cfa4b13a391a25d77af4db",
       "source_sha256": "2b18e54b07e6a0e5ab8bf82454eed0bcb877ee0d356a05fb8c29f76ec9c65916",
-      "size_bytes": 41845
+      "size_bytes": 42881
     },
     {
       "source": "assets/fonts/Montserrat-Latin.woff",
@@ -264,10 +271,10 @@
     },
     {
       "source": "assets/js/chatbot.js",
-      "url": "/assets/versioned/js/chatbot.ce3cf3ae01a8d0f9.js",
-      "sha256": "ce3cf3ae01a8d0f9ab255fdd6134595359134c43184de85bf058a2191f3d43a7",
-      "source_sha256": "ce3cf3ae01a8d0f9ab255fdd6134595359134c43184de85bf058a2191f3d43a7",
-      "size_bytes": 4142
+      "url": "/assets/versioned/js/chatbot.d199ef54817d4541.js",
+      "sha256": "d199ef54817d454116e19aa6ad50aec04fc46c0e8b68a85971eb7981ce39dc2a",
+      "source_sha256": "d199ef54817d454116e19aa6ad50aec04fc46c0e8b68a85971eb7981ce39dc2a",
+      "size_bytes": 8384
     },
     {
       "source": "assets/js/contact-config.js",

@@ -50,60 +50,85 @@ test('inline hashes normalize browser newlines, detect code changes and ignore J
   assert.notDeepEqual(inlineHashes(dir), before);
 });
 
-// Exercise both launch states using an in-memory copy of the actual loader.
-function loaderFixture({enabled = true, protocol = 'https:', hostname = 'tournstack.com', readyState = 'complete', returningOpen = false, blockedStorage = false} = {}) {
-  const vm = require('node:vm');
-  const source = fs.readFileSync(path.join(root, 'assets/js/chatbot.js'), 'utf8');
-  assert.match(source, /const ENABLED=(?:true|false);/, 'Loader must retain an explicit launch control');
-  const frames = [], listeners = {}, events = [], posts = [], timers = new Map();let timerId=0;
-  const frame = {style: {}, contentWindow: {postMessage: (...args) => posts.push(args)}, attributes: {},
-    setAttribute(name, value) { this.attributes[name] = value; }, classList: {toggle(name, value) { frame[name] = value; }}};
-  const document = {readyState,createElement(tag) { assert.equal(tag, 'iframe'); return frame; }, body: {append(value) { frames.push(value); }},
-    getElementById() { return null; }, addEventListener() {}};
-  const window = {addEventListener(name, fn) { listeners[name] = fn; }, plausible: (...args) => events.push(args)};
-  vm.runInNewContext(source.replace(/const ENABLED=(?:true|false);/, 'const ENABLED=' + enabled + ';'),
-    {document, window, sessionStorage:{getItem(){if(blockedStorage)throw Error('blocked');return String(returningOpen);},setItem(){}},setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);},location: {protocol, hostname, origin: protocol + '//' + hostname, pathname: '/'}, innerHeight: 900});
-  return {frames, frame, listeners, events, posts,timers};
+// Execute the actual parent loader with controlled time and browser state.
+function loaderFixture({enabled=true,protocol='https:',hostname='tournstack.com',readyState='complete',returningOpen=false,blockedStorage=false,progress=null,pathname='/',hidden=false,focused=true}={}) {
+ const vm=require('node:vm'),source=fs.readFileSync(path.join(root,'assets/js/chatbot.js'),'utf8');
+ assert.match(source,/const ENABLED=(?:true|false);/);
+ const nodes=[],frames=[],hints=[],listeners={},documentListeners={},events=[],posts=[],timers=new Map(),storage=new Map();let now=0,timerId=0;
+ if(returningOpen)storage.set('tournstack-niko-panel-v1','true');
+ if(progress)storage.set('tournstack-niko-engagement-v1',JSON.stringify(progress));
+ function element(tag){
+  const e={tagName:tag,style:{},dataset:{},attributes:{},children:[],listeners:{},hidden:false,
+   setAttribute(n,v){this.attributes[n]=v;},removeAttribute(n){delete this.attributes[n];},
+   addEventListener(n,fn){this.listeners[n]=fn;},append(...values){this.children.push(...values);},
+   classList:{toggle(n,v){e[n]=v;}}};
+  if(tag==='iframe')e.contentWindow={postMessage:(...args)=>posts.push(args)};
+  nodes.push(e);return e;
+ }
+ const document={readyState,hidden,hasFocus:()=>focused,currentScript:{dataset:{nikoLauncher:'/assets/test-launcher.svg'}},
+  createElement:element,body:{append(e){if(e.tagName==='iframe')frames.push(e);}},head:{append(e){hints.push(e);}},
+  getElementById(){return null;},addEventListener(n,fn){documentListeners[n]=fn;}};
+ const window={addEventListener(n,fn){listeners[n]=fn;},plausible:(...args)=>events.push(args)};
+ vm.runInNewContext(source.replace(/const ENABLED=(?:true|false);/,'const ENABLED='+enabled+';'),{document,window,sessionStorage:{getItem(k){if(blockedStorage)throw Error('blocked');return storage.get(k)||null;},setItem(k,v){if(blockedStorage)throw Error('blocked');storage.set(k,v);}},performance:{now:()=>now},setTimeout(fn,ms){const id=++timerId;timers.set(id,{fn,at:now+ms,ms});return id;},clearTimeout(id){timers.delete(id);},location:{protocol,hostname,origin:protocol+'//'+hostname,pathname},innerHeight:900});
+ const button=nodes.find(e=>e.id==='niko-chat-launcher');
+ function advance(ms){const end=now+ms;let limit=100;while(limit--){const next=[...timers.entries()].filter(([,t])=>t.at<=end).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;now=next[1].at;timers.delete(next[0]);next[1].fn();}assert(limit>0,'Timer loop');now=end;}
+ return {frames,hints,listeners,documentListeners,events,posts,timers,storage,nodes,button,document,advance,
+  click(){button.listeners.click();},focus(value){focused=value;listeners[value?'focus':'blur']();},visibility(value){document.hidden=value;documentListeners.visibilitychange();},
+  state(open,extra={}){const frame=frames[0];listeners.message({source:frame.contentWindow,origin:'https://tournstack-public-chat.tournstack.workers.dev',data:{channel:'tournstack-niko-v1',type:'state',open},...extra});}};
 }
 
-test('Niko respects the disabled launch control and only embeds on the approved HTTPS website', () => {
-  for (const options of [{enabled: false}, {protocol: 'http:'}, {hostname: 'attacker.example'}]) {
-    assert.equal(loaderFixture(options).frames.length, 0);
-  }
-  assert.equal(loaderFixture({hostname: 'www.tournstack.com'}).frames.length, 1);
+test('Niko respects disabled launch control and approved HTTPS hosts',()=>{
+ for(const options of [{enabled:false},{protocol:'http:'},{hostname:'attacker.example'}])assert.equal(loaderFixture(options).nodes.length,0);
+ assert(loaderFixture({hostname:'www.tournstack.com'}).button);
+});
+test('fresh visits show only the lightweight button, including after load and 30 seconds on one page',()=>{
+ const f=loaderFixture();assert(f.button);assert.equal(f.frames.length,0);assert.equal(f.hints.length,0);
+ f.advance(60000);assert.equal(f.frames.length,0);assert.equal(f.hints.length,0);
+ assert.equal(JSON.parse(f.storage.get('tournstack-niko-engagement-v1')).activeMs,30000);
+});
+test('click mounts one isolated frame and opens it through the authenticated handshake',()=>{
+ const f=loaderFixture();f.click();f.click();assert.equal(f.frames.length,1);const frame=f.frames[0];
+ assert.equal(frame.src,'https://tournstack-public-chat.tournstack.workers.dev/');assert.equal(frame.attributes.allow,'clipboard-write');
+ assert.equal(frame.attributes.sandbox,'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads');assert.equal(frame.referrerPolicy,'strict-origin');
+ assert.equal(frame['is-open'],true);assert.equal(frame.style.height,'680px');
+ f.state(false);assert.equal(f.storage.get('tournstack-niko-panel-v1'),'true');assert.equal(f.posts[0][0].type,'open');
+ f.state(true);assert.equal(f.button.hidden,true);assert.equal(frame.hidden,false);assert.equal(f.timers.size,0);
+});
+test('open conversation restores immediately while the page is loading and never shrinks for a stale closed state',()=>{
+ const f=loaderFixture({returningOpen:true,readyState:'interactive'});assert.equal(f.frames.length,1);const frame=f.frames[0];
+ assert.equal(frame.hidden,false);assert.equal(frame['is-open'],true);assert.equal(frame.style.height,'680px');assert.equal(f.button.hidden,true);
+ f.state(false);assert.equal(frame['is-open'],true);assert.equal(f.storage.get('tournstack-niko-panel-v1'),'true');
+ f.state(true);f.state(false);assert.equal(frame['is-open'],false);assert.equal(frame.style.height,'88px');assert.equal(f.storage.get('tournstack-niko-panel-v1'),'false');
+});
+test('preload requires cumulative foreground time and a different page; reload is insufficient',()=>{
+ const first=loaderFixture();first.advance(12000);first.listeners.pagehide();const saved=JSON.parse(first.storage.get('tournstack-niko-engagement-v1'));
+ assert.equal(saved.activeMs,12000);
+ const reload=loaderFixture({progress:saved});reload.advance(30000);assert.equal(reload.frames.length,0);
+ const second=loaderFixture({pathname:'/faq.html',progress:saved});second.advance(17999);assert.equal(second.frames.length,0);second.advance(1);assert.equal(second.frames.length,1);
+ second.state(false);assert.equal(second.frames[0]['is-open'],false);assert.equal(second.storage.get('tournstack-niko-panel-v1'),'false');
+});
+test('hidden and unfocused time do not advance preload eligibility',()=>{
+ const progress={version:1,activeMs:0,pageChanged:true,lastPath:'/faq.html'},f=loaderFixture({progress,pathname:'/faq.html'});
+ f.advance(5000);f.visibility(true);f.advance(60000);assert.equal(f.frames.length,0);f.visibility(false);f.advance(10000);f.focus(false);f.advance(60000);assert.equal(f.frames.length,0);f.focus(true);f.advance(14999);assert.equal(f.frames.length,0);f.advance(1);assert.equal(f.frames.length,1);
+});
+test('qualified preload waits for main page load; hidden qualified pages and blocked storage remain usable',()=>{
+ const progress={version:1,activeMs:30000,pageChanged:true,lastPath:'/'},f=loaderFixture({progress,readyState:'interactive'});
+ assert.equal(f.frames.length,0);f.listeners.load();assert.equal(f.frames.length,1);
+ const hidden=loaderFixture({progress,hidden:true});assert.equal(hidden.frames.length,0);hidden.visibility(false);assert.equal(hidden.frames.length,1);
+ const blocked=loaderFixture({blockedStorage:true});blocked.advance(60000);assert.equal(blocked.frames.length,0);blocked.click();assert.equal(blocked.frames.length,1);
+});
+test('failed loads retain a keyboard-usable retry button and ignore forged readiness',()=>{
+ const f=loaderFixture();f.click();f.state(true,{origin:'https://attacker.example'});assert.equal(f.button.hidden,false);f.advance(15000);
+ assert.match(f.nodes.find(e=>e.id==='niko-launcher-status').textContent,/try again/);assert.equal(f.frames[0].hidden,true);f.click();f.state(false);f.state(true);assert.equal(f.button.hidden,true);assert.equal(f.frames.length,1);
+});
+test('iframe messages require exact source and origin and forward only categorical analytics',()=>{
+ const f=loaderFixture();f.click();const frame=f.frames[0],data={channel:'tournstack-niko-v1',type:'analytics',kind:'rating',props:{stars:5,privateText:'must not forward'}};
+ f.listeners.message({source:frame.contentWindow,origin:'https://attacker.example',data});f.listeners.message({source:{},origin:'https://tournstack-public-chat.tournstack.workers.dev',data});assert.equal(f.events.length,0);
+ f.listeners.message({source:frame.contentWindow,origin:'https://tournstack-public-chat.tournstack.workers.dev',data});assert.equal(f.events.length,1);assert.equal(f.events[0][0],'Chatbot Rating Submitted');assert.equal(JSON.stringify(f.events[0][1]),JSON.stringify({props:{stars:5},url:'https://tournstack.com/'}));
 });
 
-test('Niko iframe delegates clipboard write only and preserves sandbox isolation', () => {
-  const {frames, frame} = loaderFixture();
-  assert.equal(frames.length, 1);
-  assert.equal(frame.src, 'https://tournstack-public-chat.tournstack.workers.dev/');
-  assert.equal(frame.attributes.allow, 'clipboard-write');
-  assert.equal(frame.attributes.sandbox, 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads');
-  assert.equal(frame.referrerPolicy, 'strict-origin');
-  assert.equal(frame.title, 'Coach Niko, TournStack AI assistant');
-  assert(!frame.attributes.allow.includes('clipboard-read'));
-});
-
-test('iframe messages still require both the exact source window and exact origin', () => {
-  const {frame, listeners, events} = loaderFixture();
-  const data = {channel: 'tournstack-niko-v1', type: 'analytics', kind: 'rating', props: {stars: 5, privateText: 'must not forward'}};
-  listeners.message({source: frame.contentWindow, origin: 'https://attacker.example', data});
-  listeners.message({source: {}, origin: 'https://tournstack-public-chat.tournstack.workers.dev', data});
-  assert.equal(events.length, 0);
-  listeners.message({source: frame.contentWindow, origin: 'https://tournstack-public-chat.tournstack.workers.dev', data});
-  assert.equal(events.length, 1);
-  assert.equal(events[0][0], 'Chatbot Rating Submitted');
-  assert.equal(JSON.stringify(events[0][1]), JSON.stringify({props: {stars: 5}, url: 'https://tournstack.com/'}));
-});
-
-
-test('closed Niko waits for the main page load and cancels its fallback',()=>{
- const f=loaderFixture({readyState:'interactive'});assert.equal(f.frames.length,1);assert.equal(f.frame.src,undefined);assert.equal(f.timers.size,1);
- f.listeners.load();assert.equal(f.frame.src,'https://tournstack-public-chat.tournstack.workers.dev/');assert.equal(f.timers.size,0);
-});
-test('returning open Niko restores immediately even while the main page is loading',()=>{
- const f=loaderFixture({readyState:'interactive',returningOpen:true});assert.equal(f.frame.src,'https://tournstack-public-chat.tournstack.workers.dev/');assert.equal(f.frame['is-open'],true);assert.equal(f.timers.size,0);
-});
-test('closed Niko has a bounded load fallback, including storage-blocked browsers',()=>{
- for(const blockedStorage of [false,true]){const f=loaderFixture({readyState:'interactive',blockedStorage});const timer=[...f.timers.values()][0];assert.equal(timer.ms,3000);timer.fn();assert.equal(f.frame.src,'https://tournstack-public-chat.tournstack.workers.dev/');assert.equal(f.timers.size,0);}
+test('back-forward cached pages merge newer tab progress without counting time while away',()=>{
+ const f=loaderFixture();f.advance(10000);f.listeners.pagehide();f.advance(60000);
+ f.storage.set('tournstack-niko-engagement-v1',JSON.stringify({version:1,activeMs:25000,pageChanged:true,lastPath:'/faq.html'}));f.listeners.pageshow({persisted:true});
+ assert.equal(f.frames.length,0);f.advance(5000);assert.equal(f.frames.length,1);
 });

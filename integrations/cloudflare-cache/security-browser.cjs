@@ -114,6 +114,7 @@ const result = {environment:'Chrome, mocked network and provider scripts; no rea
           const url=new URL(route.request().url());
           if(url.origin==='https://tournstack.com'&&url.pathname==='/')return route.fulfill({contentType:'text/html',headers:browserHeaders(root,strict),body:'<!doctype html><html lang="en"><title>Embedded Niko test</title><body><h1>Embedded Niko test</h1><script src="/assets/js/chatbot.js"></script></body></html>'});
           if(url.origin==='https://tournstack.com'&&url.pathname==='/assets/js/chatbot.js')return route.fulfill({contentType:'application/javascript',body:enabledLoader});
+          if(url.origin==='https://tournstack.com'&&url.pathname==='/assets/brand/TS_Niko_Launcher_Shield_RGB.svg')return route.fulfill({contentType:'image/svg+xml',body:fs.readFileSync(path.join(root,url.pathname.slice(1)))});
           if(url.origin==='https://tournstack-public-chat.tournstack.workers.dev'){
             if(url.pathname==='/')return route.fulfill({contentType:'text/html',headers:{'Content-Security-Policy':"default-src 'none'; script-src 'self'; connect-src 'self'; frame-ancestors https://tournstack.com"},body:'<!doctype html><html lang="en"><title>Niko palette fixture</title><body><p id="answer">Electric Blue #1E6CFF</p><script src="/preview-rich.js"></script><script src="/embed-fixture.js"></script></body></html>'});
             if(url.pathname==='/preview-rich.js')return route.fulfill({contentType:'application/javascript',body:rich});
@@ -122,7 +123,7 @@ const result = {environment:'Chrome, mocked network and provider scripts; no rea
           }
           return route.abort();
         });
-        const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('https://tournstack.com/');
+        const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('https://tournstack.com/');await page.locator('#niko-chat-launcher').click();
         const frame=page.frameLocator('#niko-chat-frame'),button=frame.getByRole('button',{name:'Copy Electric Blue HEX #1E6CFF',exact:true});await button.waitFor();
         assert.equal(await page.locator('#niko-chat-frame').getAttribute('allow'),'clipboard-write');
         const child=page.frames().find(f=>f.url()==='https://tournstack-public-chat.tournstack.workers.dev/');
