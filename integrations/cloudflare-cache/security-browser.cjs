@@ -123,7 +123,7 @@ const result = {environment:'Chrome, mocked network and provider scripts; no rea
           }
           return route.abort();
         });
-        const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('https://tournstack.com/');await page.locator('#niko-chat-launcher').click();
+        const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('https://tournstack.com/');await page.locator('#niko-chat-launcher img').evaluate(async image=>{await image.decode();if(!image.naturalWidth)throw Error('Niko launcher artwork must decode before interaction');});await page.locator('#niko-chat-launcher').click();
         const frame=page.frameLocator('#niko-chat-frame'),button=frame.getByRole('button',{name:'Copy Electric Blue HEX #1E6CFF',exact:true});await button.waitFor();
         assert.equal(await page.locator('#niko-chat-frame').getAttribute('allow'),'clipboard-write');
         const child=page.frames().find(f=>f.url()==='https://tournstack-public-chat.tournstack.workers.dev/');
