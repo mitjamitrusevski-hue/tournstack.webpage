@@ -82,7 +82,9 @@ jobs:
           node scripts/version-assets.cjs --check
       - name: Rerun consent and receiver contracts without live service traffic
         working-directory: candidate
-        run: node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/*.test.cjs integrations/cloudflare-mailbox/test/*.test.mjs
+        run: |
+          node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/*.test.cjs integrations/cloudflare-mailbox/test/*.test.mjs
+          if [ -f integrations/cloudflare-blog-likes/worker.test.mjs ]; then node --test integrations/cloudflare-blog-likes/worker.test.mjs; fi
       - name: Rerun public boundary, release guard and browser policy tests
         working-directory: candidate
         run: |

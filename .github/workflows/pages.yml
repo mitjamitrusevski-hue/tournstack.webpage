@@ -25,6 +25,7 @@ jobs:
       - name: Verify consent and receiver failure gates without network
         run: |
           node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/*.test.cjs integrations/cloudflare-mailbox/test/*.test.mjs
+          if [ -f integrations/cloudflare-blog-likes/worker.test.mjs ]; then node --test integrations/cloudflare-blog-likes/worker.test.mjs; fi
       - name: Verify public artifact boundary and prepared browser headers
         run: |
           node --test scripts/public-artifact.test.cjs scripts/approved-release.test.cjs integrations/cloudflare-cache/security-policy.test.cjs
