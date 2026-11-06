@@ -1,15 +1,14 @@
-name: Validate and deploy website
+name: Validate website
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
   workflow_dispatch:
 permissions:
   contents: read
-  pages: read
 concurrency:
-  group: website-pages
-  cancel-in-progress: false
+  group: website-validation-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,27 +27,7 @@ jobs:
           node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/*.test.cjs integrations/cloudflare-mailbox/test/*.test.mjs
       - name: Verify public artifact boundary and prepared browser headers
         run: |
-          node --test scripts/public-artifact.test.cjs integrations/cloudflare-cache/security-policy.test.cjs
+          node --test scripts/public-artifact.test.cjs scripts/approved-release.test.cjs integrations/cloudflare-cache/security-policy.test.cjs
           node integrations/cloudflare-cache/security-policy.cjs --check
       - name: Prepare allowlisted public artifact
         run: node scripts/public-artifact.cjs _site
-      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5, verified 2026-10-20
-        if: github.event_name != 'pull_request'
-      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4, verified 2026-10-20
-        if: github.event_name != 'pull_request'
-        with:
-          path: _site
-  deploy:
-    if: github.event_name != 'pull_request'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy verified source
-        id: deployment
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4, verified 2026-10-20

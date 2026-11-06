@@ -1,0 +1,108 @@
+name: Approved website release
+run-name: Approved release ${{ inputs.release_id }}
+on:
+  workflow_dispatch:
+    inputs:
+      release_id:
+        description: Immutable owner-approved release ID
+        required: true
+        type: string
+      candidate_sha:
+        description: Exact reviewed candidate commit
+        required: true
+        type: string
+      candidate_ref:
+        description: Immutable release branch containing candidate_sha
+        required: true
+        type: string
+      expected_base_sha:
+        description: Expected currently deployed candidate commit
+        required: true
+        type: string
+      public_digest:
+        description: SHA256 of the reviewed canonical public file manifest
+        required: true
+        type: string
+      approval_digest:
+        description: SHA256 of the private publisher approval record
+        required: true
+        type: string
+      not_after:
+        description: Approved publication deadline with an explicit timezone offset
+        required: true
+        type: string
+permissions:
+  contents: read
+  deployments: read
+  pages: write
+  id-token: write
+concurrency:
+  group: website-pages
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      RELEASE_ID: ${{ inputs.release_id }}
+      RELEASE_CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+      RELEASE_CANDIDATE_REF: ${{ inputs.candidate_ref }}
+      RELEASE_EXPECTED_BASE_SHA: ${{ inputs.expected_base_sha }}
+      RELEASE_PUBLIC_DIGEST: ${{ inputs.public_digest }}
+      RELEASE_APPROVAL_DIGEST: ${{ inputs.approval_digest }}
+      RELEASE_NOT_AFTER: ${{ inputs.not_after }}
+    steps:
+      - name: Open trusted release controls from this workflow revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-10-20
+        with:
+          ref: ${{ github.sha }}
+          path: controls
+          persist-credentials: false
+      - name: Open the reviewed candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-10-20
+        with:
+          ref: ${{ inputs.candidate_ref }}
+          path: candidate
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4, verified 2026-10-20
+        with:
+          node-version: '24'
+      - name: Check exact candidate, approval receipt, deadline and deployed base
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node controls/scripts/approved-release.cjs preflight candidate candidate/_site
+      - name: Rerun immutable assets and performance contracts
+        working-directory: candidate
+        run: |
+          node scripts/test-version-assets.cjs
+          node --test scripts/performance-contract.test.cjs
+          node scripts/version-assets.cjs --check
+      - name: Rerun consent and receiver contracts without live service traffic
+        working-directory: candidate
+        run: node --test integrations/advertising/consent.test.cjs integrations/google-apps-script/*.test.cjs integrations/cloudflare-mailbox/test/*.test.mjs
+      - name: Rerun public boundary, release guard and browser policy tests
+        working-directory: candidate
+        run: |
+          node --test scripts/public-artifact.test.cjs scripts/approved-release.test.cjs integrations/cloudflare-cache/security-policy.test.cjs
+          node integrations/cloudflare-cache/security-policy.cjs --check
+      - name: Build production-only public artifact
+        working-directory: candidate
+        run: node scripts/public-artifact.cjs _site
+      - name: Verify reviewed public digest and write public release identity
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node controls/scripts/approved-release.cjs validate candidate candidate/_site
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5, verified 2026-10-20
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4, verified 2026-10-20
+        with:
+          path: candidate/_site
+      - name: Recheck baseline, deadline and exact artifact before activation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node controls/scripts/approved-release.cjs recheck candidate candidate/_site
+      - name: Deploy the verified artifact
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4, verified 2026-10-20
