@@ -3,8 +3,8 @@ project: TournStack
 doc_type: Website maintenance and release guide
 date: "2026-10-03"
 date_basis: Preserved NamingAudit identity baseline
-updated: "2026-10-21"
-version: "1.0.4"
+updated: "2026-11-06"
+version: "1.0.6"
 version_scope: Operational documentation revision; not a software release
 status: Maintained website guide; public Niko live and navigation accepted
 language: en
@@ -148,7 +148,7 @@ This registry owns the current website's public section destinations and their s
 | `/#tournament-portal` | `index.html`, Tournament Portal list card | See the Tournament Portal | Implemented; local verified |
 | `/#live-screen` | `index.html`, Live Screen list card | See the venue score display | Implemented; local verified |
 | `/#prize-draw` | `index.html`, TournStack Draw list card | Explore the prize draw | Implemented; local verified |
-| `/#branding` | `index.html`, existing section labelled by `approach-title` | See customer branding options | Implemented; local verified |
+| `/#branding` | Homepage branding section removed in the 2026-11-06 release at the owner's request | Use `/faq.html#branding` for the existing branding answer | Retired in this release; FAQ destination retained |
 | `/#sports-organisers` | `index.html`, existing audience section labelled by `audience-title` | See who TournStack is for | Implemented; local verified |
 | `/#lisbon-example` | `index.html`, existing example section labelled by `lisbon-title` | See the Lisbon example | Implemented; local verified |
 | `/#team` | `index.html`, existing team section labelled by `team-title` | Meet the team | Implemented; local verified |

@@ -2,6 +2,8 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),read=n=>fs.readFileSync(path.join(root,n),'utf8');
 const pages=['index.html','vision.html','faq.html','contact.html','privacy.html','author-mitja-mitrusevski.html'];
+const blogManifest=path.join(root,'blog-build-manifest.json');
+if(fs.existsSync(blogManifest)){for(const name of JSON.parse(fs.readFileSync(blogManifest,'utf8')).routes||[])if(!pages.includes(name))pages.push(name);}
 test('public chat pages use one blocking CSS bundle and bounded required connection hints',()=>{
  for(const name of pages){const html=read(name),links=[...html.matchAll(/<link\b[^>]*>/g)].map(m=>m[0]);
  const styles=links.filter(s=>/rel="stylesheet"/.test(s));assert.equal(styles.length,1,name);assert.match(styles[0],/assets\/versioned\/css\/styles\.[a-f0-9]{16}\.css/);

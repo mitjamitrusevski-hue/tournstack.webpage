@@ -1,0 +1,57 @@
+{
+  "name": "tournstack-blog-likes",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-06",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "tournstack.com/api/blog-likes/*",
+      "zone_name": "tournstack.com"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "LIKES_DB",
+      "database_name": "tournstack-blog-likes",
+      "database_id": "8c332061-f90f-4fca-9554-dc0ff1411e6b"
+    }
+  ],
+  "vars": {
+    "PUBLISHED_ARTICLE_IDS": "TS-BLOG-0001"
+  },
+  "ratelimits": [
+    {
+      "name": "READ_LIMIT",
+      "namespace_id": "600601",
+      "simple": {
+        "limit": 120,
+        "period": 60
+      }
+    },
+    {
+      "name": "WRITE_LIMIT",
+      "namespace_id": "600602",
+      "simple": {
+        "limit": 30,
+        "period": 60
+      }
+    },
+    {
+      "name": "TOKEN_LIMIT",
+      "namespace_id": "600603",
+      "simple": {
+        "limit": 10,
+        "period": 60
+      }
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "13 3 * * *"
+    ]
+  },
+  "observability": {
+    "enabled": false
+  },
+  "account_id": "af8a95ec14bf8123e2450815391dacf7"
+}

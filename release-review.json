@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "review_id": "TS-REVIEW-20261106-b31cd84a",
+  "reviewer_role": "website-maintainer",
+  "public_digest": "25b3b4ea71313cd004e1af563993cc734235f6d9a8bca7530d6edc4d857f893f",
+  "checks": {
+    "content_brand": {
+      "result": "PASS",
+      "evidence_sha256": "48058ecd49587247ac1ae2b07977fa9215877f6fc6fb31287ee7118c360f4a56",
+      "reason_code": ""
+    },
+    "source_parity": {
+      "result": "PASS",
+      "evidence_sha256": "24c97ec25340ee9d558a025abacfb0f162b4053cd58d21650718602dad220e5f",
+      "reason_code": ""
+    },
+    "accessibility_visual": {
+      "result": "PASS",
+      "evidence_sha256": "1259ba9fef16534a502d9961fe591949d7a1f3a31cebbc3491b1b5c2b0a8fb57",
+      "reason_code": ""
+    },
+    "external_destinations": {
+      "result": "NOT_APPLICABLE",
+      "evidence_sha256": "8982ddcf3195160289507ba033678c5bb3dd28e31c14ed0a80923bf7b3549cea",
+      "reason_code": "no-external-link-changes"
+    },
+    "live_service_scope": {
+      "result": "PASS",
+      "evidence_sha256": "1ff4d9a12935e587074c288b8505e2bd12a055debc44ebeee265dfcae6143efb",
+      "reason_code": ""
+    },
+    "recovery_package": {
+      "result": "PASS",
+      "evidence_sha256": "432b1937f0e050411317fd4dcc8cbec2d51ab7b9a3e18e0c9f1ffefdb171afd2",
+      "reason_code": ""
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "format_version": 1,
+  "generator": "blog_build.py",
+  "routes": [
+    "blog.html",
+    "why-were-building-tournstack.html"
+  ],
+  "current_article": "why-were-building-tournstack.html",
+  "preview_only": [],
+  "release_selection": {
+    "articles": [
+      {
+        "content_id": "TS-BLOG-0001",
+        "source_sha256": "2f406ef3ec415b090aa82f077816216fa65fd827e352528c8f55a0128b460eb9",
+        "publication_time": "2026-11-06T08:24:35+01:00"
+      }
+    ]
+  },
+  "articles": [
+    {
+      "content_id": "TS-BLOG-0001",
+      "route": "why-were-building-tournstack.html",
+      "source_reference": "Company-Community/why-were-building-tournstack/article.md",
+      "source_sha256": "2f406ef3ec415b090aa82f077816216fa65fd827e352528c8f55a0128b460eb9",
+      "source_version": "0.4.1",
+      "source_status": "selected-for-release",
+      "review_only": false,
+      "publication_time": "2026-11-06T08:24:35+01:00"
+    }
+  ]
+}

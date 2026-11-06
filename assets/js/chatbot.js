@@ -5,7 +5,7 @@
  if(!ENABLED||location.protocol!=='https:'||!['tournstack.com','www.tournstack.com'].includes(location.hostname))return;
  const origin='https://tournstack-public-chat.tournstack.workers.dev';
  const PANEL_KEY='tournstack-niko-panel-v1',ENGAGEMENT_KEY='tournstack-niko-engagement-v1',THRESHOLD=30000;
- const paths=new Set(['/','/index.html','/vision.html','/faq.html','/contact.html','/privacy.html','/author-mitja-mitrusevski.html']);
+ const paths=new Set(["/","/index.html","/vision.html","/faq.html","/contact.html","/privacy.html","/author-mitja-mitrusevski.html","/blog.html","/why-were-building-tournstack.html"]);
  const pathname=location.pathname==='/index.html'?'/':location.pathname;
  let open=false;
  try{open=sessionStorage.getItem(PANEL_KEY)==='true';}catch{}

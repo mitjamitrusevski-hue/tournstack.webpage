@@ -15,8 +15,8 @@ const extensions = Object.freeze({
   css: new Set(['.css']),
   js: new Set(['.js'])
 });
-function allowed(name) {
-  if (ROOT_FILES.includes(name) || name === 'assets/fonts/OFL.txt') return true;
+function allowed(name, blogRoutes = []) {
+  if (ROOT_FILES.includes(name) || blogRoutes.includes(name) || name === 'assets/fonts/OFL.txt') return true;
   const match = /^assets\/(versioned\/)?(brand|images|fonts|css|js)\/([^/]+)$/.exec(name);
   if (!match || match[3].startsWith('.') || !extensions[match[2]].has(path.posix.extname(match[3]))) return false;
   return !match[1] || /\.[a-f0-9]{16}\.[a-z0-9]+$/.test(match[3]);
@@ -28,10 +28,37 @@ function trackedEntries(root) {
     return {mode: match[1], name: match[3]};
   });
 }
-function selected(root, entries = trackedEntries(root)) {
+function blogManifest(root, entries, options = {}) {
+  const filename = path.join(root, 'blog-build-manifest.json');
+  if (!fs.existsSync(filename)) return {routes: []};
+  const entry = entries.find(item => item.name === 'blog-build-manifest.json');
+  if (!entry || !['100644', '100755'].includes(entry.mode) || !fs.lstatSync(filename).isFile() || fs.lstatSync(filename).isSymbolicLink()) {
+    throw Error('Blog build manifest must be a tracked regular file.');
+  }
+  const manifest = JSON.parse(fs.readFileSync(filename, 'utf8'));
+  if (manifest.format_version !== 1 || !Array.isArray(manifest.routes) || !Array.isArray(manifest.articles) || !Array.isArray(manifest.preview_only)) {
+    throw Error('Invalid Blog build manifest.');
+  }
+  const articleRoutes = manifest.articles.map(article => article.route);
+  if (new Set(manifest.routes).size !== manifest.routes.length || new Set(articleRoutes).size !== articleRoutes.length) throw Error('Duplicate Blog routes.');
+  for (const article of manifest.articles) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*\.html$/.test(article.route) || ROOT_FILES.includes(article.route) || article.route === 'blog.html' || article.route.startsWith('blog-page-') ||
+      !/^[a-f0-9]{64}$/.test(article.source_sha256) || typeof article.review_only !== 'boolean') throw Error('Invalid Blog article identity or route.');
+    if (!manifest.routes.includes(article.route)) throw Error('Blog article route omitted from catalogue.');
+    if (!options.preview && (article.review_only || !article.publication_time)) throw Error('Review-only Blog article is not eligible for production: ' + article.route);
+  }
+  for (const route of manifest.routes) {
+    if (typeof route !== 'string' || (!/^blog(?:-page-[2-9][0-9]*|-page-1[0-9]+)?\.html$/.test(route) && !articleRoutes.includes(route))) throw Error('Undeclared public Blog route.');
+  }
+  if (!options.preview && manifest.preview_only.length) throw Error('Review-only Blog build requires explicit --preview; it cannot be published.');
+  if (!manifest.routes.includes('blog.html')) throw Error('Blog catalogue route is missing.');
+  return manifest;
+}
+function selected(root, entries = trackedEntries(root), options = {}) {
+  const blog = blogManifest(root, entries, options);
   const names = [];
   for (const entry of entries) {
-    if (!allowed(entry.name)) continue;
+    if (!allowed(entry.name, blog.routes)) continue;
     if (!['100644', '100755'].includes(entry.mode)) throw Error('Public symlink or non-regular Git file: ' + entry.name);
     const file = path.resolve(root, entry.name);
     const stat = fs.lstatSync(file);
@@ -40,7 +67,11 @@ function selected(root, entries = trackedEntries(root)) {
     if (relative.startsWith('..') || path.isAbsolute(relative)) throw Error('Public file escaped source root: ' + entry.name);
     names.push(entry.name);
   }
-  for (const required of ROOT_FILES) if (!names.includes(required)) throw Error('Required public file missing or untracked: ' + required);
+  for (const required of [...ROOT_FILES, ...blog.routes]) if (!names.includes(required)) throw Error('Required public file missing or untracked: ' + required);
+  if (!options.preview) for (const name of names.filter(name => name.endsWith('.html'))) {
+    const html = fs.readFileSync(path.join(root, name), 'utf8');
+    if (/data-blog-preview\s*=\s*["']true["']/.test(html) || /\bdata-preview-date\s*=/.test(html) || html.includes('Shared likes are inactive in this staging build')) throw Error('Review-only HTML cannot enter a production artifact: ' + name);
+  }
   return names.sort();
 }
 function verifyReferences(root, names) {
@@ -67,10 +98,10 @@ function verifyReferences(root, names) {
     }
   }
 }
-function build(root, out, entries) {
+function build(root, out, entries, options = {}) {
   root = path.resolve(root);
   out = path.resolve(out);
-  const names = selected(root, entries);
+  const names = selected(root, entries, options);
   verifyReferences(root, names);
   // A fresh directory avoids carrying stale operational files into the new artifact.
   if (fs.existsSync(out)) throw Error('Output already exists; use a new empty destination: ' + out);
@@ -83,15 +114,17 @@ function build(root, out, entries) {
   }
   return names;
 }
-module.exports = {ROOT_FILES, allowed, trackedEntries, selected, verifyReferences, build};
+module.exports = {ROOT_FILES, allowed, trackedEntries, blogManifest, selected, verifyReferences, build};
 if (require.main === module) {
   const root = path.resolve(__dirname, '..');
   const args = process.argv.slice(2);
+  const preview = args[0] === '--preview';
+  if (preview) args.shift();
   if (args.length === 1 && args[0] === '--check') {
-    const names = selected(root);
+    const names = selected(root, undefined, {preview});
     verifyReferences(root, names);
     console.log('Public artifact check passed: ' + names.length + ' files.');
   } else if (args.length === 1) {
-    console.log('Prepared ' + build(root, args[0]).length + ' public files.');
-  } else throw Error('Usage: node scripts/public-artifact.cjs --check | <new-output-directory>');
+    console.log('Prepared ' + build(root, args[0], undefined, {preview}).length + (preview ? ' preview candidate files.' : ' public files.'));
+  } else throw Error('Usage: node scripts/public-artifact.cjs [--preview] --check | <new-output-directory>');
 }

@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://tournstack.com/</loc></url>
-  <url><loc>https://tournstack.com/vision.html</loc></url>
-  <url><loc>https://tournstack.com/faq.html</loc></url>
-  <url><loc>https://tournstack.com/contact.html</loc></url>
-  <url><loc>https://tournstack.com/privacy.html</loc></url>
-  <url><loc>https://tournstack.com/author-mitja-mitrusevski.html</loc></url>
+  <url>
+    <loc>https://tournstack.com/</loc>
+  </url>
+  <url>
+    <loc>https://tournstack.com/vision.html</loc>
+  </url>
+  <url>
+    <loc>https://tournstack.com/faq.html</loc>
+  </url>
+  <url>
+    <loc>https://tournstack.com/contact.html</loc>
+  </url>
+  <url>
+    <loc>https://tournstack.com/privacy.html</loc>
+  </url>
+  <url>
+    <loc>https://tournstack.com/author-mitja-mitrusevski.html</loc>
+  </url>
+  <url>
+    <loc>https://tournstack.com/why-were-building-tournstack.html</loc>
+    <lastmod>2026-11-06T08:24:35+01:00</lastmod>
+  </url>
+  <url>
+    <loc>https://tournstack.com/blog.html</loc>
+  </url>
 </urlset>

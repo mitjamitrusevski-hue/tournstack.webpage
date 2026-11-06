@@ -110,10 +110,10 @@
     },
     {
       "source": "assets/css/styles.css",
-      "url": "/assets/versioned/css/styles.ae021606cbcfb410.css",
-      "sha256": "ae021606cbcfb410c1c0a03ec7d356ad2d07f7f9d4cfa4b13a391a25d77af4db",
-      "source_sha256": "2b18e54b07e6a0e5ab8bf82454eed0bcb877ee0d356a05fb8c29f76ec9c65916",
-      "size_bytes": 42881
+      "url": "/assets/versioned/css/styles.0916a83f507bfe72.css",
+      "sha256": "0916a83f507bfe72b5b40d5c7d5a5562cc4f4f3cd30f7e120b772247ecc9a677",
+      "source_sha256": "1799fb2bbfd5bed66894903a6224889b9df072ee3b4141678b855eeeaff74eb3",
+      "size_bytes": 52062
     },
     {
       "source": "assets/fonts/Montserrat-Latin.woff",
@@ -249,6 +249,34 @@
       "size_bytes": 40269
     },
     {
+      "source": "assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1200x675_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1200x675_RGB.e7f3153716cce7be.webp",
+      "sha256": "e7f3153716cce7bef11939eb7bc0b7a888274d08d35d6cc97611539bcdae59b3",
+      "source_sha256": "e7f3153716cce7bef11939eb7bc0b7a888274d08d35d6cc97611539bcdae59b3",
+      "size_bytes": 114732
+    },
+    {
+      "source": "assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1600x900_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1600x900_RGB.44a0d81438236c82.webp",
+      "sha256": "44a0d81438236c825d8b71308d87d27e237f1947c7ef0f5454939a72dc0603d3",
+      "source_sha256": "44a0d81438236c825d8b71308d87d27e237f1947c7ef0f5454939a72dc0603d3",
+      "size_bytes": 170496
+    },
+    {
+      "source": "assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_480x270_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_480x270_RGB.a1a8c5d2f953606e.webp",
+      "sha256": "a1a8c5d2f953606ec896918ee24e85a29f188a151e75ea8e908c8986d1d624be",
+      "source_sha256": "a1a8c5d2f953606ec896918ee24e85a29f188a151e75ea8e908c8986d1d624be",
+      "size_bytes": 28190
+    },
+    {
+      "source": "assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_800x450_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_800x450_RGB.396cdecb8ebab5a0.webp",
+      "sha256": "396cdecb8ebab5a08c3ecf3b7d917988902eb209c41620e646476479fbacf5fd",
+      "source_sha256": "396cdecb8ebab5a08c3ecf3b7d917988902eb209c41620e646476479fbacf5fd",
+      "size_bytes": 57546
+    },
+    {
       "source": "assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp",
       "url": "/assets/versioned/images/TS_Hero_Tennis_Lifestyle_RGB.580dd2e17b6837e4.webp",
       "sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",
@@ -270,11 +298,18 @@
       "size_bytes": 12368
     },
     {
+      "source": "assets/js/blog.js",
+      "url": "/assets/versioned/js/blog.2778369a0c3ed4b9.js",
+      "sha256": "2778369a0c3ed4b9c2aaae5de231791062a97b4196fa660fdbe9c811455c9aa8",
+      "source_sha256": "2778369a0c3ed4b9c2aaae5de231791062a97b4196fa660fdbe9c811455c9aa8",
+      "size_bytes": 12780
+    },
+    {
       "source": "assets/js/chatbot.js",
-      "url": "/assets/versioned/js/chatbot.d199ef54817d4541.js",
-      "sha256": "d199ef54817d454116e19aa6ad50aec04fc46c0e8b68a85971eb7981ce39dc2a",
-      "source_sha256": "d199ef54817d454116e19aa6ad50aec04fc46c0e8b68a85971eb7981ce39dc2a",
-      "size_bytes": 8384
+      "url": "/assets/versioned/js/chatbot.403ee2b6c215b2e7.js",
+      "sha256": "403ee2b6c215b2e7d2d6372401a974760fcf15f6f213ab451d5de2ee4cd9c985",
+      "source_sha256": "403ee2b6c215b2e7d2d6372401a974760fcf15f6f213ab451d5de2ee4cd9c985",
+      "size_bytes": 8434
     },
     {
       "source": "assets/js/contact-config.js",

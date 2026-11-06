@@ -59,3 +59,40 @@ test('srcset and CSS font dependencies must remain public', t => {
   fs.writeFileSync(path.join(f.root, 'index.html'), '<img srcset="assets/images/a.webp 1x, assets/images/missing.webp 2x">');
   assert.throws(() => verifyReferences(f.root, selected(f.root, f.entries)), /missing.webp/);
 });
+
+function blogFixture(f, review = true) {
+  const manifest = {format_version: 1, routes: ['blog.html', 'first-story.html'], preview_only: review ? ['TS-BLOG-0001'] : [],
+    articles: [{content_id: 'TS-BLOG-0001', route: 'first-story.html', source_sha256: 'a'.repeat(64), review_only: review, publication_time: review ? null : '2026-11-06T09:00:00+01:00'}]};
+  f.write('blog-build-manifest.json', JSON.stringify(manifest));
+  f.write('blog.html', '<h1>Stories</h1><a href="first-story.html">First story</a>');
+  f.write('first-story.html', '<html' + (review ? ' data-blog-preview="true"' : '') + '><h1>Story</h1></html>');
+  return manifest;
+}
+
+test('draft Blog candidate requires explicit preview and keeps its manifest private', t => {
+  const f = fixture(t); blogFixture(f);
+  assert.throws(() => selected(f.root, f.entries), /Review-only/);
+  const names = selected(f.root, f.entries, {preview: true});
+  assert(names.includes('first-story.html'));
+  assert(!names.includes('blog-build-manifest.json'));
+  const built = build(f.root, path.join(f.base, 'preview'), f.entries, {preview: true});
+  assert(built.includes('blog.html'));
+  assert(!fs.existsSync(path.join(f.base, 'preview/blog-build-manifest.json')));
+});
+
+test('eligible Blog routes must be tracked, declared and contain no preview marker', t => {
+  const f = fixture(t); const manifest = blogFixture(f, false);
+  assert(selected(f.root, f.entries).includes('first-story.html'));
+  assert.throws(() => selected(f.root, f.entries.filter(x => x.name !== 'first-story.html')), /missing or untracked/);
+  fs.writeFileSync(path.join(f.root, 'first-story.html'), '<html data-blog-preview="true">Draft</html>');
+  assert.throws(() => selected(f.root, f.entries), /Review-only HTML/);
+  fs.writeFileSync(path.join(f.root, 'first-story.html'), '<button disabled title="Shared likes are inactive in this staging build">Like</button>');
+  assert.throws(() => selected(f.root, f.entries), /Review-only HTML/);
+  fs.writeFileSync(path.join(f.root, 'first-story.html'), '<time datetime="2026-11-06" data-preview-date="true">6 Nov 2026</time>');
+  assert.throws(() => selected(f.root, f.entries), /Review-only HTML/);
+  fs.writeFileSync(path.join(f.root, 'first-story.html'), '<time datetime="2026-11-06T09:00:00+01:00">6 Nov 2026</time>');
+  assert(selected(f.root, f.entries).includes('first-story.html'));
+  manifest.routes.push('private.html');
+  fs.writeFileSync(path.join(f.root, 'blog-build-manifest.json'), JSON.stringify(manifest));
+  assert.throws(() => selected(f.root, f.entries, {preview: true}), /Undeclared/);
+});
