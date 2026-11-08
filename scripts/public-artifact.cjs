@@ -103,6 +103,7 @@ function build(root, out, entries, options = {}) {
   out = path.resolve(out);
   const names = selected(root, entries, options);
   verifyReferences(root, names);
+  if (!options.preview) require('./article-metadata.cjs').check(root, {publicNames: names});
   // A fresh directory avoids carrying stale operational files into the new artifact.
   if (fs.existsSync(out)) throw Error('Output already exists; use a new empty destination: ' + out);
   if (out === root || root.startsWith(out + path.sep)) throw Error('Output cannot contain the source tree.');
@@ -123,6 +124,7 @@ if (require.main === module) {
   if (args.length === 1 && args[0] === '--check') {
     const names = selected(root, undefined, {preview});
     verifyReferences(root, names);
+    if (!preview) require('./article-metadata.cjs').check(root, {publicNames: names});
     console.log('Public artifact check passed: ' + names.length + ' files.');
   } else if (args.length === 1) {
     console.log('Prepared ' + build(root, args[0], undefined, {preview}).length + (preview ? ' preview candidate files.' : ' public files.'));

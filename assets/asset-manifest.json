@@ -110,10 +110,10 @@
     },
     {
       "source": "assets/css/styles.css",
-      "url": "/assets/versioned/css/styles.0916a83f507bfe72.css",
-      "sha256": "0916a83f507bfe72b5b40d5c7d5a5562cc4f4f3cd30f7e120b772247ecc9a677",
-      "source_sha256": "1799fb2bbfd5bed66894903a6224889b9df072ee3b4141678b855eeeaff74eb3",
-      "size_bytes": 52062
+      "url": "/assets/versioned/css/styles.dac024454d652ac7.css",
+      "sha256": "dac024454d652ac7c4449b57f57159eed6c64263125d53b321debe023b0b941a",
+      "source_sha256": "c71ca3f564469209fb136588273f6fcf5726b14bf6c6b4ff809f5c2a4feba1ea",
+      "size_bytes": 53054
     },
     {
       "source": "assets/fonts/Montserrat-Latin.woff",
@@ -306,10 +306,10 @@
     },
     {
       "source": "assets/js/chatbot.js",
-      "url": "/assets/versioned/js/chatbot.403ee2b6c215b2e7.js",
-      "sha256": "403ee2b6c215b2e7d2d6372401a974760fcf15f6f213ab451d5de2ee4cd9c985",
-      "source_sha256": "403ee2b6c215b2e7d2d6372401a974760fcf15f6f213ab451d5de2ee4cd9c985",
-      "size_bytes": 8434
+      "url": "/assets/versioned/js/chatbot.4603d1bc698cfc3b.js",
+      "sha256": "4603d1bc698cfc3bd59d2bc65c299a8ce421929f447e509e1ad036f97f95cea0",
+      "source_sha256": "4603d1bc698cfc3bd59d2bc65c299a8ce421929f447e509e1ad036f97f95cea0",
+      "size_bytes": 6230
     },
     {
       "source": "assets/js/contact-config.js",

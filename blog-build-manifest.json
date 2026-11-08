@@ -8,24 +8,263 @@
   "current_article": "why-were-building-tournstack.html",
   "preview_only": [],
   "release_selection": {
-    "articles": [
-      {
-        "content_id": "TS-BLOG-0001",
-        "source_sha256": "2f406ef3ec415b090aa82f077816216fa65fd827e352528c8f55a0128b460eb9",
-        "publication_time": "2026-11-06T08:24:35+01:00"
-      }
-    ]
+    "articles": []
   },
   "articles": [
     {
       "content_id": "TS-BLOG-0001",
       "route": "why-were-building-tournstack.html",
       "source_reference": "Company-Community/why-were-building-tournstack/article.md",
-      "source_sha256": "2f406ef3ec415b090aa82f077816216fa65fd827e352528c8f55a0128b460eb9",
-      "source_version": "0.4.1",
-      "source_status": "selected-for-release",
+      "source_sha256": "76c52f9e198277b32053e1f2abb0e763a3f55e83a98d9c6652bf158d160f8761",
+      "source_version": "0.4.4",
+      "source_status": "published",
       "review_only": false,
-      "publication_time": "2026-11-06T08:24:35+01:00"
+      "publication_time": "2026-11-06T08:38:59+01:00",
+      "metadata_contract": {
+        "format_version": 1,
+        "title": "Why We’re Building TournStack | Our Story",
+        "language": "en",
+        "canonical_url": "https://tournstack.com/why-were-building-tournstack.html",
+        "meta": {
+          "description": "Why we started building TournStack after searching for tournament tools: registration details, guests, prize draws and participation through the browser.",
+          "robots": "index, follow, max-image-preview:large",
+          "og:title": "Why we’re building TournStack",
+          "og:description": "The registration details, guest requirements and browser experience that led us to build our own tournament software.",
+          "og:type": "article",
+          "og:url": "https://tournstack.com/why-were-building-tournstack.html",
+          "og:site_name": "TournStack",
+          "og:image": "https://tournstack.com/assets/images/2026-11-06_TS_Blog_Why-We-Are-Building_Event-Welcome-Share_1200x675_RGB.jpg",
+          "og:image:type": "image/jpeg",
+          "og:image:width": "1200",
+          "og:image:height": "675",
+          "og:image:alt": "An organiser in a navy TournStack polo welcomes a player and guest beside folded shirts and a laptop showing a dark tournament and digital prize-draw interface.",
+          "twitter:card": "summary_large_image",
+          "twitter:title": "Why we’re building TournStack",
+          "twitter:description": "The registration details, guest requirements and browser experience that led us to build our own tournament software.",
+          "twitter:image": "https://tournstack.com/assets/images/2026-11-06_TS_Blog_Why-We-Are-Building_Event-Welcome-Share_1200x675_RGB.jpg",
+          "twitter:image:alt": "An organiser in a navy TournStack polo welcomes a player and guest beside folded shirts and a laptop showing a dark tournament and digital prize-draw interface.",
+          "og:locale": "en_GB",
+          "article:published_time": "2026-11-06T08:38:59+01:00"
+        },
+        "structured_data": {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://tournstack.com/#organization",
+              "name": "TournStack",
+              "url": "https://tournstack.com/",
+              "email": "info@tournstack.com",
+              "description": "Tournament-and-league management project in development, connecting guided setup and organiser control with public event information.",
+              "logo": {
+                "@id": "https://tournstack.com/#logo"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Project inquiries",
+                "email": "info@tournstack.com",
+                "url": "https://tournstack.com/contact.html",
+                "availableLanguage": "en"
+              },
+              "sameAs": [
+                "https://www.linkedin.com/company/tournstack/",
+                "https://www.facebook.com/TournStack",
+                "https://x.com/tournstack",
+                "https://www.tiktok.com/@tournstack",
+                "https://www.reddit.com/r/TournStack/",
+                "https://bsky.app/profile/tournstack.com"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/#logo",
+              "url": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "contentUrl": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "caption": "TournStack logo",
+              "width": 1024,
+              "height": 165
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://tournstack.com/#website",
+              "url": "https://tournstack.com/",
+              "name": "TournStack",
+              "inLanguage": "en",
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "description": "TournStack’s tournament-and-league management project, product vision and answers to common questions."
+            },
+            {
+              "@type": "Person",
+              "@id": "https://tournstack.com/#mitja-mitrusevski",
+              "name": "Mitja Mitruševski",
+              "jobTitle": "Vision & Commercial Lead",
+              "url": "https://tournstack.com/author-mitja-mitrusevski.html",
+              "image": "https://tournstack.com/assets/versioned/images/mitja-mitrusevski.72354b1de625eddb.webp",
+              "sameAs": [
+                "https://www.linkedin.com/in/mitja-mitrusevski/",
+                "https://timelesstech.io/en/mitja-mitrusevski-igaming-casino-industry-expert-timeless-tech"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/why-were-building-tournstack.html#primaryimage",
+              "url": "https://tournstack.com/assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1200x675_RGB.webp",
+              "contentUrl": "https://tournstack.com/assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1200x675_RGB.webp",
+              "width": 1200,
+              "height": 675,
+              "caption": "AI-generated concept image of event registration. The people and interface are illustrative.",
+              "representativeOfPage": true
+            },
+            {
+              "@type": "WebPage",
+              "@id": "https://tournstack.com/why-were-building-tournstack.html#webpage",
+              "url": "https://tournstack.com/why-were-building-tournstack.html",
+              "name": "Why We’re Building TournStack | Our Story",
+              "description": "Why we started building TournStack after searching for tournament tools: registration details, guests, prize draws and participation through the browser.",
+              "inLanguage": "en",
+              "mainEntity": {
+                "@id": "https://tournstack.com/why-were-building-tournstack.html#article"
+              },
+              "isPartOf": {
+                "@id": "https://tournstack.com/#website"
+              },
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://tournstack.com/why-were-building-tournstack.html#primaryimage"
+              },
+              "breadcrumb": {
+                "@id": "https://tournstack.com/why-were-building-tournstack.html#breadcrumbs"
+              },
+              "datePublished": "2026-11-06T08:38:59+01:00"
+            },
+            {
+              "@type": "BlogPosting",
+              "@id": "https://tournstack.com/why-were-building-tournstack.html#article",
+              "url": "https://tournstack.com/why-were-building-tournstack.html",
+              "mainEntityOfPage": {
+                "@id": "https://tournstack.com/why-were-building-tournstack.html#webpage"
+              },
+              "headline": "Why we’re building TournStack",
+              "description": "Why the tools we assessed did not fit our events, and how registration details, guests, prize draws and browser access shaped TournStack.",
+              "inLanguage": "en",
+              "articleSection": "Company & Community",
+              "author": [
+                {
+                  "@id": "https://tournstack.com/#mitja-mitrusevski"
+                }
+              ],
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "image": {
+                "@id": "https://tournstack.com/why-were-building-tournstack.html#primaryimage"
+              },
+              "datePublished": "2026-11-06T08:38:59+01:00"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://tournstack.com/why-were-building-tournstack.html#breadcrumbs",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Overview",
+                  "item": "https://tournstack.com/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Blog",
+                  "item": "https://tournstack.com/blog.html"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Why we’re building TournStack",
+                  "item": "https://tournstack.com/why-were-building-tournstack.html"
+                }
+              ]
+            }
+          ]
+        },
+        "authors": [
+          {
+            "id": "https://tournstack.com/#mitja-mitrusevski",
+            "name": "Mitja Mitruševski",
+            "url": "https://tournstack.com/author-mitja-mitrusevski.html"
+          }
+        ],
+        "publisher": {
+          "id": "https://tournstack.com/#organization",
+          "name": "TournStack",
+          "url": "https://tournstack.com/"
+        },
+        "breadcrumbs": [
+          {
+            "name": "Overview",
+            "url": "https://tournstack.com/"
+          },
+          {
+            "name": "Blog",
+            "url": "https://tournstack.com/blog.html"
+          },
+          {
+            "name": "Why we’re building TournStack",
+            "url": "https://tournstack.com/why-were-building-tournstack.html"
+          }
+        ],
+        "dates": {
+          "published": "2026-11-06T08:38:59+01:00",
+          "modified": null
+        },
+        "lead_image": {
+          "url": "https://tournstack.com/assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1200x675_RGB.webp",
+          "width": 1200,
+          "height": 675,
+          "alt": "An organiser in a navy TournStack polo welcomes a player and guest beside folded shirts and a laptop showing a dark tournament and digital prize-draw interface."
+        },
+        "image_assets": [
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_480x270_RGB.webp",
+            "sha256": "a1a8c5d2f953606ec896918ee24e85a29f188a151e75ea8e908c8986d1d624be",
+            "width": 480,
+            "height": 270,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_800x450_RGB.webp",
+            "sha256": "396cdecb8ebab5a08c3ecf3b7d917988902eb209c41620e646476479fbacf5fd",
+            "width": 800,
+            "height": 450,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1200x675_RGB.webp",
+            "sha256": "e7f3153716cce7bef11939eb7bc0b7a888274d08d35d6cc97611539bcdae59b3",
+            "width": 1200,
+            "height": 675,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-05_TS_Blog_Why-We-Are-Building_Event-Welcome-DSLR-Fresh_1600x900_RGB.webp",
+            "sha256": "44a0d81438236c825d8b71308d87d27e237f1947c7ef0f5454939a72dc0603d3",
+            "width": 1600,
+            "height": 900,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-06_TS_Blog_Why-We-Are-Building_Event-Welcome-Share_1200x675_RGB.jpg",
+            "sha256": "9c368a2560c4778fa305eec9bf942cbdf4c2014c0047c15fb1ab3bd19b112535",
+            "width": 1200,
+            "height": 675,
+            "type": "image/jpeg"
+          }
+        ]
+      }
     }
   ]
 }

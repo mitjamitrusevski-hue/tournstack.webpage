@@ -25,7 +25,7 @@
   <link rel="canonical" href="https://tournstack.com/privacy.html">
   <link rel="icon" type="image/svg+xml" href="assets/versioned/brand/TS_MasterFavicon_Shield_FullColor_Transparent_RGB.e47d4552b09c74e6.svg">
   <link rel="preload" href="assets/versioned/fonts/Montserrat-Latin.16b6ffa02b466bb7.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="assets/versioned/css/styles.0916a83f507bfe72.css">
+  <link rel="stylesheet" href="assets/versioned/css/styles.dac024454d652ac7.css">
   <!-- Start cookieyes banner -->
   <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/e9d335d0f9967ac125f2bc1619ff6298/script.js"></script>
   <!-- End cookieyes banner -->
@@ -57,7 +57,8 @@
         "https://www.facebook.com/TournStack",
         "https://x.com/tournstack",
         "https://www.tiktok.com/@tournstack",
-        "https://www.reddit.com/r/TournStack/"
+        "https://www.reddit.com/r/TournStack/",
+        "https://bsky.app/profile/tournstack.com"
       ]
     },
     {
@@ -102,7 +103,7 @@
         "@id": "https://tournstack.com/#website"
       },
       "inLanguage": "en",
-      "dateModified": "2026-10-20T16:05:48Z",
+      "dateModified": "2026-11-08",
       "author": {
         "@id": "https://tournstack.com/#mitja-mitrusevski"
       },
@@ -112,12 +113,12 @@
     }
   ]
 }
-  </script>
+</script>
   <script defer src="assets/versioned/js/contact-config.675b25f6f19ce600.js"></script>
   <script defer src="assets/versioned/js/newsletter.71d8081d51d6b75d.js"></script>
   <script defer src="assets/versioned/js/interaction-analytics.a036e12134d80ed2.js"></script>
   <script defer src="assets/versioned/js/advertising.2ca967e428120cbb.js"></script>
-  <script src="assets/versioned/js/chatbot.403ee2b6c215b2e7.js" data-niko-launcher="assets/versioned/brand/TS_Niko_Launcher_Shield_RGB.71df76072f730d20.svg" defer></script>
+  <script src="assets/versioned/js/chatbot.4603d1bc698cfc3b.js" data-niko-launcher="assets/versioned/brand/TS_Niko_Launcher_Shield_RGB.71df76072f730d20.svg" defer></script>
 </head>
 <body data-page="privacy">
   <a class="skip-link" href="#main" title="Skip navigation and go to the main content" hreflang="en" data-link-type="internal">Skip to content</a>
@@ -125,7 +126,7 @@
   <main id="main">
     <section class="vision-hero"><div class="container"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="./" title="TournStack overview" hreflang="en" data-link-type="internal">Overview</a><span aria-hidden="true">/</span><span aria-current="page">Privacy</span></nav><p class="status"><span aria-hidden="true"></span> Website privacy</p><h1>Privacy, explained.</h1><p>Here is how we handle information when you visit this website or get in touch.</p></div></section>
     <section class="section"><div class="container policy-layout"><nav class="policy-toc" aria-label="On this page"><p class="eyebrow">ON THIS PAGE</p><a href="#who-we-are">Who is responsible</a><a href="#contact-inquiries">Contact inquiries</a><a href="#newsletter">Newsletter signup</a><a href="#webchatbot">Coach Niko chat</a><a href="#analytics-storage">Analytics and storage</a><a href="#article-likes">Article likes</a><a href="#advertising">Advertising tools and your choice</a><a href="#providers">Providers and transfers</a><a href="#retention">How long we keep data</a><a href="#rights">Your choices and rights</a></nav><article class="policy-copy">
-      <p class="policy-updated">Last updated 6 November 2026</p>
+      <p class="policy-updated">Last updated 8 November 2026</p>
       <p>This notice covers <strong>tournstack.com</strong>. It describes the website as it works today. The TournStack tournament product and any future consumer app will need their own notices when they become available.</p>
       <section id="who-we-are"><h2>Who is responsible</h2><p><strong>Mitja Mitruševski</strong> operates the TournStack website personally from Slovenia and is responsible for its personal-data processing. TournStack is not yet a registered company.<br>Email: <!--email_off--><a href="mailto:info@tournstack.com">info@tournstack.com</a><!--/email_off--></p><p>Contact us at that address about this notice or your personal information.</p></section>
       <section id="contact-inquiries"><h2>When you contact us</h2><p>The contact form asks for your name, email address and inquiry. We also record the submission time. We use this information to answer you, discuss an event or possible pilot, and keep a record of the conversation. We do not add form submissions to a newsletter.</p><p>For ordinary inquiries, our legal basis is our legitimate interest in responding to people who contact us (GDPR Article 6(1)(f)). If you ask us to discuss a potential agreement, processing needed to take those requested steps may also rely on Article 6(1)(b). The fields are needed so we can identify and answer your message. You can email us instead of using the form.</p><p>Cloudflare Turnstile checks whether a form submission is likely to be human. Cloudflare receives technical information from your browser for that check and sends a token, not your inquiry text, to our form endpoint. The form then sends the inquiry to Google Apps Script, which saves it in a Google Sheet after Cloudflare verifies the token. A Cloudflare Worker queues notification and confirmation email through mailbox.org. These services help us receive your message at <!--email_off--><a href="mailto:info@tournstack.com">info@tournstack.com</a><!--/email_off--> and send a confirmation to the address you supplied.</p></section>
@@ -137,7 +138,9 @@
         <p>Our private Cloudflare R2 store keeps raw chats for 14 days from the first saved turn. Updates do not restart that period. Private weekly Markdown review copies expire 30 days after generation. Expired records are blocked from access and scheduled deletion normally runs within the next hour; outages can delay physical cleanup. Downloaded copies need their own deletion handling. Minimal D1 index/rating metadata can remain in recovery history for up to seven additional days after live deletion. Durable Object session/notice/tombstone metadata can remain in its separate recovery history for up to 30 additional days after live deletion. We do not store transcript text in D1 or Durable Object recovery history.</p>
         <p>OpenAI receives the current question, limited recent context and selected public information. We set <code>store:false</code> and provide no internal knowledge or tools. This does not mean zero provider retention: OpenAI normally retains API abuse-monitoring data for up to 30 days, with longer retention possible for legal or service-safety reasons. API data is not used for model training by default, and we have left optional training-data sharing disabled for this service. See <a href="https://developers.openai.com/api/docs/guides/your-data" rel="external">OpenAI API data controls</a>.</p>
         <p>Cloudflare Turnstile runs a security check when you choose <strong>Start chatting</strong> and before each question. Cloudflare processes browser and network signals, including your IP address and browser information, to detect automated abuse and improve its bot detection. Our server verifies the resulting token before admitting a session or question; verification tokens are not kept with saved chats. See <a href="https://www.cloudflare.com/turnstile-privacy-policy/" rel="external">Cloudflare's Turnstile privacy notice</a>.</p>
-        <p>The chat uses session storage inside Niko's own frame to keep your session active when you change pages or reload in the same tab. It stores a signed session token, panel preferences and unsent question or feedback drafts; saved messages and feedback are retrieved through authenticated requests. The surrounding website uses its own session storage only to remember whether the chat panel is open; the session token and drafts stay inside Niko's frame. Niko does not use local storage or a persistent tracking cookie. The chat session keeps its original expiry; navigating does not extend it. Starting a new chat or deleting the saved chat clears that session's token and drafts. They are also cleared when an expired session is checked. Closing the tab normally clears session storage, although browser tab-restore features may retain it. Starting a new chat or closing the tab does not delete a previously saved conversation. Cloudflare receives network information to operate and protect the service; the application uses IP information only in memory for rate limiting and does not add it to saved chats.</p>
+        <p>The chat uses session storage inside Niko's own frame to keep your session active when you change pages or reload in the same tab. It stores a signed session token, panel preferences and unsent question or feedback drafts; saved messages and feedback are retrieved through authenticated requests. </p>
+        <p>The surrounding website loads Niko when you open the chat, or restores a panel you previously left open in the same tab. After you choose to open it, the website uses its own session storage to remember whether the panel is open or closed. It does not track browsing time or page changes to preload the chat. This panel preference contains no chat messages, session token or drafts. It has no separate application expiry and lasts for the browser's tab session. Reloading and navigation retain it; closing the tab normally clears it, although browser tab restoration may retain it. The session token and drafts stay inside Niko's frame.</p>
+        <p> Niko does not use local storage or a persistent tracking cookie. The chat session keeps its original expiry; navigating does not extend it. Starting a new chat or deleting the saved chat clears that session's token and drafts. They are also cleared when an expired session is checked. Closing the tab normally clears session storage, although browser tab-restore features may retain it. Starting a new chat or closing the tab does not delete a previously saved conversation. Cloudflare receives network information to operate and protect the service; the application uses IP information only in memory for rate limiting and does not add it to saved chats.</p>
         <p>Optional ratings update one record per conversation. Participation and average scores use code-calculated counts. Plausible may receive fixed chat interaction events such as opening chat, starting a conversation, contacting the team, submitting a rating or downloading notes. Those events contain only bounded categories or stars, never questions, answers, comments, conversation identifiers or raw destination links. Advertising tools are not loaded inside the isolated chat.</p>
         <p>You can stop chatting and use <strong>Delete saved chat</strong> to erase its active raw record while the session remains available. To withdraw consent or request access/deletion of any weekly review copies, email <a href="mailto:info@tournstack.com">info@tournstack.com</a>, including the chat reference in your downloaded notes if available. Weekly copies require a separate controller review; deleting the raw chat does not recall copies already exported or information held separately by a provider. Withdrawal does not affect earlier lawful processing.</p>
         <p>Mitja Mitru&#353;evski controls this processing. Cloudflare and OpenAI provide storage, delivery and answer processing; provider processing may occur outside the EEA under the applicable contractual safeguards. Full weekly review copies remain in private Cloudflare storage. Only approved reviewers can open the private reports page, using their approved email address and an emailed login code through Cloudflare Access. Report-ready notification emails contain a link to that page, without conversation text or attachments. Reviewers can download copies for review; those copies need their own access controls and deletion, because cloud expiry does not delete a download. Personal Google Drive receives numerical summaries only, without transcript text, written comments or chat identifiers.</p>

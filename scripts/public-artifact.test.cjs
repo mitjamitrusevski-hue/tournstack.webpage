@@ -5,6 +5,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const {ROOT_FILES, allowed, selected, verifyReferences, build} = require('./public-artifact.cjs');
+// Existing trusted CI invokes this suite; include metadata regressions without
+// changing the pinned deployment workflows.
+require('./article-metadata.test.cjs');
 function fixture(t) {
   const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tournstack-artifact-'));
   const root = path.join(base, 'source');

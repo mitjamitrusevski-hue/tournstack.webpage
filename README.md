@@ -3,8 +3,8 @@ project: TournStack
 doc_type: Website maintenance and release guide
 date: "2026-10-03"
 date_basis: Preserved NamingAudit identity baseline
-updated: "2026-11-06"
-version: "1.0.6"
+updated: "2026-11-08"
+version: "1.0.7"
 version_scope: Operational documentation revision; not a software release
 status: Maintained website guide; public Niko live and navigation accepted
 language: en
@@ -24,11 +24,11 @@ The owner's actual PageSpeed report used Lighthouse 13.5.0 and returned 84/100/1
 
 The immutable asset generator bundles `assets/css/chatbot.css` into the compiled main stylesheet. Maintain the small frame stylesheet as its source; do not reintroduce a separate blocking link in the six chat-enabled pages. Its bytes participate in the main stylesheet hash, and the generator regression tests verify dependency invalidation. Both CSS sources remain editable, and historical hashed files stay immutable.
 
-The six chat pages now show a first-party button using the exact approved Niko shield SVG. A fresh visit creates no Worker iframe or Worker connection hint. Hover or keyboard focus may preconnect; clicking mounts the isolated client immediately and opens it through a source/origin-checked message. The parent button announces loading and offers retry after a 15-second failure. A remembered open panel bypasses all delays and mounts at its final size before child loading, preserving authenticated recovery.
+Chat-enabled pages show a first-party button using the exact approved Niko shield SVG. A fresh closed visit creates no Worker iframe or Worker connection hint, including on hover, keyboard focus, waiting or page changes. Clicking mounts the isolated client immediately and opens it through a source/origin-checked message. The parent button announces loading and offers retry after a 15-second failure. A remembered user-opened panel mounts immediately at its final size before child loading, preserving authenticated recovery.
 
-Optional automatic preloading requires both 30,000ms cumulative visible, focused tab time and navigation to a different website page. It stays closed and does not choose Start chatting or create a session. Reloads do not count as a page change. Hidden/unfocused time is excluded; back-forward restoration merges newer progress. Only a capped duration, a page-change boolean and the most recent approved pathname are retained in the new functional session-storage record. No queries, transcripts, tokens or timing analytics are added. With blocked storage, the button still works; cross-page timing/restoration cannot be promised.
+The owner-approved 8 November loading correction removes automatic preloading and browsing-progress storage. The parent reads only the existing panel preference for requested restoration, and writes panel state on deliberate opening or authenticated frame-state updates. It neither reads nor updates legacy `tournstack-niko-engagement-v1` records; they can remain unused until normal browser session cleanup. No new timing, page-change or last-path record is created. Parent panel state has no application TTL and follows tab-session retention, including possible browser tab restoration; messages, capability and drafts stay inside the isolated chat. With blocked storage, clicking still works but cross-page panel restoration cannot be promised. The [correction release record](../../Operations/Releases/2026-11-07_TournStack_Article-SEO-Correction.md) records deployment status; this maintained contract does not assert a completed release.
 
-The immutable asset generator bundles parent-frame and facade CSS into the main stylesheet. CI checks one blocking stylesheet, only the initial CookieYes preconnect, the versioned facade artwork reference, preserved CMP ordering and reviewed image budgets. Loader tests cover click/handshake, time/page gates, visibility/focus, failure/retry, message filtering and immediate restore. The Niko navigation harness checks the real isolated client with synthetic data. CookieYes ordering, initial CSS, security headers, sandbox, clipboard permission and consent are preserved. A passed implementation test does not guarantee a particular Google PageSpeed score.
+The immutable asset generator bundles parent-frame and facade CSS into the main stylesheet. CI checks one blocking stylesheet, only the initial CookieYes preconnect, the versioned facade artwork reference, preserved CMP ordering and reviewed image budgets. Loader checks cover no background frame/connection/progress storage after waiting, navigation, hover or focus; click/handshake; blocked storage; failure/retry; message filtering; and immediate user-opened restoration. The Niko navigation harness checks the real isolated client with synthetic data. CookieYes ordering, initial CSS, security headers, sandbox, clipboard permission and consent are preserved. A passed implementation test does not guarantee a particular Google PageSpeed score.
 
 
 ## Current operational checkpoint - 2026-10-20
