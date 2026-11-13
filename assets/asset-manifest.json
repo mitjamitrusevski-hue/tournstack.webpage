@@ -110,10 +110,10 @@
     },
     {
       "source": "assets/css/styles.css",
-      "url": "/assets/versioned/css/styles.dac024454d652ac7.css",
-      "sha256": "dac024454d652ac7c4449b57f57159eed6c64263125d53b321debe023b0b941a",
-      "source_sha256": "c71ca3f564469209fb136588273f6fcf5726b14bf6c6b4ff809f5c2a4feba1ea",
-      "size_bytes": 53054
+      "url": "/assets/versioned/css/styles.e45c2c2926f21474.css",
+      "sha256": "e45c2c2926f2147447dcb9eade89ff8023bf43996c42575da2aed68aa30537f9",
+      "source_sha256": "19071d162b79664450bfca4d9140d2cfcf561900ca87fdc0915f829e469f094e",
+      "size_bytes": 53551
     },
     {
       "source": "assets/fonts/Montserrat-Latin.woff",
