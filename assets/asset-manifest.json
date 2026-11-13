@@ -277,6 +277,76 @@
       "size_bytes": 57546
     },
     {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1200x675_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1200x675_RGB.e2b374e115e0fd47.webp",
+      "sha256": "e2b374e115e0fd475dd00ad52eba97cd9b28f87f32d64e59d7acfea66d23a30f",
+      "source_sha256": "e2b374e115e0fd475dd00ad52eba97cd9b28f87f32d64e59d7acfea66d23a30f",
+      "size_bytes": 86840
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1600x900_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1600x900_RGB.dd26c0d7899bdb57.webp",
+      "sha256": "dd26c0d7899bdb5747ed09e7159389424abf43f94d990b93cd1796547d386016",
+      "source_sha256": "dd26c0d7899bdb5747ed09e7159389424abf43f94d990b93cd1796547d386016",
+      "size_bytes": 123576
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_480x270_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_480x270_RGB.aa338f714fa1fe33.webp",
+      "sha256": "aa338f714fa1fe33a4f267a15d8e4565d6cda882dd89cdca43f852b449867ff2",
+      "source_sha256": "aa338f714fa1fe33a4f267a15d8e4565d6cda882dd89cdca43f852b449867ff2",
+      "size_bytes": 25788
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_800x450_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_800x450_RGB.bf07e1bc36ac5adb.webp",
+      "sha256": "bf07e1bc36ac5adb5c473bdf1d081519ab950c912498be9875841fdd7d5abdb7",
+      "source_sha256": "bf07e1bc36ac5adb5c473bdf1d081519ab950c912498be9875841fdd7d5abdb7",
+      "size_bytes": 51138
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_1440x1800_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_1440x1800_RGB.86a2c25fa4a5f339.webp",
+      "sha256": "86a2c25fa4a5f339a95ae8b85788b637f4fce76ccb9038a44aa15073d7dbc1c1",
+      "source_sha256": "86a2c25fa4a5f339a95ae8b85788b637f4fce76ccb9038a44aa15073d7dbc1c1",
+      "size_bytes": 99000
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_480x600_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_480x600_RGB.6c6ac1ec423a172b.webp",
+      "sha256": "6c6ac1ec423a172b6f336357cdc869c8f356b7aedeb01996f05871561d6f1edd",
+      "source_sha256": "6c6ac1ec423a172b6f336357cdc869c8f356b7aedeb01996f05871561d6f1edd",
+      "size_bytes": 27142
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_800x1000_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_800x1000_RGB.202780d893838b46.webp",
+      "sha256": "202780d893838b46f706d420de2499c85e9eadaabbb4afc34b284b16135d68cf",
+      "source_sha256": "202780d893838b46f706d420de2499c85e9eadaabbb4afc34b284b16135d68cf",
+      "size_bytes": 54206
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_1440x1800_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_1440x1800_RGB.470fd447ddd3e952.webp",
+      "sha256": "470fd447ddd3e952ca9a858a7af86a6adf73d876299fd4142d2bd6df47068bb6",
+      "source_sha256": "470fd447ddd3e952ca9a858a7af86a6adf73d876299fd4142d2bd6df47068bb6",
+      "size_bytes": 108420
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_480x600_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_480x600_RGB.683d7f521f84d09d.webp",
+      "sha256": "683d7f521f84d09dab14050c7ec7c910013a82fa96f37e1d2f2caeacbf1666eb",
+      "source_sha256": "683d7f521f84d09dab14050c7ec7c910013a82fa96f37e1d2f2caeacbf1666eb",
+      "size_bytes": 27906
+    },
+    {
+      "source": "assets/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_800x1000_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_800x1000_RGB.05d8bcc5e37c38c1.webp",
+      "sha256": "05d8bcc5e37c38c143f146840d87d78d42e6107fcaaf46692862364048a85f0c",
+      "source_sha256": "05d8bcc5e37c38c143f146840d87d78d42e6107fcaaf46692862364048a85f0c",
+      "size_bytes": 56620
+    },
+    {
       "source": "assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp",
       "url": "/assets/versioned/images/TS_Hero_Tennis_Lifestyle_RGB.580dd2e17b6837e4.webp",
       "sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",

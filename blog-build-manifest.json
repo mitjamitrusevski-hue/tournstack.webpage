@@ -3,12 +3,19 @@
   "generator": "blog_build.py",
   "routes": [
     "blog.html",
+    "connected-tournament-administration.html",
     "why-were-building-tournstack.html"
   ],
-  "current_article": "why-were-building-tournstack.html",
+  "current_article": "connected-tournament-administration.html",
   "preview_only": [],
   "release_selection": {
-    "articles": []
+    "articles": [
+      {
+        "content_id": "TS-BLOG-0002",
+        "source_sha256": "4facd5e608fd53983564c0e844730f849cfbeed7474abdd9d9aad142fcc93fe7",
+        "publication_time": "2026-11-13T09:00:00+01:00"
+      }
+    ]
   },
   "articles": [
     {
@@ -264,6 +271,307 @@
             "type": "image/jpeg"
           }
         ]
+      }
+    },
+    {
+      "content_id": "TS-BLOG-0002",
+      "route": "connected-tournament-administration.html",
+      "source_reference": "Company-Community/connected-tournament-administration/article.md",
+      "source_sha256": "4facd5e608fd53983564c0e844730f849cfbeed7474abdd9d9aad142fcc93fe7",
+      "source_version": "0.2.2",
+      "source_status": "selected-for-release",
+      "review_only": false,
+      "publication_time": "2026-11-13T09:00:00+01:00",
+      "metadata_contract": {
+        "format_version": 1,
+        "title": "Tournament administration: connected updates | TournStack",
+        "language": "en",
+        "canonical_url": "https://tournstack.com/connected-tournament-administration.html",
+        "meta": {
+          "description": "Follow registration changes through your tournament’s records, people and messages. Use three questions to keep updates clear and organisers in control.",
+          "robots": "index, follow, max-image-preview:large",
+          "og:title": "How to keep tournament administration connected",
+          "og:description": "What changed, who needs to know and where must it be updated? Follow one tournament change through the decisions, records and messages it affects.",
+          "og:type": "article",
+          "og:url": "https://tournstack.com/connected-tournament-administration.html",
+          "og:site_name": "TournStack",
+          "og:image": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination-Share_1200x675_RGB.jpg",
+          "og:image:type": "image/jpeg",
+          "og:image:width": "1200",
+          "og:image:height": "675",
+          "og:image:alt": "Three event organisers compare a laptop schedule, a clipboard and a phone beside tennis courts.",
+          "twitter:card": "summary_large_image",
+          "twitter:title": "How to keep tournament administration connected",
+          "twitter:description": "What changed, who needs to know and where must it be updated? Follow one tournament change through the decisions, records and messages it affects.",
+          "twitter:image": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination-Share_1200x675_RGB.jpg",
+          "twitter:image:alt": "Three event organisers compare a laptop schedule, a clipboard and a phone beside tennis courts.",
+          "og:locale": "en_GB",
+          "article:published_time": "2026-11-13T09:00:00+01:00"
+        },
+        "structured_data": {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://tournstack.com/#organization",
+              "name": "TournStack",
+              "url": "https://tournstack.com/",
+              "email": "info@tournstack.com",
+              "description": "Tournament-and-league management project in development, connecting guided setup and organiser control with public event information.",
+              "logo": {
+                "@id": "https://tournstack.com/#logo"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Project inquiries",
+                "email": "info@tournstack.com",
+                "url": "https://tournstack.com/contact.html",
+                "availableLanguage": "en"
+              },
+              "sameAs": [
+                "https://www.linkedin.com/company/tournstack/",
+                "https://www.facebook.com/TournStack",
+                "https://x.com/tournstack",
+                "https://www.tiktok.com/@tournstack",
+                "https://www.reddit.com/r/TournStack/",
+                "https://bsky.app/profile/tournstack.com"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/#logo",
+              "url": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "contentUrl": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "caption": "TournStack logo",
+              "width": 1024,
+              "height": 165
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://tournstack.com/#website",
+              "url": "https://tournstack.com/",
+              "name": "TournStack",
+              "inLanguage": "en",
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "description": "TournStack’s tournament-and-league management project, product vision and answers to common questions."
+            },
+            {
+              "@type": "Person",
+              "@id": "https://tournstack.com/#mitja-mitrusevski",
+              "name": "Mitja Mitruševski",
+              "jobTitle": "Vision & Commercial Lead",
+              "url": "https://tournstack.com/author-mitja-mitrusevski.html",
+              "image": "https://tournstack.com/assets/versioned/images/mitja-mitrusevski.72354b1de625eddb.webp",
+              "sameAs": [
+                "https://www.linkedin.com/in/mitja-mitrusevski/",
+                "https://timelesstech.io/en/mitja-mitrusevski-igaming-casino-industry-expert-timeless-tech"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/connected-tournament-administration.html#primaryimage",
+              "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1200x675_RGB.webp",
+              "contentUrl": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1200x675_RGB.webp",
+              "width": 1200,
+              "height": 675,
+              "caption": "AI-generated concept of event coordination. The people and interface are illustrative.",
+              "representativeOfPage": true
+            },
+            {
+              "@type": "WebPage",
+              "@id": "https://tournstack.com/connected-tournament-administration.html#webpage",
+              "url": "https://tournstack.com/connected-tournament-administration.html",
+              "name": "Tournament administration: connected updates | TournStack",
+              "description": "Follow registration changes through your tournament’s records, people and messages. Use three questions to keep updates clear and organisers in control.",
+              "inLanguage": "en",
+              "mainEntity": {
+                "@id": "https://tournstack.com/connected-tournament-administration.html#article"
+              },
+              "isPartOf": {
+                "@id": "https://tournstack.com/#website"
+              },
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://tournstack.com/connected-tournament-administration.html#primaryimage"
+              },
+              "breadcrumb": {
+                "@id": "https://tournstack.com/connected-tournament-administration.html#breadcrumbs"
+              },
+              "datePublished": "2026-11-13T09:00:00+01:00"
+            },
+            {
+              "@type": "BlogPosting",
+              "@id": "https://tournstack.com/connected-tournament-administration.html#article",
+              "url": "https://tournstack.com/connected-tournament-administration.html",
+              "mainEntityOfPage": {
+                "@id": "https://tournstack.com/connected-tournament-administration.html#webpage"
+              },
+              "headline": "How to keep tournament administration connected",
+              "description": "A practical method for following a tournament change through the people, records and messages it affects, with organisers retaining control of event decisions.",
+              "inLanguage": "en",
+              "articleSection": "Company & Community",
+              "author": [
+                {
+                  "@id": "https://tournstack.com/#mitja-mitrusevski"
+                }
+              ],
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "image": {
+                "@id": "https://tournstack.com/connected-tournament-administration.html#primaryimage"
+              },
+              "datePublished": "2026-11-13T09:00:00+01:00"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://tournstack.com/connected-tournament-administration.html#breadcrumbs",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Overview",
+                  "item": "https://tournstack.com/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Blog",
+                  "item": "https://tournstack.com/blog.html"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "How to keep tournament administration connected",
+                  "item": "https://tournstack.com/connected-tournament-administration.html"
+                }
+              ]
+            }
+          ]
+        },
+        "authors": [
+          {
+            "id": "https://tournstack.com/#mitja-mitrusevski",
+            "name": "Mitja Mitruševski",
+            "url": "https://tournstack.com/author-mitja-mitrusevski.html"
+          }
+        ],
+        "publisher": {
+          "id": "https://tournstack.com/#organization",
+          "name": "TournStack",
+          "url": "https://tournstack.com/"
+        },
+        "breadcrumbs": [
+          {
+            "name": "Overview",
+            "url": "https://tournstack.com/"
+          },
+          {
+            "name": "Blog",
+            "url": "https://tournstack.com/blog.html"
+          },
+          {
+            "name": "How to keep tournament administration connected",
+            "url": "https://tournstack.com/connected-tournament-administration.html"
+          }
+        ],
+        "dates": {
+          "published": "2026-11-13T09:00:00+01:00",
+          "modified": null
+        },
+        "lead_image": {
+          "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1200x675_RGB.webp",
+          "width": 1200,
+          "height": 675,
+          "alt": "Three event organisers compare a laptop schedule, a clipboard and a phone beside tennis courts."
+        },
+        "image_assets": [
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_480x270_RGB.webp",
+            "sha256": "aa338f714fa1fe33a4f267a15d8e4565d6cda882dd89cdca43f852b449867ff2",
+            "width": 480,
+            "height": 270,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_800x450_RGB.webp",
+            "sha256": "bf07e1bc36ac5adb5c473bdf1d081519ab950c912498be9875841fdd7d5abdb7",
+            "width": 800,
+            "height": 450,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1200x675_RGB.webp",
+            "sha256": "e2b374e115e0fd475dd00ad52eba97cd9b28f87f32d64e59d7acfea66d23a30f",
+            "width": 1200,
+            "height": 675,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination_1600x900_RGB.webp",
+            "sha256": "dd26c0d7899bdb5747ed09e7159389424abf43f94d990b93cd1796547d386016",
+            "width": 1600,
+            "height": 900,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Event-Coordination-Share_1200x675_RGB.jpg",
+            "sha256": "2823a613ecc0851a3c547cb996e8359fbb7a380ce46f27b0c3bb09becfa894ec",
+            "width": 1200,
+            "height": 675,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_480x600_RGB.webp",
+            "sha256": "6c6ac1ec423a172b6f336357cdc869c8f356b7aedeb01996f05871561d6f1edd",
+            "width": 480,
+            "height": 600,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_800x1000_RGB.webp",
+            "sha256": "202780d893838b46f706d420de2499c85e9eadaabbb4afc34b284b16135d68cf",
+            "width": 800,
+            "height": 1000,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Role-Views_v02_1440x1800_RGB.webp",
+            "sha256": "86a2c25fa4a5f339a95ae8b85788b637f4fce76ccb9038a44aa15073d7dbc1c1",
+            "width": 1440,
+            "height": 1800,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_480x600_RGB.webp",
+            "sha256": "683d7f521f84d09dab14050c7ec7c910013a82fa96f37e1d2f2caeacbf1666eb",
+            "width": 480,
+            "height": 600,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_800x1000_RGB.webp",
+            "sha256": "05d8bcc5e37c38c143f146840d87d78d42e6107fcaaf46692862364048a85f0c",
+            "width": 800,
+            "height": 1000,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-12_TS_Blog_Connected-Administration_Withdrawal-Review_v02_1440x1800_RGB.webp",
+            "sha256": "470fd447ddd3e952ca9a858a7af86a6adf73d876299fd4142d2bd6df47068bb6",
+            "width": 1440,
+            "height": 1800,
+            "type": "image/webp"
+          }
+        ],
+        "inline_manifest": {
+          "path": "assets/2026-11-12_TournStack_S02-UI-Illustrations.json",
+          "sha256": "ff90d54c7b4a37bf385baca44dfe989f86fd15dc8f387ca8d73a6bfedaa6c533"
+        }
       }
     }
   ]

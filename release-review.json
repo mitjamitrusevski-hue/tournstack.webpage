@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "review_id": "TS-REVIEW-20261108-08a577aa",
+  "review_id": "TS-REVIEW-20261113-bcc4f88b",
   "reviewer_role": "website-maintainer",
-  "public_digest": "82d80002b00cf688a096ee5c64e6e7320b2ca38c2363891c499c944eaa5daf76",
+  "public_digest": "4d4d15a437e605629bbff4e82b8735d9ca23ef30be9de9c61e8b1f2c7257d2d3",
   "checks": {
     "content_brand": {
       "result": "PASS",
-      "evidence_sha256": "b2ff9be5ea9f662315e3f737dfadf548a9bf95b9ca71fd9bc7d9a76141ddb16f",
+      "evidence_sha256": "8c7627196d3dd1dfcf1edbdefdb51db14845057c1a32a73d05ccfd62e892f887",
       "reason_code": ""
     },
     "source_parity": {
       "result": "PASS",
-      "evidence_sha256": "433a30d73af410c69ade38101a8040976861aea0e4e7d2567c6b60873572730f",
+      "evidence_sha256": "b0387d8bb8f2c9e54fdebd2de05b38775c51ac1aec0467428714680741489cc4",
       "reason_code": ""
     },
     "accessibility_visual": {
       "result": "PASS",
-      "evidence_sha256": "9259749302dd544879e28c7a852ec4732c7553dc133a89266c7a03d64cfbfe35",
+      "evidence_sha256": "7a5628f32b8740454c0a9caa126ef05e22f74c6e203becac80d80dc869d9d1ff",
       "reason_code": ""
     },
     "external_destinations": {
-      "result": "PASS",
-      "evidence_sha256": "a88a312e1b7cad8c70505683dd85be1d003403e1442c542020ed3b78005390ae",
-      "reason_code": ""
+      "result": "NOT_APPLICABLE",
+      "evidence_sha256": "d3f781140758876888de729e0e69f4166ea0313c5f2eb28ac8f5a97d473c5e23",
+      "reason_code": "no-external-link-changes"
     },
     "live_service_scope": {
       "result": "PASS",
-      "evidence_sha256": "43d83a68d01ebc61d5b8b31f5c9f59e3440a40a05274cf9ce2a8a0233040f1f7",
+      "evidence_sha256": "e35fbfdfdeb4c771ee4cc33eebfa8f7f6b6c0091577fc5ad17842f7b4bcc5646",
       "reason_code": ""
     },
     "recovery_package": {
       "result": "PASS",
-      "evidence_sha256": "d612a8b87b76fc04e5acc198f3b4e58f85f86cee84bc53e1bfe70c1965bfd3f3",
+      "evidence_sha256": "a6ee21db802bc8edb0476cbe58b94f062cb77d3fd23d6ff87584cab30c9ae8fc",
       "reason_code": ""
     }
   }

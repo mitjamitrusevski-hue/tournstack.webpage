@@ -45,9 +45,9 @@ test('missing source contract blocks production artifact build before output exi
   const f=fixture(t);delete f.row.metadata_contract;
   fs.writeFileSync(path.join(f.root,'blog-build-manifest.json'),JSON.stringify(f.manifest));
   // Keep this integration fixture minimal so the contract is the first failure.
-  for (const name of ROOT_FILES) fs.writeFileSync(path.join(f.root,name),name.endsWith('.html')?'<h1>Fixture</h1>':'');
+  for (const name of new Set([...ROOT_FILES,...f.manifest.routes])) fs.writeFileSync(path.join(f.root,name),name.endsWith('.html')?'<h1>Fixture</h1>':'');
   fs.writeFileSync(f.filename,'<h1>Fixture</h1>');fs.writeFileSync(path.join(f.root,'blog.html'),'<h1>Stories</h1>');
-  const entries=[...ROOT_FILES,'blog.html',f.row.route,'blog-build-manifest.json'].map(name=>({name,mode:'100644'}));
+  const entries=[...new Set([...ROOT_FILES,...f.manifest.routes,'blog-build-manifest.json'])].map(name=>({name,mode:'100644'}));
   const out=path.join(f.root,'public');
   assert.throws(()=>build(f.root,out,entries),/missing source metadata contract/);assert(!fs.existsSync(out));
 });
