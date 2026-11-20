@@ -347,6 +347,55 @@
       "size_bytes": 56620
     },
     {
+      "source": "assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1200x675_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1200x675_RGB.502b5d7693b2594b.webp",
+      "sha256": "502b5d7693b2594b74f4ec16a93020cbb4f2fe98dd2fee06b16ad9c5977c29f2",
+      "source_sha256": "502b5d7693b2594b74f4ec16a93020cbb4f2fe98dd2fee06b16ad9c5977c29f2",
+      "size_bytes": 89110
+    },
+    {
+      "source": "assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1600x900_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1600x900_RGB.9f20b27a9370037c.webp",
+      "sha256": "9f20b27a9370037cc4543422865f314349200c71adb81cf3c454538b80eba730",
+      "source_sha256": "9f20b27a9370037cc4543422865f314349200c71adb81cf3c454538b80eba730",
+      "size_bytes": 134654
+    },
+    {
+      "source": "assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_480x270_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_480x270_RGB.1a2fb103a7843102.webp",
+      "sha256": "1a2fb103a78431020a274526d19fa150b72b82b9ac186e04abc060e7bc62cfa2",
+      "source_sha256": "1a2fb103a78431020a274526d19fa150b72b82b9ac186e04abc060e7bc62cfa2",
+      "size_bytes": 23756
+    },
+    {
+      "source": "assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_800x450_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_800x450_RGB.52c851281ac50a23.webp",
+      "sha256": "52c851281ac50a23a07e4d4be35e635bd6c6af9b47f86e88eb617337ce978f36",
+      "source_sha256": "52c851281ac50a23a07e4d4be35e635bd6c6af9b47f86e88eb617337ce978f36",
+      "size_bytes": 49578
+    },
+    {
+      "source": "assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_1200x960_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_1200x960_RGB.9ffa00c62dd0486f.webp",
+      "sha256": "9ffa00c62dd0486f2185bc38f799eab1545cb45d9e0d4598c82f37d618060d9f",
+      "source_sha256": "9ffa00c62dd0486f2185bc38f799eab1545cb45d9e0d4598c82f37d618060d9f",
+      "size_bytes": 59746
+    },
+    {
+      "source": "assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_480x384_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_480x384_RGB.2bdc064281aafcf0.webp",
+      "sha256": "2bdc064281aafcf0570fa9d983414a2bb249c87f6415f414cd85f9cab9d48928",
+      "source_sha256": "2bdc064281aafcf0570fa9d983414a2bb249c87f6415f414cd85f9cab9d48928",
+      "size_bytes": 17434
+    },
+    {
+      "source": "assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_800x640_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_800x640_RGB.83e9a031b14e3d3b.webp",
+      "sha256": "83e9a031b14e3d3b5c8f2ef0dbdd0826eb26793af48b11b1a85035c983dda7b0",
+      "source_sha256": "83e9a031b14e3d3b5c8f2ef0dbdd0826eb26793af48b11b1a85035c983dda7b0",
+      "size_bytes": 35376
+    },
+    {
       "source": "assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp",
       "url": "/assets/versioned/images/TS_Hero_Tennis_Lifestyle_RGB.580dd2e17b6837e4.webp",
       "sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",

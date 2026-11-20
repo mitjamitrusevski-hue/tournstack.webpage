@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const os = require('node:os');
 const guard = require('./approved-release.cjs');
 const reviewContract = require('./release-review.cjs');
 const NOW = Date.parse('2030-01-01T09:00:00Z');
@@ -21,17 +22,31 @@ const live = (sha = BASE) => async url => {
   if (url.includes('/deployments/8/statuses')) return response(200, [{state: 'success'}]);
   throw Error('Unexpected baseline request');
 };
+function temporaryDirectory(t, prefix) {
+  const parent = fs.realpathSync(os.tmpdir());
+  const dir = fs.mkdtempSync(path.join(parent, prefix));
+  const resolved = fs.realpathSync(dir);
+  assert.equal(path.dirname(resolved), parent, 'Fixture must be a direct child of the private OS temp directory');
+  assert(path.basename(resolved).startsWith(prefix));
+  t.after(() => {
+    // Check the final target again before recursive cleanup. Do not follow a
+    // replaced directory or junction out of this exact fixture directory.
+    const current = fs.realpathSync(dir);
+    assert.equal(current, resolved, 'Fixture cleanup target changed');
+    assert.equal(path.dirname(current), parent);
+    fs.rmSync(current, {recursive: true, force: true, maxRetries: 3, retryDelay: 100});
+  });
+  return dir;
+}
 function fixture(t) {
-  const dir = fs.mkdtempSync(path.join(__dirname, '.approved-release-test-'));
-  t.after(() => fs.rmSync(dir, {recursive: true, force: true}));
+  const dir = temporaryDirectory(t, 'ts-approved-release-test-');
   fs.writeFileSync(path.join(dir, 'index.html'), '<h1>Approved</h1>');
   fs.mkdirSync(path.join(dir, 'assets'));
   fs.writeFileSync(path.join(dir, 'assets', 'a.txt'), 'image');
   return dir;
 }
 function reviewed(t, publicDigest) {
-  const dir = fs.mkdtempSync(path.join(__dirname, '.approved-review-test-'));
-  t.after(() => fs.rmSync(dir, {recursive: true, force: true}));
+  const dir = temporaryDirectory(t, 'ts-approved-review-test-');
   const checks = Object.fromEntries(['content_brand', 'source_parity', 'accessibility_visual', 'recovery_package',
     'external_destinations', 'live_service_scope'].map(key => [key, {result: 'PASS', evidence_sha256: 'f'.repeat(64), reason_code: ''}]));
   fs.writeFileSync(path.join(dir, 'release-review.json'), JSON.stringify({schema_version: 2,
@@ -244,4 +259,38 @@ test('ordinary workflow cannot deploy; release workflow uses pinned actions and 
   assert(approved.includes('node scripts/public-artifact.cjs _site'));
   assert(!approved.includes('public-artifact.cjs --preview'));
   for (const line of approved.split('\n').filter(line => line.includes('uses: actions/'))) assert.match(line, /@[a-f0-9]{40}\b/);
+});
+
+
+test('new article dates follow actual Ljubljana release day and retained publication dates stay unchanged', () => {
+  const published = {content_id: 'old', route: 'old.html', publication_time: '2029-11-02T10:00:00+01:00', review_only: false};
+  const fresh = {content_id: 'new', route: 'new.html', publication_time: '2030-01-01', planned_release_date: '2029-12-28', review_only: false};
+  const baseline = {articles: [published]}, current = {articles: [published, fresh]};
+  const before = JSON.stringify(current);
+  assert.equal(guard.verifyPublicationDays(current, baseline, NOW), 1);
+  assert.equal(JSON.stringify(current), before);
+  assert.equal(guard.verifyPublicationDays(current, baseline, Date.parse('2029-12-31T23:30:00Z')), 1);
+  assert.throws(() => guard.verifyPublicationDays(current, baseline, Date.parse('2030-01-01T23:00:00Z')), /actual Ljubljana release day/);
+  assert.throws(() => guard.verifyPublicationDays({articles: [{...fresh, publication_time: '2030-01-01T10:00:00+01:00'}]}, {articles: []}, NOW), /calendar-only/);
+  assert.equal(guard.verifyPublicationDays(baseline, baseline, Date.parse('2030-01-01T23:59:00Z'), guard.PUBLICATION_DAY_RESERVE_MS), 0);
+});
+
+test('final activation reserves more than the bounded job duration before local midnight, including DST', () => {
+  const current = day => ({articles: [{content_id: 'new', route: 'new.html', publication_time: day, review_only: false}]});
+  const baseline = {articles: []}, reserve = guard.PUBLICATION_DAY_RESERVE_MS;
+  assert.equal(guard.verifyPublicationDays(current('2030-01-01'), baseline, Date.parse('2030-01-01T22:34:00Z'), reserve), 1);
+  assert.throws(() => guard.verifyPublicationDays(current('2030-01-01'), baseline, Date.parse('2030-01-01T22:35:00Z'), reserve), /midnight/);
+  assert.equal(guard.verifyPublicationDays(current('2030-07-01'), baseline, Date.parse('2030-07-01T21:34:00Z'), reserve), 1);
+  assert.throws(() => guard.verifyPublicationDays(current('2030-07-01'), baseline, Date.parse('2030-07-01T21:35:00Z'), reserve), /midnight/);
+  const workflow = fs.readFileSync(path.join(__dirname, '../.github/workflows/approved-release.yml'), 'utf8');
+  const timeout = Number(/timeout-minutes:\s*(\d+)/.exec(workflow)[1]);
+  assert(reserve > timeout * 60 * 1000);
+  assert.match(workflow, /ref: \$\{\{ inputs.expected_base_sha \}\}\s+path: baseline/);
+  assert(workflow.indexOf('approved-release.cjs recheck') < workflow.indexOf('uses: actions/deploy-pages@'));
+});
+
+test('publication day verification fails closed if exact baseline is unavailable', t => {
+  const root = fixture(t);
+  fs.writeFileSync(path.join(root, 'blog-build-manifest.json'), JSON.stringify({articles: [{content_id: 'new', route: 'new.html', publication_time: '2030-01-01', review_only: false}]}));
+  assert.throws(() => guard.checkPublicationDays(root, BASE, NOW), /Exact baseline checkout/);
 });

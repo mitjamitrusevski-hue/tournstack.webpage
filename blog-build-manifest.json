@@ -3,17 +3,19 @@
   "generator": "blog_build.py",
   "routes": [
     "blog.html",
+    "tournament-tools-easier-to-use-and-join.html",
     "connected-tournament-administration.html",
     "why-were-building-tournstack.html"
   ],
-  "current_article": "connected-tournament-administration.html",
+  "current_article": "tournament-tools-easier-to-use-and-join.html",
   "preview_only": [],
   "release_selection": {
     "articles": [
       {
-        "content_id": "TS-BLOG-0002",
-        "source_sha256": "4facd5e608fd53983564c0e844730f849cfbeed7474abdd9d9aad142fcc93fe7",
-        "publication_time": "2026-11-13T09:00:00+01:00"
+        "content_id": "TS-BLOG-0003",
+        "source_sha256": "e31473530cd142bf7fbf28dbbc7c7a101da904ccba6fb837c401dc1ad8d88957",
+        "publication_time": "2026-11-20",
+        "planned_release_date": "2026-11-20"
       }
     ]
   },
@@ -571,6 +573,286 @@
         "inline_manifest": {
           "path": "assets/2026-11-12_TournStack_S02-UI-Illustrations.json",
           "sha256": "ff90d54c7b4a37bf385baca44dfe989f86fd15dc8f387ca8d73a6bfedaa6c533"
+        }
+      }
+    },
+    {
+      "content_id": "TS-BLOG-0003",
+      "route": "tournament-tools-easier-to-use-and-join.html",
+      "source_reference": "Company-Community/tournament-tools-easier-to-use-and-join/article.md",
+      "source_sha256": "e31473530cd142bf7fbf28dbbc7c7a101da904ccba6fb837c401dc1ad8d88957",
+      "source_version": "0.5.1",
+      "source_status": "selected-for-release",
+      "review_only": false,
+      "publication_time": "2026-11-20",
+      "planned_release_date": "2026-11-20",
+      "metadata_contract": {
+        "format_version": 1,
+        "title": "Tournament Tools: Easier Setup and Access | TournStack",
+        "language": "en",
+        "canonical_url": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html",
+        "meta": {
+          "description": "TournStack is building guided tournament setup around your event decisions, with browser access that helps players and guests join without an app download.",
+          "robots": "index, follow, max-image-preview:large",
+          "og:title": "Making tournament tools easier to use and join",
+          "og:description": "How TournStack is shaping guided setup around event decisions, with straightforward browser access for players and guests.",
+          "og:type": "article",
+          "og:url": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html",
+          "og:site_name": "TournStack",
+          "og:image": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena-Share_1200x675_RGB.jpg",
+          "og:image:type": "image/jpeg",
+          "og:image:width": "1200",
+          "og:image:height": "675",
+          "og:image:alt": "An organiser helps a basketball team captain check his phone while a guest looks towards the arena court.",
+          "twitter:card": "summary_large_image",
+          "twitter:title": "Making tournament tools easier to use and join",
+          "twitter:description": "How TournStack is shaping guided setup around event decisions, with straightforward browser access for players and guests.",
+          "twitter:image": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena-Share_1200x675_RGB.jpg",
+          "twitter:image:alt": "An organiser helps a basketball team captain check his phone while a guest looks towards the arena court.",
+          "og:locale": "en_GB"
+        },
+        "structured_data": {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://tournstack.com/#organization",
+              "name": "TournStack",
+              "url": "https://tournstack.com/",
+              "email": "info@tournstack.com",
+              "description": "Tournament-and-league management project in development, connecting guided setup and organiser control with public event information.",
+              "logo": {
+                "@id": "https://tournstack.com/#logo"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Project inquiries",
+                "email": "info@tournstack.com",
+                "url": "https://tournstack.com/contact.html",
+                "availableLanguage": "en"
+              },
+              "sameAs": [
+                "https://www.linkedin.com/company/tournstack/",
+                "https://www.facebook.com/TournStack",
+                "https://x.com/tournstack",
+                "https://www.tiktok.com/@tournstack",
+                "https://www.reddit.com/r/TournStack/",
+                "https://bsky.app/profile/tournstack.com"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/#logo",
+              "url": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "contentUrl": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "caption": "TournStack logo",
+              "width": 1024,
+              "height": 165
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://tournstack.com/#website",
+              "url": "https://tournstack.com/",
+              "name": "TournStack",
+              "inLanguage": "en",
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "description": "TournStack’s tournament-and-league management project, product vision and answers to common questions."
+            },
+            {
+              "@type": "Person",
+              "@id": "https://tournstack.com/#mitja-mitrusevski",
+              "name": "Mitja Mitruševski",
+              "jobTitle": "Vision & Commercial Lead",
+              "url": "https://tournstack.com/author-mitja-mitrusevski.html",
+              "image": "https://tournstack.com/assets/versioned/images/mitja-mitrusevski.72354b1de625eddb.webp",
+              "sameAs": [
+                "https://www.linkedin.com/in/mitja-mitrusevski/",
+                "https://timelesstech.io/en/mitja-mitrusevski-igaming-casino-industry-expert-timeless-tech"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#primaryimage",
+              "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1200x675_RGB.webp",
+              "contentUrl": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1200x675_RGB.webp",
+              "width": 1200,
+              "height": 675,
+              "caption": "AI-generated concept of player and guest access in a basketball arena. The people and setting are illustrative.",
+              "representativeOfPage": true
+            },
+            {
+              "@type": "WebPage",
+              "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#webpage",
+              "url": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html",
+              "name": "Tournament Tools: Easier Setup and Access | TournStack",
+              "description": "TournStack is building guided tournament setup around your event decisions, with browser access that helps players and guests join without an app download.",
+              "inLanguage": "en",
+              "mainEntity": {
+                "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#article"
+              },
+              "isPartOf": {
+                "@id": "https://tournstack.com/#website"
+              },
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#primaryimage"
+              },
+              "breadcrumb": {
+                "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#breadcrumbs"
+              },
+              "datePublished": "2026-11-20"
+            },
+            {
+              "@type": "BlogPosting",
+              "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#article",
+              "url": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html",
+              "mainEntityOfPage": {
+                "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#webpage"
+              },
+              "headline": "Making tournament tools easier to use and join",
+              "description": "How TournStack is shaping guided setup around event decisions, with straightforward browser access for players and guests.",
+              "inLanguage": "en",
+              "articleSection": "Company & Community",
+              "author": [
+                {
+                  "@id": "https://tournstack.com/#mitja-mitrusevski"
+                }
+              ],
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "image": {
+                "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#primaryimage"
+              },
+              "datePublished": "2026-11-20"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html#breadcrumbs",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://tournstack.com/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Blog",
+                  "item": "https://tournstack.com/blog.html"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Making tournament tools easier to use and join",
+                  "item": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html"
+                }
+              ]
+            }
+          ]
+        },
+        "authors": [
+          {
+            "id": "https://tournstack.com/#mitja-mitrusevski",
+            "name": "Mitja Mitruševski",
+            "url": "https://tournstack.com/author-mitja-mitrusevski.html"
+          }
+        ],
+        "publisher": {
+          "id": "https://tournstack.com/#organization",
+          "name": "TournStack",
+          "url": "https://tournstack.com/"
+        },
+        "breadcrumbs": [
+          {
+            "name": "Home",
+            "url": "https://tournstack.com/"
+          },
+          {
+            "name": "Blog",
+            "url": "https://tournstack.com/blog.html"
+          },
+          {
+            "name": "Making tournament tools easier to use and join",
+            "url": "https://tournstack.com/tournament-tools-easier-to-use-and-join.html"
+          }
+        ],
+        "dates": {
+          "published": "2026-11-20",
+          "modified": null
+        },
+        "lead_image": {
+          "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1200x675_RGB.webp",
+          "width": 1200,
+          "height": 675,
+          "alt": "An organiser helps a basketball team captain check his phone while a guest looks towards the arena court."
+        },
+        "image_assets": [
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_480x270_RGB.webp",
+            "sha256": "1a2fb103a78431020a274526d19fa150b72b82b9ac186e04abc060e7bc62cfa2",
+            "width": 480,
+            "height": 270,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_800x450_RGB.webp",
+            "sha256": "52c851281ac50a23a07e4d4be35e635bd6c6af9b47f86e88eb617337ce978f36",
+            "width": 800,
+            "height": 450,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1200x675_RGB.webp",
+            "sha256": "502b5d7693b2594b74f4ec16a93020cbb4f2fe98dd2fee06b16ad9c5977c29f2",
+            "width": 1200,
+            "height": 675,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena_1600x900_RGB.webp",
+            "sha256": "9f20b27a9370037cc4543422865f314349200c71adb81cf3c454538b80eba730",
+            "width": 1600,
+            "height": 900,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Arena-Share_1200x675_RGB.jpg",
+            "sha256": "aa5adca76ad53a17587b126afed82288d05204399ddfd9befc08292331670e66",
+            "width": 1200,
+            "height": 675,
+            "type": "image/jpeg"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_480x384_RGB.webp",
+            "sha256": "2bdc064281aafcf0570fa9d983414a2bb249c87f6415f414cd85f9cab9d48928",
+            "width": 480,
+            "height": 384,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_800x640_RGB.webp",
+            "sha256": "83e9a031b14e3d3b5c8f2ef0dbdd0826eb26793af48b11b1a85035c983dda7b0",
+            "width": 800,
+            "height": 640,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-19_TS_Blog_Easier-To-Use-And-Join_Basketball-Browser-UI_1200x960_RGB.webp",
+            "sha256": "9ffa00c62dd0486f2185bc38f799eab1545cb45d9e0d4598c82f37d618060d9f",
+            "width": 1200,
+            "height": 960,
+            "type": "image/webp"
+          }
+        ],
+        "inline_manifest": {
+          "path": "assets/2026-11-19_TournStack_S03-UI-Illustrations.json",
+          "sha256": "28bd4c2bcad57a93aba3a8bd6c261c620d7b62be93ecb4bd0f74c5ba596ed01c"
         }
       }
     }

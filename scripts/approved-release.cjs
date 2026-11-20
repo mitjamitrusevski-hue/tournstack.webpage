@@ -164,6 +164,49 @@ function verifyArtifact(root, value, mode) {
   else if (fs.readFileSync(filename, 'utf8') !== expected) throw Error('Public release identity changed.');
 }
 
+// The entire workflow is bounded to 20 minutes. Reserve 25 minutes before
+// Ljubljana midnight at final activation, so a successful bounded run cannot
+// cross the date represented by new articles. Published identities are untouched.
+const PUBLICATION_DAY_RESERVE_MS = 25 * 60 * 1000;
+function localDay(now) {
+  return new Intl.DateTimeFormat('en-CA', {timeZone: 'Europe/Ljubljana', year: 'numeric', month: '2-digit', day: '2-digit'}).format(new Date(now));
+}
+function verifyPublicationDays(current, previous, now, reserve = 0) {
+  const identities = rows => {
+    if (!Array.isArray(rows)) throw Error('Blog publication manifest must contain article identities.');
+    const values = rows.map(row => {
+      if (!row || typeof row.content_id !== 'string' || !row.content_id || typeof row.route !== 'string' || !row.route) throw Error('Invalid Blog publication identity.');
+      return JSON.stringify([row.content_id, row.route]);
+    });
+    if (new Set(values).size !== values.length) throw Error('Duplicate Blog publication identities.');
+    return values;
+  };
+  const existing = new Set(identities(previous.articles));
+  const keys = identities(current.articles), today = localDay(now);
+  const additions = current.articles.filter((row, index) => !existing.has(keys[index]));
+  for (const row of additions) {
+    if (row.review_only !== false || row.publication_time !== today) throw Error('New article publication date must be the actual Ljubljana release day, at calendar-only precision. Prepare a fresh reviewed candidate.');
+  }
+  if (additions.length && localDay(now + reserve) !== today) throw Error('Insufficient time before Ljubljana midnight for the bounded deployment. Prepare on the next release day.');
+  return additions.length;
+}
+function checkPublicationDays(root, expectedBase, now, reserve = 0) {
+  const currentPath = path.join(root, 'blog-build-manifest.json');
+  if (!fs.existsSync(currentPath)) return;
+  const baseline = path.resolve(root, '..', 'baseline');
+  let baseSha;
+  try { baseSha = cp.execFileSync('git', ['rev-parse', 'HEAD'], {cwd: baseline, encoding: 'utf8'}).trim(); }
+  catch { throw Error('Exact baseline checkout is required for publication-date verification.'); }
+  if (baseSha !== expectedBase) throw Error('Publication-date baseline does not match approved production.');
+  const read = filename => {
+    const stat = fs.lstatSync(filename);
+    if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 2 * 1024 * 1024) throw Error('Invalid bounded Blog publication manifest.');
+    return JSON.parse(fs.readFileSync(filename, 'utf8'));
+  };
+  const previousPath = path.join(baseline, 'blog-build-manifest.json');
+  verifyPublicationDays(read(currentPath), fs.existsSync(previousPath) ? read(previousPath) : {articles: []}, now, reserve);
+}
+
 async function check(mode, candidateRoot, publicRoot, {env = process.env, fetcher = fetch, now = Date.now(), checkCandidate = candidate} = {}) {
   if (!['preflight', 'validate', 'recheck'].includes(mode)) throw Error('Unknown publication gate mode.');
   const value = inputs(env, now);
@@ -174,11 +217,12 @@ async function check(mode, candidateRoot, publicRoot, {env = process.env, fetche
   if (mode !== 'preflight') verifyArtifact(publicRoot, value, mode);
   // Network/build duration cannot silently consume the approved window.
   deadline(value.not_after, Math.max(now, Date.now()));
+  checkPublicationDays(candidateRoot, value.expected_base_sha, Math.max(now, Date.now()), mode === 'recheck' ? PUBLICATION_DAY_RESERVE_MS : 0);
   return {release_id: value.release_id, candidate_sha: value.candidate_sha, public_digest: value.public_digest,
     approval_digest: value.approval_digest, baseline_basis: baseline.basis, result: 'pass', mode};
 }
 
-module.exports = {canonical, hash, deadline, inputs, manifest, candidate, verifyControls, currentBaseline, identityFor, verifyReview, verifyArtifact, check};
+module.exports = {canonical, hash, deadline, inputs, manifest, candidate, verifyControls, currentBaseline, identityFor, verifyReview, verifyArtifact, localDay, verifyPublicationDays, checkPublicationDays, PUBLICATION_DAY_RESERVE_MS, check};
 if (require.main === module) {
   const [mode, candidateRoot, publicRoot] = process.argv.slice(2);
   if (!mode || !candidateRoot || !publicRoot) { console.error('Usage: approved-release.cjs preflight|validate|recheck <candidate-root> <public-artifact>'); process.exitCode = 1; }

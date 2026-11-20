@@ -17,7 +17,7 @@
     }
   ],
   "vars": {
-    "PUBLISHED_ARTICLE_IDS": "TS-BLOG-0001"
+    "PUBLISHED_ARTICLE_IDS": "TS-BLOG-0001,TS-BLOG-0002,TS-BLOG-0003"
   },
   "ratelimits": [
     {

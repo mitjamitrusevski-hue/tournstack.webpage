@@ -58,8 +58,8 @@ test('distinct readers increment once; state is per article and secret token is 
 test('unknown and unpublished IDs are rejected; a missing database registration cannot create one', async () => {
   const {env, sqlite} = fixture();
   assert.equal((await handle(req('PUT', {token: identity, path: 'TS-BLOG-9999'}), env, now)).status, 404);
-  env.PUBLISHED_ARTICLE_IDS += ',TS-BLOG-0002';
-  assert.equal((await handle(req('PUT', {token: identity, path: 'TS-BLOG-0002'}), env, now)).status, 404);
+  env.PUBLISHED_ARTICLE_IDS += ',TS-BLOG-9998';
+  assert.equal((await handle(req('PUT', {token: identity, path: 'TS-BLOG-9998'}), env, now)).status, 404);
   assert.equal(sqlite.prepare('SELECT count(*) AS n FROM article_votes').get().n, 0);
 });
 test('origin, method, payload and token checks fail closed', async () => {

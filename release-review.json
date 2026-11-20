@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "review_id": "TS-REVIEW-20261113-597e69af",
+  "review_id": "TS-REVIEW-20261120-b97d11e9",
   "reviewer_role": "website-maintainer",
-  "public_digest": "b1186677a4754a62556b9158a7bf1b4dd6ebfd9670e275ea8a25add32d1e9b77",
+  "public_digest": "cc67f7022c69ea421494021513d2d1fcce75503bb5596b7e11d649e8be6f24cc",
   "checks": {
     "content_brand": {
       "result": "PASS",
-      "evidence_sha256": "3b88077006d8114ac90b23356068796c6997bb9cc251ce41f8167ac18b2712b4",
+      "evidence_sha256": "77cf5af0aa687854835710f94a39c9576e7c0ed89d20dca88242059056ea3594",
       "reason_code": ""
     },
     "source_parity": {
       "result": "PASS",
-      "evidence_sha256": "9b382f034d067a48cf468bd6e5a67338311d9307da43f9590d7b7d567639f170",
+      "evidence_sha256": "6a32d59ee6374adfca8e585d1d6771fc5f2a50ec4f601d85a6a6d00b6cc07e6e",
       "reason_code": ""
     },
     "accessibility_visual": {
       "result": "PASS",
-      "evidence_sha256": "6c2304ab113ead192c3050fa831e56d77057e8ba3bdfc8c779b11b4ddc7558b4",
+      "evidence_sha256": "5a03978d84294fea424855412aa9128f595b5d186a65c8f99fb1e7551865b359",
       "reason_code": ""
     },
     "external_destinations": {
       "result": "NOT_APPLICABLE",
-      "evidence_sha256": "0e17ef79c16587c2984cd879f978a38ddb1fcfbeba74829b109c49f2bbaef42b",
+      "evidence_sha256": "d92a06a4f68d4504711a15d0ca92241d3709f18c9f73091fecc199faa2cb34f4",
       "reason_code": "no-external-link-changes"
     },
     "live_service_scope": {
-      "result": "NOT_APPLICABLE",
-      "evidence_sha256": "1b7cc5aab2ce3592bf5d39ecbce3a1edacc14e69eb04af8fdcb823a1e7de0eab",
-      "reason_code": "no-live-service-changes"
+      "result": "PASS",
+      "evidence_sha256": "275dc74d733c308f2ca5bdb2dc85bba66d8ccf8ed9902b768619b2cd37c4b5e2",
+      "reason_code": ""
     },
     "recovery_package": {
       "result": "PASS",
-      "evidence_sha256": "2f8d40a3de758ed6c2fee82e928301613a684b8ea6e0c6755787186afd0ecb14",
+      "evidence_sha256": "5fdbedd793e617f0b118bd3c482c68dba368bed2d005e6d983e5a83deb5e7a2f",
       "reason_code": ""
     }
   }

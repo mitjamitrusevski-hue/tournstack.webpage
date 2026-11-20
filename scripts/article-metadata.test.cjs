@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
-const {check, imageInfo, visibleDate} = require('./article-metadata.cjs');
+const {check, imageInfo, visibleDate, datePrecedes} = require('./article-metadata.cjs');
 const {build, ROOT_FILES} = require('./public-artifact.cjs');
 const source = path.resolve(__dirname, '..');
 function fixture(t) {
@@ -17,9 +17,27 @@ function fixture(t) {
   assert(row, 'A generated published article is required as the regression fixture');
   // Keep every published contract: real listings/related cards can reference
   // other published articles as the catalogue grows.
+  const previewRoutes=new Set(manifest.articles.filter(a=>a.review_only).map(a=>a.route));
   manifest.articles=manifest.articles.filter(a=>!a.review_only);
-  manifest.routes=manifest.routes.filter(route=>!manifest.preview_only.includes(route));manifest.preview_only=[];
-  for (const name of fs.readdirSync(source).filter(x=>x.endsWith('.html') || x==='sitemap.xml')) fs.copyFileSync(path.join(source,name),path.join(root,name));
+  manifest.routes=manifest.routes.filter(route=>!previewRoutes.has(route));manifest.preview_only=[];
+  manifest.current_article=row.route;
+  for (const name of fs.readdirSync(source).filter(x=>(x.endsWith('.html') || x==='sitemap.xml') && !previewRoutes.has(x))) {
+    let html=fs.readFileSync(path.join(source,name),'utf8');
+    // The checkout is a mixed staging preview. Remove only whole preview cards
+    // from this temporary published-only fixture; retain published card bytes
+    // unchanged so all disclosure mutations still exercise the real output.
+    html=html.replace(/<article\b[^>]*class="(?:blog-feature|blog-card)"[^>]*>[\s\S]*?<\/article>/g,card=>{
+      const links=[...card.matchAll(/<a\b[^>]*href="([^"]+)"/g)];
+      const unpublished=links.some(m=>previewRoutes.has(new URL(m[1],'https://tournstack.com/').pathname.slice(1)));
+      return unpublished?'':card;
+    });
+    // Published-only fixture listings have no preview cards after the filter.
+    // Clear their staging flag only in this temporary copy so artifact tests
+    // reach the intended metadata check; production preview rejection is
+    // independently asserted by public-artifact.test.cjs.
+    if (/^blog(?:-page-\d+)?\.html$/.test(name)) html=html.replace(/\sdata-blog-preview="true"/g,'');
+    fs.writeFileSync(path.join(root,name),html);
+  }
   fs.cpSync(path.join(source,'assets'),path.join(root,'assets'),{recursive:true});
   fs.writeFileSync(path.join(root,'blog-build-manifest.json'), JSON.stringify(manifest));
   const filename=path.join(root,row.route);
@@ -150,4 +168,32 @@ test('production artifact construction rejects stripped listing disclosure befor
   const out=path.join(f.root,'public');
   assert.throws(()=>build(f.root,out,entries),/visible adjacent listing image disclosure missing/);
   assert(!fs.existsSync(out),'Invalid artifact must not be written');
+});
+
+
+test('mixed date precision compares Ljubljana days without manufacturing an instant',()=>{
+  const now=Date.parse('2099-01-01T00:00:00Z');
+  assert.equal(datePrecedes('2026-11-17T00:30:00+01:00','2026-11-17',now),false);
+  assert.equal(datePrecedes('2026-11-17','2026-11-17T13:00:00+01:00',now),false);
+  assert.equal(datePrecedes('2026-11-16T23:30:00Z','2026-11-17',now),false);
+  assert.equal(datePrecedes('2026-11-16T21:30:00Z','2026-11-17',now),true);
+  assert.equal(datePrecedes('2026-11-17T08:00:00+01:00','2026-11-17T09:00:00+01:00',now),true);
+});
+
+test('calendar-only publication is valid without a fabricated Open Graph instant',t=>{
+  const f=fixture(t), day='2026-11-09', c=f.row.metadata_contract;
+  const oldValues=[c.dates.published,c.dates.modified].filter(Boolean);
+  for (const before of oldValues) {
+    f.change(html=>html.split(before).join(day).split(visibleDate(before)).join(visibleDate(day)));
+  }
+  f.change(html=>html.replace(/<meta property="article:(?:published|modified)_time"[^>]*>\s*/g,''));
+  const changeDates=value=>JSON.parse(oldValues.reduce((out,before)=>out.split(before).join(day),JSON.stringify(value)));
+  f.row.metadata_contract=changeDates(c);
+  delete f.row.metadata_contract.meta['article:published_time'];
+  delete f.row.metadata_contract.meta['article:modified_time'];
+  f.row.publication_time=day;
+  fs.writeFileSync(path.join(f.root,'blog-build-manifest.json'),JSON.stringify(f.manifest));
+  assert.equal(check(f.root,{now:f.now}).result,'PASS');
+  f.change(html=>html.replace('</head>','<meta property="article:published_time" content="2026-11-09T00:00:00Z"></head>'));
+  assert.throws(()=>check(f.root,{now:f.now}),/publication fields differ|metadata/);
 });

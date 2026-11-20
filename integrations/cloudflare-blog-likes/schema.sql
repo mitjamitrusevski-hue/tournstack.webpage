@@ -21,3 +21,5 @@ BEGIN
 END;
 -- Only explicitly approved article identities belong in this register.
 INSERT OR IGNORE INTO article_counts(article_id) VALUES ('TS-BLOG-0001');
+INSERT OR IGNORE INTO article_counts(article_id) VALUES ('TS-BLOG-0002');
+INSERT OR IGNORE INTO article_counts(article_id) VALUES ('TS-BLOG-0003');

@@ -68,9 +68,25 @@ function imageInfo(bytes) {
   fail('unsupported or invalid image bytes');
 }
 function iso(value, now) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value || '')) {
+    const [year,month,day]=value.split('-').map(Number);
+    const latest=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Ljubljana',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(now)).map(p=>[p.type,p.value]));
+    const today=`${latest.year}-${latest.month}-${latest.day}`;
+    if (month<1 || month>12 || day<1 || day>new Date(Date.UTC(year,month,0)).getUTCDate() || value>today) fail('invalid or future publication/update date');
+    return Date.UTC(year,month-1,day);
+  }
   const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(value || '');
   if (!m || +m[2] < 1 || +m[2] > 12 || +m[3] < 1 || +m[3] > new Date(Date.UTC(+m[1],+m[2],0)).getUTCDate() || +m[4] > 23 || +m[5] > 59 || +m[6] > 59 || !Number.isFinite(Date.parse(value)) || Date.parse(value) > now) fail('invalid or future publication/update timestamp');
   return Date.parse(value);
+}
+function calendarDate(value) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return value;
+  const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Ljubljana',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(value)).map(x=>[x.type,x.value]));
+  return `${p.year}-${p.month}-${p.day}`;
+}
+function datePrecedes(value, baseline, now) {
+  const left=iso(value,now), right=iso(baseline,now);
+  return value.includes('T') && baseline.includes('T') ? left<right : calendarDate(value)<calendarDate(baseline);
 }
 function visibleDate(value) {
   const parts=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Ljubljana',day:'numeric',month:'numeric',year:'numeric'}).formatToParts(new Date(value)).map(p=>[p.type,p.value]));
@@ -171,7 +187,7 @@ function check(root, {now=Date.now(), publicRoot=root, publicNames=null} = {}) {
     const meta={};
     for (const a of tags(html,'meta')) { const key=a.property || a.name; if (!key) continue; if (Object.hasOwn(meta,key)) fail('duplicate metadata '+key); meta[key]=a.content; }
     for (const [key,value] of Object.entries(c.meta || {})) if (meta[key]!==value) fail(row.route+': source metadata mismatch '+key);
-    for (const key of ['description','robots','og:title','og:description','og:type','og:url','og:site_name','og:image','og:image:type','og:image:width','og:image:height','og:image:alt','twitter:card','twitter:title','twitter:description','twitter:image','twitter:image:alt','article:published_time']) if (!meta[key]?.trim()) fail('missing required metadata '+key);
+    for (const key of ['description','robots','og:title','og:description','og:type','og:url','og:site_name','og:image','og:image:type','og:image:width','og:image:height','og:image:alt','twitter:card','twitter:title','twitter:description','twitter:image','twitter:image:alt']) if (!meta[key]?.trim()) fail('missing required metadata '+key);
     for (const key of ['og:locale','article:modified_time']) if (!Object.hasOwn(c.meta,key) && Object.hasOwn(meta,key)) fail('unsupported inherited metadata '+key);
     if (meta['og:type']!=='article' || meta['og:url']!==url || meta['twitter:card']!=='summary_large_image' || /noindex|nofollow/i.test(meta.robots)) fail('incorrect article discovery/share policy');
     const graphs=jsonld(html);
@@ -216,8 +232,8 @@ function check(root, {now=Date.now(), publicRoot=root, publicNames=null} = {}) {
     const publisherMarkup=html.match(/<[^>]*class="[^"]*article-publisher[^"]*"[^>]*>([\s\S]*?)<\/(?:p|span|div)>/i);
     if (!publisherMarkup || !text(publisherMarkup[1]).includes(c.publisher.name)) fail('visible publisher attribution missing');
     const published=iso(article.datePublished,now);
-    if (article.datePublished!==c.dates.published || meta['article:published_time']!==article.datePublished) fail('publication fields differ');
-    if (article.dateModified) {if (iso(article.dateModified,now)<published || article.dateModified!==c.dates.modified || meta['article:modified_time']!==article.dateModified) fail('modification fields differ');}
+    if (article.datePublished!==c.dates.published || (article.datePublished.includes('T') ? meta['article:published_time']!==article.datePublished : !!meta['article:published_time'])) fail('publication fields differ');
+    if (article.dateModified) {if (datePrecedes(article.dateModified,article.datePublished,now) || article.dateModified!==c.dates.modified || (article.dateModified.includes('T') ? meta['article:modified_time']!==article.dateModified : !!meta['article:modified_time'])) fail('modification fields differ');}
     else if (c.dates.modified || meta['article:modified_time']) fail('unsupported modification time');
     const times=[...html.matchAll(/<time\b([^>]*)>([\s\S]*?)<\/time>/gi)];
     for (const stamp of [article.datePublished,article.dateModified].filter(Boolean)) {
@@ -253,7 +269,7 @@ function check(root, {now=Date.now(), publicRoot=root, publicNames=null} = {}) {
   checkCardDisclosures(publicRoot,contracts,publicNames);
   return {result:'PASS',articles:manifest.articles.length};
 }
-module.exports={check,imageInfo,attrs,jsonld,visibleDate};
+module.exports={check,imageInfo,attrs,jsonld,visibleDate,datePrecedes};
 if (require.main===module) {
   try {console.log(JSON.stringify(check(process.argv[2] || path.resolve(__dirname,'..'))));}
   catch(error) {console.error(error.message);process.exitCode=1;}
