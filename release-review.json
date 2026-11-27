@@ -1,38 +1,38 @@
 {
   "schema_version": 2,
-  "review_id": "TS-REVIEW-20261120-fceeeeef",
+  "review_id": "TS-REVIEW-20261127-13b57713",
   "reviewer_role": "website-maintainer",
-  "public_digest": "cc67f7022c69ea421494021513d2d1fcce75503bb5596b7e11d649e8be6f24cc",
+  "public_digest": "13089498bc4e38b1c9c33647707c720c0002e3ef584e01ee9689ddff00d038a8",
   "checks": {
-    "content_brand": {
-      "result": "PASS",
-      "evidence_sha256": "a88880464bd2fb44edcb5e44b44df7a0cfa987b38ba2960bf549c59e1950cf2e",
-      "reason_code": ""
-    },
-    "source_parity": {
-      "result": "PASS",
-      "evidence_sha256": "4fc8445094c2fc42bb459e035d53c08b8e4753fa2050f3b5008524cf75fbe73c",
-      "reason_code": ""
-    },
     "accessibility_visual": {
       "result": "PASS",
-      "evidence_sha256": "5a25f958f8c435f97e30972e99bb56421c7c97cdad0e54a0dc042f239f472407",
-      "reason_code": ""
+      "reason_code": "",
+      "evidence_sha256": "a739fb39eed7a91572adb213f0f69a6d7d3b2167d10f7910e56941e61eccf666"
+    },
+    "content_brand": {
+      "result": "PASS",
+      "reason_code": "",
+      "evidence_sha256": "eb680500eb7f21d53d5414e035d507401f14f4b0e8f163031f2b9546472286b4"
     },
     "external_destinations": {
-      "result": "NOT_APPLICABLE",
-      "evidence_sha256": "860e54d7481aeb69c3ae07f569bca37c3d84869ad9a974cf6bfbb6328345e725",
-      "reason_code": "no-external-link-changes"
+      "result": "PASS",
+      "reason_code": "",
+      "evidence_sha256": "acac1ab0adde664be75f19bfb63c658ae1e075787d099dfd9cb34bbf9853f5e7"
     },
     "live_service_scope": {
-      "result": "PASS",
-      "evidence_sha256": "21f5096f966abe4c21b64bc105dd16e91aadab5b0ffde061659fe2a21fb3841a",
-      "reason_code": ""
+      "result": "NOT_APPLICABLE",
+      "reason_code": "no-live-service-changes",
+      "evidence_sha256": "d36d4651a9c66ffefa1fa84ef9b9c63f8393d52726d31b3747e31dffdd3c7b71"
     },
     "recovery_package": {
       "result": "PASS",
-      "evidence_sha256": "58d21ab970bbf9d5bdaa1a493f952a90de02f4085fa733727e239a38e3f35537",
-      "reason_code": ""
+      "reason_code": "",
+      "evidence_sha256": "0d6bfa3357e84a26d3538bb1d712b1c97e7cf01ad3e9d8090fcf67b1922a6c50"
+    },
+    "source_parity": {
+      "result": "PASS",
+      "reason_code": "",
+      "evidence_sha256": "cb2fb75924b5b557b8d5d302eff84d97d2746788058e12b7d00b8b6ff917d3ae"
     }
   }
 }

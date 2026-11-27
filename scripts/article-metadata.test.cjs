@@ -161,6 +161,9 @@ test('intentional pagination hiding preserves the disclosure when a whole card i
 
 test('production artifact construction rejects stripped listing disclosure before writing output',t=>{
   const f=fixture(t);
+  // Exercise disclosure validation at the fixture's release time. A staged
+  // future article must not mask this assertion with the independent date guard.
+  t.mock.method(Date, 'now', () => f.now);
   for (const name of ROOT_FILES) if (!fs.existsSync(path.join(f.root,name))) fs.copyFileSync(path.join(source,name),path.join(f.root,name));
   const walk=(dir,prefix='')=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name),prefix+e.name+'/'):[prefix+e.name]);
   const entries=walk(f.root).map(name=>({name,mode:'100644'}));

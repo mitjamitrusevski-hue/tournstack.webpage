@@ -3,19 +3,20 @@
   "generator": "blog_build.py",
   "routes": [
     "blog.html",
+    "meet-coach-niko-and-the-tournstack-team.html",
     "tournament-tools-easier-to-use-and-join.html",
     "connected-tournament-administration.html",
     "why-were-building-tournstack.html"
   ],
-  "current_article": "tournament-tools-easier-to-use-and-join.html",
+  "current_article": "meet-coach-niko-and-the-tournstack-team.html",
   "preview_only": [],
   "release_selection": {
     "articles": [
       {
-        "content_id": "TS-BLOG-0003",
-        "source_sha256": "e31473530cd142bf7fbf28dbbc7c7a101da904ccba6fb837c401dc1ad8d88957",
-        "publication_time": "2026-11-20",
-        "planned_release_date": "2026-11-20"
+        "content_id": "TS-BLOG-0004",
+        "source_sha256": "0c9ff2cc829875612fb58682d7f616a2f858cf620be79af44ea84ee898bcff0e",
+        "publication_time": "2026-11-27",
+        "planned_release_date": "2026-11-27"
       }
     ]
   },
@@ -854,6 +855,262 @@
           "path": "assets/2026-11-19_TournStack_S03-UI-Illustrations.json",
           "sha256": "28bd4c2bcad57a93aba3a8bd6c261c620d7b62be93ecb4bd0f74c5ba596ed01c"
         }
+      }
+    },
+    {
+      "content_id": "TS-BLOG-0004",
+      "route": "meet-coach-niko-and-the-tournstack-team.html",
+      "source_reference": "Company-Community/meet-coach-niko-and-the-tournstack-team/article.md",
+      "source_sha256": "0c9ff2cc829875612fb58682d7f616a2f858cf620be79af44ea84ee898bcff0e",
+      "source_version": "0.2.1",
+      "source_status": "selected-for-release",
+      "review_only": false,
+      "publication_time": "2026-11-27",
+      "planned_release_date": "2026-11-27",
+      "metadata_contract": {
+        "format_version": 1,
+        "title": "Meet Coach Niko Stackington and the TournStack Team",
+        "language": "en",
+        "canonical_url": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html",
+        "meta": {
+          "description": "Meet Coach Niko, TournStack’s fictional AI host, and the people behind him. Learn what to ask, when to contact the team and how to join the conversation.",
+          "robots": "index, follow, max-image-preview:large",
+          "og:title": "Meet Coach Niko and the people building TournStack",
+          "og:description": "Meet Coach Niko, understand the human team’s responsibilities and choose the right place for a question about TournStack or sport.",
+          "og:type": "article",
+          "og:url": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html",
+          "og:site_name": "TournStack",
+          "og:image": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport-Share_1200x675_RGB.jpg",
+          "og:image:type": "image/jpeg",
+          "og:image:width": "1200",
+          "og:image:height": "675",
+          "og:image:alt": "Coach Niko smiles with a knowing raised eyebrow, centred among sports balls, rackets, a hockey stick and puck.",
+          "twitter:card": "summary_large_image",
+          "twitter:title": "Meet Coach Niko and the people building TournStack",
+          "twitter:description": "Meet Coach Niko, understand the human team’s responsibilities and choose the right place for a question about TournStack or sport.",
+          "twitter:image": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport-Share_1200x675_RGB.jpg",
+          "twitter:image:alt": "Coach Niko smiles with a knowing raised eyebrow, centred among sports balls, rackets, a hockey stick and puck.",
+          "og:locale": "en_GB"
+        },
+        "structured_data": {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://tournstack.com/#organization",
+              "name": "TournStack",
+              "url": "https://tournstack.com/",
+              "email": "info@tournstack.com",
+              "description": "Tournament-and-league management project in development, connecting guided setup and organiser control with public event information.",
+              "logo": {
+                "@id": "https://tournstack.com/#logo"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Project inquiries",
+                "email": "info@tournstack.com",
+                "url": "https://tournstack.com/contact.html",
+                "availableLanguage": "en"
+              },
+              "sameAs": [
+                "https://www.linkedin.com/company/tournstack/",
+                "https://www.facebook.com/TournStack",
+                "https://x.com/tournstack",
+                "https://www.tiktok.com/@tournstack",
+                "https://www.reddit.com/r/TournStack/",
+                "https://bsky.app/profile/tournstack.com"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/#logo",
+              "url": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "contentUrl": "https://tournstack.com/assets/versioned/brand/TS_Primary_H_FullColor_LightBG_RGB.fa1887797d2619a4.svg",
+              "caption": "TournStack logo",
+              "width": 1024,
+              "height": 165
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://tournstack.com/#website",
+              "url": "https://tournstack.com/",
+              "name": "TournStack",
+              "inLanguage": "en",
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "description": "TournStack’s tournament-and-league management project, product vision and answers to common questions."
+            },
+            {
+              "@type": "Person",
+              "@id": "https://tournstack.com/#mitja-mitrusevski",
+              "name": "Mitja Mitruševski",
+              "jobTitle": "Vision & Commercial Lead",
+              "url": "https://tournstack.com/author-mitja-mitrusevski.html",
+              "image": "https://tournstack.com/assets/versioned/images/mitja-mitrusevski.72354b1de625eddb.webp",
+              "sameAs": [
+                "https://www.linkedin.com/in/mitja-mitrusevski/",
+                "https://timelesstech.io/en/mitja-mitrusevski-igaming-casino-industry-expert-timeless-tech"
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#primaryimage",
+              "url": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1200x675_RGB.webp",
+              "contentUrl": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1200x675_RGB.webp",
+              "width": 1200,
+              "height": 675,
+              "caption": "AI-generated illustration of Coach Niko, TournStack’s fictional mascot, surrounded by sports equipment.",
+              "representativeOfPage": true
+            },
+            {
+              "@type": "WebPage",
+              "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#webpage",
+              "url": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html",
+              "name": "Meet Coach Niko Stackington and the TournStack Team",
+              "description": "Meet Coach Niko, TournStack’s fictional AI host, and the people behind him. Learn what to ask, when to contact the team and how to join the conversation.",
+              "inLanguage": "en",
+              "mainEntity": {
+                "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#article"
+              },
+              "isPartOf": {
+                "@id": "https://tournstack.com/#website"
+              },
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#primaryimage"
+              },
+              "breadcrumb": {
+                "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#breadcrumbs"
+              },
+              "datePublished": "2026-11-27"
+            },
+            {
+              "@type": "BlogPosting",
+              "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#article",
+              "url": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html",
+              "mainEntityOfPage": {
+                "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#webpage"
+              },
+              "headline": "Meet Coach Niko and the people building TournStack",
+              "description": "Meet Coach Niko, understand the human team’s responsibilities and choose the right place for a question about TournStack or sport.",
+              "inLanguage": "en",
+              "articleSection": "Company & Community",
+              "author": [
+                {
+                  "@id": "https://tournstack.com/#mitja-mitrusevski"
+                }
+              ],
+              "publisher": {
+                "@id": "https://tournstack.com/#organization"
+              },
+              "image": {
+                "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#primaryimage"
+              },
+              "datePublished": "2026-11-27"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html#breadcrumbs",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://tournstack.com/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Blog",
+                  "item": "https://tournstack.com/blog.html"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Meet Coach Niko and the people building TournStack",
+                  "item": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html"
+                }
+              ]
+            }
+          ]
+        },
+        "authors": [
+          {
+            "id": "https://tournstack.com/#mitja-mitrusevski",
+            "name": "Mitja Mitruševski",
+            "url": "https://tournstack.com/author-mitja-mitrusevski.html"
+          }
+        ],
+        "publisher": {
+          "id": "https://tournstack.com/#organization",
+          "name": "TournStack",
+          "url": "https://tournstack.com/"
+        },
+        "breadcrumbs": [
+          {
+            "name": "Home",
+            "url": "https://tournstack.com/"
+          },
+          {
+            "name": "Blog",
+            "url": "https://tournstack.com/blog.html"
+          },
+          {
+            "name": "Meet Coach Niko and the people building TournStack",
+            "url": "https://tournstack.com/meet-coach-niko-and-the-tournstack-team.html"
+          }
+        ],
+        "dates": {
+          "published": "2026-11-27",
+          "modified": null
+        },
+        "lead_image": {
+          "url": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1200x675_RGB.webp",
+          "width": 1200,
+          "height": 675,
+          "alt": "Coach Niko smiles with a knowing raised eyebrow, centred among sports balls, rackets, a hockey stick and puck."
+        },
+        "image_assets": [
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_480x270_RGB.webp",
+            "sha256": "3d95019146100b44d830117c7223f9cf67127c10f1b058e079d33cad42bfbfb7",
+            "width": 480,
+            "height": 270,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_800x450_RGB.webp",
+            "sha256": "3bc23eb0b356f4d08555016c0878ab9c00a8899b18cf6640eaadb32efc23c754",
+            "width": 800,
+            "height": 450,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1200x675_RGB.webp",
+            "sha256": "f1e7d6dfc936fabffa4d213c3b3bfa9b46748b8ad7fc5309914e899db282be44",
+            "width": 1200,
+            "height": 675,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1600x900_RGB.webp",
+            "sha256": "1ec72dfffc9ad866bbbe40ea35ec0570080335deaea9550f7874d02aba689858",
+            "width": 1600,
+            "height": 900,
+            "type": "image/webp"
+          },
+          {
+            "url": "https://tournstack.com/assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport-Share_1200x675_RGB.jpg",
+            "sha256": "c4bc3819a21e806730735384cd0c164b7be6857d6202b0fd5bb2ec24a3696872",
+            "width": 1200,
+            "height": 675,
+            "type": "image/jpeg"
+          }
+        ],
+        "inline_manifest": null
       }
     }
   ]

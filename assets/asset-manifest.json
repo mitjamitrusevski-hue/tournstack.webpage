@@ -396,6 +396,34 @@
       "size_bytes": 35376
     },
     {
+      "source": "assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1200x675_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1200x675_RGB.f1e7d6dfc936fabf.webp",
+      "sha256": "f1e7d6dfc936fabffa4d213c3b3bfa9b46748b8ad7fc5309914e899db282be44",
+      "source_sha256": "f1e7d6dfc936fabffa4d213c3b3bfa9b46748b8ad7fc5309914e899db282be44",
+      "size_bytes": 70976
+    },
+    {
+      "source": "assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1600x900_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_1600x900_RGB.1ec72dfffc9ad866.webp",
+      "sha256": "1ec72dfffc9ad866bbbe40ea35ec0570080335deaea9550f7874d02aba689858",
+      "source_sha256": "1ec72dfffc9ad866bbbe40ea35ec0570080335deaea9550f7874d02aba689858",
+      "size_bytes": 98002
+    },
+    {
+      "source": "assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_480x270_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_480x270_RGB.3d95019146100b44.webp",
+      "sha256": "3d95019146100b44d830117c7223f9cf67127c10f1b058e079d33cad42bfbfb7",
+      "source_sha256": "3d95019146100b44d830117c7223f9cf67127c10f1b058e079d33cad42bfbfb7",
+      "size_bytes": 22804
+    },
+    {
+      "source": "assets/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_800x450_RGB.webp",
+      "url": "/assets/versioned/images/2026-11-26_TS_Blog_Niko-Team_Niko-Multi-Sport_800x450_RGB.3bc23eb0b356f4d0.webp",
+      "sha256": "3bc23eb0b356f4d08555016c0878ab9c00a8899b18cf6640eaadb32efc23c754",
+      "source_sha256": "3bc23eb0b356f4d08555016c0878ab9c00a8899b18cf6640eaadb32efc23c754",
+      "size_bytes": 44328
+    },
+    {
       "source": "assets/images/TS_Hero_Tennis_Lifestyle_RGB.webp",
       "url": "/assets/versioned/images/TS_Hero_Tennis_Lifestyle_RGB.580dd2e17b6837e4.webp",
       "sha256": "580dd2e17b6837e4b2530bc0f67b0e9fa08e5f17d20c7de7915ef196a9df808d",
